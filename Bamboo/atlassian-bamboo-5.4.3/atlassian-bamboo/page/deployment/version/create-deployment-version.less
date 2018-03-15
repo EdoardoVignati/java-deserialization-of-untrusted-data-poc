@@ -1,0 +1,43 @@
+@import "../../../global.less";
+
+form#createDeploymentVersion {
+
+  .aui-group {
+      margin-top: 0px;
+  }
+  .select-build-result,
+  .changes-since {
+      padding-top: @baseSpacing;
+  }
+
+  .result-selector,
+  .version-name-selector {
+      padding-right: @doubleSpacing;
+      padding-top: 0px;
+  }
+  .result-selector-note,
+  .version-name-selector-note {
+      border-left: 1px solid @dividerColor;
+      color: @secondaryTextColor;
+      font-size: 12px;
+      padding-top: @baseSpacing;
+      width: 30%;
+  }
+
+  .field-value {
+    display: inline-block;
+    font-weight: normal;
+    padding-top: 5px;
+  }
+
+  .deployment-preview {
+      margin-top: 0px;
+      width: 70%;
+  }
+  #new-version-details {
+      min-height: 70px;
+      margin-top: 0px;
+  }
+}
+
+

@@ -1,0 +1,9 @@
+#Wed May 21 04:37:54 UTC 2014
+assembly.key=5.4.3/db232e31a6c971fc90e4f98b7405ced3074b2a10
+image.US_EAST_1.S3.x86_64.linux.Amazon\ Linux=ami-430a452a
+assembly.bucket=bamboo-agent-release
+image.US_EAST_1.S3.i386.linux.Amazon\ Linux=ami-a10b44c8
+image.US_EAST_1.EBS.x86_64.windows.Windows=ami-976edafe
+image.US_EAST_1.EBS.x86_64.linux.Ubuntu=ami-bd9cb5d4
+image.US_EAST_1.EBS.x86_64.linux.Amazon\ Linux=ami-270b444e
+image.US_EAST_1.EBS.i386.linux.Amazon\ Linux=ami-a30b44ca

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <!-- helper beans -->
+
+  <bean id="mapperFactory" class="com.atlassian.bamboo.migration.beans.MapperFactoryImpl">
+    <constructor-arg ref="sessionFactory"/>
+
+    <constructor-arg ref="buildResultsSummaryDao"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="planRepositoryLinkDao"/>
+    <constructor-arg ref="planVcsRevisionHistoryDao"/>
+    <constructor-arg ref="repositoryDefinitionDao"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="legacyRequirementMapper"/>
+    <constructor-arg ref="notificationSetMapper"/>
+    <constructor-arg ref="requirementSetMapper"/>
+  </bean>
+
+  <bean id="authorMigrationCache" class="com.atlassian.bamboo.migration.beans.AuthorMigrationCacheImpl">
+    <constructor-arg ref="authorDao"/>
+  </bean>
+
+  <!-- mapper beans -->
+
+  <bean id="agentAssignmentMapper" class="com.atlassian.bamboo.buildqueue.migration.stream.AgentAssignmentMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="agentAssignmentDao"/>
+  </bean>
+
+  <bean id="artifactDefinitionMapper" class="com.atlassian.bamboo.migration.stream.ArtifactDefinitionMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="artifactDefinitionDao"/>
+    <constructor-arg ref="planDao"/>
+  </bean>
+
+  <bean id="artifactMapper" class="com.atlassian.bamboo.artifact.ArtifactMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="artifactDao"/>
+  </bean>
+
+  <bean id="artifactLinkMapper" class="com.atlassian.bamboo.build.artifact.ArtifactLinkMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="artifactLinkDao"/>
+    <constructor-arg ref="artifactDao"/>
+    <constructor-arg ref="dummyResultsSummaryCache"/>
+  </bean>
+
+  <bean id="artifactSubscriptionMapper" class="com.atlassian.bamboo.migration.stream.ArtifactSubscriptionMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="artifactDefinitionDao"/>
+    <constructor-arg ref="artifactSubscriptionDao"/>
+    <constructor-arg ref="planDao"/>
+  </bean>
+
+  <bean id="auditLogMapper" class="com.atlassian.bamboo.migration.stream.AuditLogMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="auditLogDao"/>
+  </bean>
+
+  <bean id="authorMapper" class="com.atlassian.bamboo.migration.stream.AuthorMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="authorDao"/>
+  </bean>
+
+  <bean id="buildNumberMapper" class="com.atlassian.bamboo.migration.stream.BuildNumberMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="applicationConfig"/>
+  </bean>
+
+  <bean id="consumedSubscriptionMapper" class="com.atlassian.bamboo.migration.stream.ConsumedSubscriptionMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="consumedSubscriptionDao"/>
+    <constructor-arg ref="artifactLinkDao"/>
+    <constructor-arg ref="dummyResultsSummaryCache"/>
+  </bean>
+
+  <bean id="groupMapper" class="com.atlassian.bamboo.migration.stream.GroupMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="bambooUserManager"/>
+  </bean>
+
+  <bean id="labelMapper" class="com.atlassian.bamboo.migration.stream.LabelMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="labelDao"/>
+  </bean>
+
+  <bean id="loginInformationMapper" class="com.atlassian.bamboo.migration.stream.LoginInformationMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="loginInformationDao"/>
+  </bean>
+
+  <bean id="serverIdMapper" class="com.atlassian.bamboo.migration.stream.ServerIDMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="bootstrapManager"/>
+  </bean>
+
+  <bean id="testClassMapper" class="com.atlassian.bamboo.resultsummary.tests.TestClassMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="testsDao"/>
+  </bean>
+
+  <bean id="testCaseMapper" class="com.atlassian.bamboo.resultsummary.tests.TestCaseMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="testCaseDao"/>
+  </bean>
+
+  <bean id="testClassResultMapper" class="com.atlassian.bamboo.resultsummary.tests.TestClassResultMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="testResultsDao"/>
+  </bean>
+
+  <bean id="testCaseResultMapper" class="com.atlassian.bamboo.resultsummary.tests.TestCaseResultMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="testCaseResultDao"/>
+  </bean>
+
+  <bean id="testCaseResultErrorMapper" class="com.atlassian.bamboo.resultsummary.tests.TestCaseResultErrorMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="testCaseResultDao"/>
+  </bean>
+
+  <bean id="userMapper" class="com.atlassian.bamboo.migration.stream.UserMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="bambooUserManager"/>
+  </bean>
+
+  <bean id="trustedApplicationsMapper" class="com.atlassian.bamboo.migration.stream.TrustedApplicationsMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="bambooTrustedApplicationsHibernateDao"/>
+  </bean>
+
+  <bean id="elasticImageConfigurationMapper" class="com.atlassian.bamboo.migration.stream.ElasticImageConfigurationMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="elasticImageConfigurationAccessor"/>
+    <constructor-arg ref="capabilitySetManager"/>
+  </bean>
+
+  <bean id="pipelineMapper" class="com.atlassian.bamboo.migration.stream.PipelineMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="capabilitySetManager"/>
+    <constructor-arg ref="elasticImageConfigurationDao"/>
+    <constructor-arg ref="agentManager"/>
+  </bean>
+
+  <bean id="sharedCapabilityMapper" class="com.atlassian.bamboo.migration.stream.SharedCapabilityMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="localCapabilityDao"/>
+    <constructor-arg ref="remoteCapabilityDao"/>
+  </bean>
+
+  <bean id="legacyJiraServerMapper" class="com.atlassian.bamboo.migration.stream.legacy.LegacyJiraServerMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="jiraApplinksService"/>
+    <constructor-arg ref="bandanaManager"/>
+  </bean>
+
+  <bean id="instantMessagingServerMapper" class="com.atlassian.bamboo.migration.stream.InstantMessagingServerMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="instantMessagingServerManager"/>
+  </bean>
+
+  <bean id="mailServerMapper" class="com.atlassian.bamboo.migration.stream.MailServerMapper">
+    <constructor-arg ref="sessionFactory"/>
+  </bean>
+
+  <bean id="elasticInstanceScheduleMapper" class="com.atlassian.bamboo.migration.stream.ElasticInstanceScheduleMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="elasticInstanceScheduleDao"/>
+    <constructor-arg ref="elasticImageConfigurationDao"/>
+  </bean>
+
+  <bean id="projectMapper" class="com.atlassian.bamboo.migration.stream.ProjectMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="projectDao"/>
+    <constructor-arg ref="authorDao"/>
+    <constructor-arg ref="labelDao"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="planVcsRevisionHistoryDao"/>
+    <constructor-arg ref="repositoryDefinitionDao"/>
+    <constructor-arg ref="planRepositoryLinkDao"/>
+    <constructor-arg ref="mapperFactory"/>
+  </bean>
+
+  <bean id="projectChainMapper" class="com.atlassian.bamboo.migration.stream.ProjectChainMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="projectDao"/>
+    <constructor-arg ref="authorDao"/>
+    <constructor-arg ref="labelDao"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="planVcsRevisionHistoryDao"/>
+    <constructor-arg ref="repositoryDefinitionDao"/>
+    <constructor-arg ref="planRepositoryLinkDao"/>
+    <constructor-arg ref="mapperFactory"/>
+  </bean>
+
+  <bean id="projectDependencyMapper" class="com.atlassian.bamboo.migration.stream.ProjectDependencyMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="planDependencyManager"/>
+  </bean>
+
+  <bean id="legacyProjectDependencyMapper" class="com.atlassian.bamboo.migration.stream.LegacyProjectDependencyMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="planDependencyManager"/>
+  </bean>
+
+  <bean id="commitRootMapper" class="com.atlassian.bamboo.migration.stream.CommitRootMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="commitDao"/>
+    <constructor-arg ref="authorDao"/>
+    <constructor-arg ref="repositoryChangesetDao"/>
+  </bean>
+
+  <bean id="commentRootMapper" class="com.atlassian.bamboo.migration.stream.CommentRootMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="commentDao"/>
+  </bean>
+
+  <bean id="linkedJiraIssueRootMapper" class="com.atlassian.bamboo.migration.stream.LinkedJiraIssueRootMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="linkedJiraIssueDao"/>
+  </bean>
+
+  <bean id="bandanaItemMapper" class="com.atlassian.bamboo.migration.stream.BandanaItemMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="bandanaItemDao"/>
+  </bean>
+
+  <bean id="aclMapper" class="com.atlassian.bamboo.migration.stream.AclMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="aclDao"/>
+  </bean>
+
+  <bean id="variableDefinitionMapper" class="com.atlassian.bamboo.migration.stream.VariableDefinitionMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="variableDefinitionDao"/>
+    <constructor-arg ref="planDao"/>
+  </bean>
+
+  <bean id="variableSubstitutionMapper" class="com.atlassian.bamboo.migration.stream.VariableSubstitutionMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="buildResultsSummaryDao"/>
+  </bean>
+
+  <bean id="planVcsRevisionHistoryMapper" class="com.atlassian.bamboo.migration.stream.PlanVcsRevisionHistoryMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="planVcsRevisionHistoryDao"/>
+  </bean>
+
+  <bean id="repositoryDefinitionMapper" class="com.atlassian.bamboo.migration.stream.RepositoryDefinitionMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="repositoryDefinitionDao"/>
+    <constructor-arg ref="planDao"/>
+  </bean>
+
+  <bean id="repositoryChangesetMapper" class="com.atlassian.bamboo.migration.stream.RepositoryChangesetMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="repositoryChangesetDao"/>
+  </bean>
+
+  <bean id="relevantChangesetMapper" class="com.atlassian.bamboo.migration.stream.RelevantChangesetsMapper">
+     <constructor-arg ref="sessionFactory"/>
+     <constructor-arg ref="repositoryChangesetDao"/>
+  </bean>
+
+  <bean id="planRepositoryLinkMapper" class="com.atlassian.bamboo.migration.stream.PlanRepositoryLinkMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="repositoryDefinitionDao"/>
+    <constructor-arg ref="planRepositoryLinkDao"/>
+  </bean>
+
+  <bean id="remoteAgentAuthenticationMapper" class="com.atlassian.bamboo.migration.stream.RemoteAgentAuthenticationMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="remoteAgentAuthenticationDao"/>
+  </bean>
+
+  <bean id="vcsBranchMapper" class="com.atlassian.bamboo.migration.stream.VcsBranchMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="vcsBranchDao"/>
+  </bean>
+
+
+  <bean id="localUserExportDao"  parent="txReadWriteProxy">
+    <property name="target">
+        <bean class="com.atlassian.bamboo.migration.dao.LocalUserHibernateDao">
+          <property name="sessionFactory" ref="sessionFactory"/>
+        </bean>
+    </property>
+  </bean>
+
+  <bean id="externalEntityExportDao" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.migration.dao.ExternalEntityExportHibernateDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="localGroupExportHibernateDao" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.migration.dao.LocalGroupExportHibernateDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="propertyEntryExportDao" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.migration.dao.PropertyEntryExportHibernateDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="externalEntityMapper" class="com.atlassian.bamboo.migration.stream.userdata.ExternalEntityMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="externalEntityExportDao"/>
+  </bean>
+
+  <bean id="localUserMapper" class="com.atlassian.bamboo.migration.stream.userdata.LocalUserMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="localUserExportDao"/>
+  </bean>
+  
+  <bean id="localGroupMapper" class="com.atlassian.bamboo.migration.stream.userdata.LocalGroupMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="localGroupExportHibernateDao"/>
+    <constructor-arg ref="localUserExportDao"/>
+    <constructor-arg ref="externalEntityExportDao"/>
+  </bean>
+
+  <bean id="propertyEntryMapper" class="com.atlassian.bamboo.migration.stream.userdata.PropertyEntryMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="propertyEntryExportDao"/>
+  </bean>
+
+  <bean id="notificationRuleMapper" class="com.atlassian.bamboo.migration.stream.notifications.NotificationRuleMapper">
+    <constructor-arg ref="sessionFactory"/>
+  </bean>
+
+  <bean id="notificationSetMapper" class="com.atlassian.bamboo.migration.stream.notifications.NotificationSetMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="notificationRuleMapper"/>
+  </bean>
+
+  <bean id="legacyRequirementMapper" class="com.atlassian.bamboo.migration.stream.requirements.LegacyRequirementMapper">
+    <constructor-arg ref="sessionFactory"/>
+  </bean>
+
+  <bean id="requirementSetMapper" class="com.atlassian.bamboo.migration.stream.requirements.RequirementSetMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="requirementMapper"/>
+  </bean>
+
+  <bean id="requirementMapper" class="com.atlassian.bamboo.migration.stream.requirements.RequirementMapper">
+    <constructor-arg ref="sessionFactory"/>
+  </bean>
+
+  <bean id="activeObjectsMapper" class="com.atlassian.bamboo.migration.stream.activeobjects.ActiveObjectsMapper">
+  </bean>
+
+  <bean id="variableBaselineItemMapper" class="com.atlassian.bamboo.migration.stream.variable.baseline.VariableBaselineItemMapper">
+    <constructor-arg ref="sessionFactory"/>
+  </bean>
+
+  <bean id="variableContextBaselineMapper" class="com.atlassian.bamboo.migration.stream.variable.baseline.VariableContextBaselineMapper">
+    <constructor-arg ref="sessionFactory"/>
+    <constructor-arg ref="variableBaselineItemMapper"/>
+    <constructor-arg ref="variableContextBaselineDao"/>
+    <constructor-arg ref="variableContextBaselinePropertiesMapper"/>
+  </bean>
+
+  <bean id="variableContextBaselinePropertiesMapper" class="com.atlassian.bamboo.migration.stream.variable.baseline.VariableContextBaselinePropertiesMapper">
+    <constructor-arg ref="sessionFactory"/>
+  </bean>
+
+</beans>

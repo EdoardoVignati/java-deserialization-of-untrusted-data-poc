@@ -1,0 +1,66 @@
+{namespace bamboo.feature.agent.assignment}
+
+/**
+ * @param name
+ * @param? metaData
+ */
+{template .environmentItemResult}
+    <span>{$name} {if $metaData}<span class="autocomplete-metadata">{$metaData}</span>{/if}</span>
+{/template}
+
+/**
+ * @param capabilitiesTooltipUrl
+ * @param environments
+ * @param? addedEnvironment
+ */
+{template .environmentList}
+ {if $environments and length($environments) > 0}
+        {call aui.table}
+            {param theadContent}
+                <tr>
+                  <th>{getText('agents.assignment.agent.environment')}</th>
+                  <th>{getText('agents.assignment.agent.project')}</th>
+                  <th></th>
+                </tr>
+            {/param}
+            {param content}
+                {foreach $environment in $environments}
+                    <tr data-id="{$environment.id}" {if $addedEnvironment and $addedEnvironment.id == $environment.id}class="multi-select-added"{/if}>
+                        {call .environmentItem data="$environment"}
+                            {param capabilitiesTooltipUrl: $capabilitiesTooltipUrl/}
+                        {/call}
+                    </tr>
+                {/foreach}
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param capabilitiesTooltipUrl url to show tooltip content when capabilities don't match. Must contain context path and '?'
+ * @param name
+ * @param id
+ * @param? metaData
+ * @param capabilitiesMatch
+ */
+{template .environmentItem private="true"}
+    <td>
+        {$name}
+        <input type="hidden" name="selectedEnvironments" value="{$id}"/>
+    </td>
+    <td>
+        {if $metaData}{$metaData}{/if}
+    </td>
+    <td class="actions">
+        {if not $capabilitiesMatch}
+            <span id="failed-capability-match-{$id}"  class="aui-icon aui-icon-error"></span>{sp}
+            {call bamboo.widget.tooltip.tooltip}
+                {param trigger: '#failed-capability-match-' + $id/}
+                {param url : $capabilitiesTooltipUrl +  '&environmentId=' + $id/}
+                {param showDelay: 300 /}
+            {/call}
+        {/if}
+        <a class="remove"></a>
+    </td>
+{/template}
+

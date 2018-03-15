@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN" "http://tuckey.org/res/dtds/urlrewrite4.0.dtd">
+<urlrewrite>
+
+  <!-- Caching of static resources -->
+  <class-rule class="com.atlassian.plugin.webresource.filter.rewrite.ResourceDownloadRewriteRule"/>
+
+  <!-- Rule for the artifacts  -->
+
+    <!-- Job/Job urls -->
+    <rule>
+        <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})-([A-Z0-9]{2,})-([0-9]+)/artifact/(.*)</from>
+        <run class="com.atlassian.plugin.servlet.ResourceDownloadUtils" method="addCachingHeaders"/>
+        <to type="forward">/artifact/$1-$2/$3/build-$4/$5</to>
+    </rule>
+
+    <!-- latest / latestSuccessful-->
+    <rule>
+        <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})-([A-Z0-9]{2,})/(latest[^/]*)/artifact/(.*)</from>
+        <to type="forward">/artifact/$1-$2/$3/build-$4/$5</to>
+    </rule>
+
+  <!-- Plan / Chain urls -->
+    <rule>
+        <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})-([0-9]+)/artifact/([A-Z0-9]{2,})/(.*)</from>
+        <run class="com.atlassian.plugin.servlet.ResourceDownloadUtils" method="addCachingHeaders"/>
+        <to type="forward">/artifact/$1-$2/$4/build-$3/$5</to>
+    </rule>
+    <rule>
+        <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})/(latest[^/]*)/artifact/([A-Z0-9]{2,})/(.*)</from>
+        <to type="forward">/artifact/$1-$2/$4/build-$3/$5</to>
+    </rule>
+
+  <!-- Redirect pre 2.7 /activity to Plan Summary -->
+  <rule>
+    <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})/activity</from>
+    <to type="permanent-redirect">%{context-path}/browse/$1-$2</to>
+  </rule>
+  <rule>
+     <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})-([A-Z0-9]{2,})/activity</from>
+     <to type="permanent-redirect">%{context-path}/browse/$1-$2-$3</to>
+  </rule>
+
+  <!-- Redirect pre 2.7 /log to Plan Summary -->
+  <rule>
+      <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})/log</from>
+      <to type="permanent-redirect">%{context-path}/browse/$1-$2</to>
+  </rule>
+  <rule>
+      <from>/browse/([A-Z0-9]{2,})-([A-Z0-9]{2,})-([A-Z0-9]{2,})/log</from>
+      <to type="permanent-redirect">%{context-path}/browse/$1-$2-$3</to>
+  </rule>
+
+  <!-- For old RSS links.-->
+  <rule>
+    <from>/download/allbuilds/rss/allBuilds.xml</from>
+    <to>/rss/createAllBuildsRssFeed.action?feedType=rssAll</to>
+  </rule>
+  <rule>
+    <from>/download/allbuilds/rss/failedBuilds.xml</from>
+    <to>/rss/createAllBuildsRssFeed.action?feedType=rssFailed</to>
+  </rule>
+  <rule>
+    <from>/download/(.*)/rss/failedBuilds.xml</from>
+    <to>/rss/createAllBuildsRssFeed.action?feedType=rssFailed&amp;buildKey=$1</to>
+  </rule>
+  <rule>
+    <from>/download/(.*)/rss/allBuilds.xml</from>
+    <to>/rss/createAllBuildsRssFeed.action?feedType=rssAll&amp;buildKey=$1</to>
+  </rule>
+
+  <!-- For loading remote agents   -->
+  <rule>
+    <from>/agentServer/GetPackage.action</from>
+    <to>/agentServer/GetPackage</to>
+  </rule>
+  <rule>
+    <from>/agentServer/GetJar.action</from>
+    <to>/agentServer/GetJar</to>
+  </rule>
+  <rule>
+    <from>/agentServer/GetResource.action</from>
+    <to>/agentServer/GetResource</to>
+  </rule>
+  <rule>
+    <from>/agentServer/GetResources.action</from>
+    <to>/agentServer/GetResources</to>
+  </rule>
+
+  <!--About Page-->
+  <rule>
+    <from>/about</from>
+    <to>/about.action</to>
+  </rule>
+</urlrewrite>

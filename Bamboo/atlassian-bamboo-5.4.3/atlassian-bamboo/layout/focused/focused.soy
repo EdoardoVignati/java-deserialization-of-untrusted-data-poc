@@ -1,0 +1,21 @@
+{namespace bamboo.layout}
+
+/**
+ * Focused Task Layout
+ * @param? headerImageContent
+ * @param? headerMainContent - required if progressTrackerSteps is supplied (ADG rule)
+ * @param? progressTrackerSteps - array of steps to show in progress tracker
+ * @param content
+ */
+{template .focused}
+    {call .base data="all"}
+        {param headerActionsContent}
+            {if $progressTrackerSteps and length($progressTrackerSteps)}
+                {call aui.progressTracker.progressTracker}
+                    {param isInverted: true /}
+                    {param steps: $progressTrackerSteps /}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+{/template}

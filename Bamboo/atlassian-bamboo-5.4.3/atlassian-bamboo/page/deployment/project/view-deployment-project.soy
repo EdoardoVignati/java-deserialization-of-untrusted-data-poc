@@ -1,0 +1,68 @@
+{namespace bamboo.page.deployment.project}
+
+/**
+ * @param deploymentProject
+ * @param relatedPlan
+ * @param deploymentProjectItems
+ * @param currentUrl
+ */
+{template .projectEnvironmentsPageBody}
+    <div class="project-summary">
+        <h2>{getText('deployment.project.summary.title')}</h2>
+        {call bamboo.feature.deployment.build.showRelatedPlanDetails}
+            {param relatedPlan: $relatedPlan /}
+            {param deploymentProjectItems: $deploymentProjectItems /}
+        {/call}
+        {call bamboo.feature.deployment.project.projectList.container}
+            {param id: 'projectEnvironments'/}
+            {param projectId: $deploymentProject.id /}
+            {param showProject: false /}
+            {param currentUrl: $currentUrl /}
+        {/call}
+    </div>
+{/template}
+
+/**
+ * @param deploymentVersionsWithCurrentEnvironments
+ * @param deploymentVersionsWithHistoricalEnvironments
+ * @param deploymentProject
+ * @param helpUrl
+ */
+{template .projectVersionsPageBody}
+    {if length($deploymentVersionsWithHistoricalEnvironments) > 0}
+        {if length($deploymentVersionsWithCurrentEnvironments) > 0}
+            <h2>{getText('deployment.project.versions.currentlyDeployed')}</h2>
+            {call bamboo.feature.deployment.version.versionList.container}
+                {param id: 'deployment-project-currently-deployed'/}
+                {param deploymentProject: $deploymentProject/}
+                {param versions:  $deploymentVersionsWithCurrentEnvironments /}
+            {/call}
+        {/if}
+        <h2>{getText('deployment.project.versions.versionHistory')}</h2>
+        {call bamboo.feature.deployment.version.versionList.container}
+            {param id: 'deployment-project-version-history'/}
+            {param deploymentProject: $deploymentProject/}
+            {param versions:  $deploymentVersionsWithHistoricalEnvironments /}
+            {param limit: 15 /}
+            {param isHistory: true/}
+        {/call}
+    {else}
+        {let $returnUrl: '/deploy/viewDeploymentProjectVersions.action?id=' + $deploymentProject.id/}
+        <div class="no-versions">
+            <img src="{contextPath()}/images/deployment/no-version-created.png" />
+            <h2>{getText('deployment.project.versions.noneCreated')}</h2>
+            <p>{getText('deployment.project.versions.noneCreated.description')}</p>
+            <p>
+                {if $deploymentProject.operations.allowedToCreateVersion}
+                    {getText('deployment.project.versions.createOrLearnMore',
+                     contextPath() + '/deploy/createDeploymentVersion.action?deploymentProjectId=' + $deploymentProject.id + '&returnUrl=' + $returnUrl,
+                     $helpUrl)|noAutoescape}
+                {else}
+                    <a href='{$helpUrl}'>
+                        {getText('deployment.project.versions.learnMore')|noAutoescape}
+                    </a>
+                {/if}
+            </p>
+        </div>
+    {/if}
+{/template}

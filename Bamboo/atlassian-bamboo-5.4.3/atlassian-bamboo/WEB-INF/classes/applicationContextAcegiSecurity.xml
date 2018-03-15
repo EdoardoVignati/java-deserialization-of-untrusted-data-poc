@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+
+  <bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
+    <property name="filterInvocationDefinitionSource">
+      <value>
+        CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+        PATTERN_TYPE_APACHE_ANT
+        /plugins/servlet/stream**=anonymousProcessingFilter,exceptionTranslationFilter,seraphLoginFilter,filterSecurityInterceptor
+        /**=seraphLoginFilter,anonymousProcessingFilter
+      </value>
+    </property>
+  </bean>
+
+  <!-- =========================================================================================== Acegi Web Filters -->
+  <!-- TODO: Custom filter to put an authentication object in SecurityContextHolder after Seraph login-->
+  <bean id="seraphLoginFilter" class="com.atlassian.bamboo.filter.SeraphLoginFilter">
+    <property name="bambooUserManager" ref="bambooUserManager"/>
+  </bean>
+
+  <bean id="filterSecurityInterceptor" class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="accessDecisionManager">
+      <bean class="com.atlassian.bamboo.security.acegi.vote.UnanimousMultiAccessDecisionManager">
+        <constructor-arg>
+          <list>
+            <ref local="mustMatchAllVoters"/>
+          </list>
+        </constructor-arg>
+      </bean>
+    </property>
+    <property name="objectDefinitionSource" value=".*=GLOBAL_READ"/>
+  </bean>
+
+  <bean id="exceptionTranslationFilter" class="org.acegisecurity.ui.ExceptionTranslationFilter">
+    <property name="authenticationEntryPoint">
+      <bean class="org.acegisecurity.ui.basicauth.BasicProcessingFilterEntryPoint">
+        <property name="realmName" value="Bamboo"/>
+      </bean>
+    </property>
+
+    <property name="accessDeniedHandler">
+      <bean class="org.acegisecurity.ui.AccessDeniedHandlerImpl"/>
+    </property>
+  </bean>
+
+  <bean id="httpSessionContextIntegrationFilter" class="org.acegisecurity.context.HttpSessionContextIntegrationFilter"/>
+
+  <!--Gives anonymous access a ROLE_ANONYMOUS Authority -->
+  <bean id="anonymousProcessingFilter" class="org.acegisecurity.providers.anonymous.AnonymousProcessingFilter">
+    <property name="key" value="anonymous"/>
+    <property name="userAttribute" value="anonymousUser,ROLE_ANONYMOUS"/>
+  </bean>
+
+  <!-- ======================================================================= Default Acegi Authentication Managers -->
+  <!-- We can use a mock authentication manager as we authenticate via seraph and the 'alwaysReauthenticate' flag
+       should always be off -->
+  <bean id="authenticationManager" class="org.acegisecurity.MockAuthenticationManager"/>
+  <!-- Logs authorisation events -->
+  <bean id="loggerListener" class="com.atlassian.bamboo.security.acegi.acls.AuthorizationLoggerListener"/>
+
+  <!-- ============================================================================================================= -->
+  <!-- XWork Interceptor implementation of Acegi's Security Interceptor -->
+  <!-- This replaces the old URL driven protection by the filterInvocationInterceptor -->
+  <bean id="webworkSecurityInterceptor" class="com.atlassian.bamboo.security.acegi.intercept.web.WebworkSecurityInterceptor">
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <!-- Determines which permissions we can possibly check, and how we should check it -->
+    <property name="accessDecisionManager">
+      <bean class="com.atlassian.bamboo.security.acegi.vote.UnanimousMultiAccessDecisionManager">
+        <constructor-arg>
+          <list>
+            <ref local="matchAnyOfTheseVoters"/>
+            <ref local="mustMatchAllVoters"/>
+          </list>
+        </constructor-arg>
+      </bean>
+    </property>
+    <!--
+    Specifies which permissions to check for a security interface. The security interface used for the check is the closest (in terms of hierarchy)
+    directly (non-transitively) implemented interface. If a class directly implements more than one interface from this list, a sum of all permissions
+    will be taken.
+    -->
+    <property name="objectDefinitionSource">
+      <value>
+        com.atlassian.bamboo.ww2.aware.permissions.GlobalAdminSecurityAware=WW_ADMIN,WW_RESTRICTED_ADMIN,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.PlanAdminSecurityAware=WW_ADMIN,WW_NEWOBJECT,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.PlanEditSecurityAware=WW_EDIT,WW_NEWOBJECT,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.GlobalCreatePlanSecurityAware=WW_CREATE,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.PlanExecuteSecurityAware=WW_EXECUTE,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.PlanReadSecurityAware=WW_READ,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.GlobalReadSecurityAware=WW_READ,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.DomainObjectSecurityAware=GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.AuthenticatedUserSecurityAware=ROLE_USER
+        com.atlassian.bamboo.ww2.aware.permissions.GlobalBypassSecurityAware=ROLE_ANONYMOUS,ROLE_USER
+        com.atlassian.bamboo.ww2.aware.permissions.DeploymentProjectEditSecurityAware=WW_EDIT,WW_NEWOBJECT,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.DeploymentEnvironmentEditSecurityAware=WW_EDIT,WW_NEWOBJECT,GLOBAL_READ
+        com.atlassian.bamboo.ww2.aware.permissions.DeploymentEnvironmentExecuteSecurityAware=WW_EXECUTE,GLOBAL_READ
+      </value>
+    </property>
+    <property name="overrideAuthorities"> <!-- Below authorities will bypass WebworkSecurityInterceptor -->
+      <list>
+        <bean class="org.acegisecurity.GrantedAuthorityImpl"> <!-- System can do ANYTHING -->
+          <constructor-arg value="ROLE_SYSTEM"/>
+        </bean>
+        <bean class="org.acegisecurity.GrantedAuthorityImpl"> <!-- Global admin can do ANYTHING. -->
+          <constructor-arg value="ROLE_ADMIN"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Decision Managers -->
+  <bean class="org.acegisecurity.vote.AffirmativeBased" id="matchAnyOfTheseVoters">
+    <property name="allowIfAllAbstainDecisions" value="true"/>
+    <property name="decisionVoters">
+      <list>
+        <bean class="org.acegisecurity.vote.RoleVoter"/>
+        <ref local="wwReadVoter"/>
+        <ref local="wwExecuteVoter"/>
+        <ref local="wwAdminVoter"/>
+        <ref local="wwRestrictedAdminVoter"/>
+        <ref local="wwEditVoter"/>
+        <ref local="wwCloneVoter"/>
+        <ref local="wwCreateVoter"/>
+        <ref local="wwSignUpVoter"/>
+        <ref local="wwNewObjectVoter"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean class="org.acegisecurity.vote.UnanimousBased" id="mustMatchAllVoters">
+    <property name="allowIfAllAbstainDecisions" value="true"/>
+    <property name="decisionVoters">
+      <list>
+        <ref local="globalReadVoter"/>
+      </list>
+    </property>
+  </bean>
+
+
+  <!-- Voters -->
+  <bean id="wwReadVoter" parent="wwVoter">
+    <constructor-arg value="WW_READ"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwExecuteVoter" parent="wwVoter">
+    <constructor-arg value="WW_EXECUTE"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.BUILD"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwCloneVoter" parent="wwRestrictedAdminAwareVoter">
+    <constructor-arg value="WW_CLONE"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CLONE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwEditVoter" parent="wwVoter">
+    <constructor-arg value="WW_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwAdminVoter" parent="wwVoter">
+    <constructor-arg value="WW_ADMIN"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.ADMINISTRATION"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwRestrictedAdminVoter" parent="wwVoter">
+    <constructor-arg value="WW_RESTRICTED_ADMIN"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.RESTRICTEDADMINISTRATION"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwCreateVoter" parent="wwRestrictedAdminAwareVoter">
+    <constructor-arg value="WW_CREATE"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CREATE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="wwSignUpVoter" parent="wwVoter">
+    <constructor-arg value="WW_SIGNUP"/>
+    <constructor-arg>
+      <list>
+        <ref bean="com.atlassian.bamboo.security.acegi.acls.BambooPermission.SIGN_UP"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!--Abstract WW ACL Voter-->
+  <bean id="wwVoter" class="com.atlassian.bamboo.security.acegi.vote.WebworkAclVoter" abstract="true">
+    <constructor-arg ref="aclService"/>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <bean id="wwRestrictedAdminAwareVoter" class="com.atlassian.bamboo.security.acegi.vote.RestrictedAdminAwareWebworkAclVoter" abstract="true">
+    <constructor-arg ref="aclService"/>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <bean id="globalReadVoter" class="com.atlassian.bamboo.security.acegi.vote.GlobalReadVoter">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="GLOBAL_READ"/>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <bean id="wwNewObjectVoter" class="com.atlassian.bamboo.security.acegi.vote.WebworkNewObjectAclVoter">
+    <constructor-arg value="WW_NEWOBJECT"/>
+  </bean>
+</beans>

@@ -1,0 +1,203 @@
+
+ul#buildResultsList
+{
+    width: 100%;
+}
+
+ul#buildResultsList, ul#buildResultsList *, .buildPlanList, .buildPlanList *
+{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    vertical-align: bottom;
+    line-height: 1.4;
+}
+
+ul#buildResultsList .subText, ul#buildResultsList .subText *
+{
+    font-size: 10px;
+}
+
+
+ul#buildResultsList .columnContainer
+{
+    display: inline;
+    width: auto;
+}
+
+ul#buildResultsList li, .issues ol
+{
+	display: inline;
+	/*float: left;*/
+	/*margin: 0 10px 0 0;*/
+	/*font-weight: bold;*/
+}
+
+ul#buildResultsList li.summary
+{
+    overflow: hidden;    
+}
+
+ul#buildResultsList li.summary, ul#buildResultsList li.summaryInfoContainer, ul#buildResultsList li.buildDetails
+{
+    display: block;        
+	width: auto;
+    clear: both;
+}
+
+ul#buildResultsList li.statusIcon
+{
+    padding-right: 5px;
+}
+ul#buildResultsList li.summary, .buildPlanList .plan
+{
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #ccc;
+    
+}
+
+ul#buildResultsList li.last, .buildPlanList .plan .last
+{
+    border-bottom: none;
+}
+
+ul#buildResultsList ul.rightSummary
+{
+	float: right;
+    margin-right: 5px;
+}
+
+ul#buildResultsList ul.leftSummary
+{
+	float: left;
+}
+ul#buildResultsList .summaryFailed .buildResultKey a, .buildPlanList .plan .Failed *
+{
+    color: #CC0000;
+}
+
+ul#buildResultsList .summarySuccessful .buildResultKey a, .buildPlanList .plan .Successful *
+{
+    color: #009900;
+}
+
+ul#buildResultsList ol.centreSummary .buildResultKey a, .planName *
+{
+    font-size: 12px;
+    font-weight: bold;
+}
+
+ul#buildResultsList ol.centreSummary .buildResultKeyContainer
+{
+    width: 270px;
+}
+
+ul#buildResultsList ol.centreSummary
+{
+	float: left;
+    width: 85%;
+}
+ul#buildResultsList ol.centreSummary li
+{
+    width: auto;
+}
+
+ul#buildResultsList .fixesIssues
+{
+    margin-right: 5px;
+}
+
+ul#buildResultsList ul.summaryInfo
+{
+    float: left;
+}
+ul#buildResultsList li.buildDetails
+{
+    margin-top: 3px;
+}
+
+ul#buildResultsList li.buildDetails ul .detailContainer, ul#buildResultsList .summaryInfo .buildResultKey, ul#buildResultsList .summaryInfo .issues
+{
+    display: block;
+}
+
+ul#buildResultsList li.buildDetails ul .detailContainer
+{
+    /* Interestingly, no width causes IE to pad in an extra line */
+    width: 100%;
+}
+
+ul#buildResultsList .summaryInfo .buildResultKey, ul#buildResultsList .summaryInfo .issues
+{
+    float: left;
+    display: block;
+}
+
+ul#buildResultsList .clearer
+{
+    clear: both;
+}
+
+.buildPlanList, .buildPlanList .plan
+{
+    width: 100%;
+    overflow: hidden;
+    clear: both;
+}
+
+.buildPlanList .plan .currentBuildStatusIcon img
+{
+    vertical-align: top;
+}
+
+.buildPlanList .plan .currentBuildStatusIcon
+{
+    margin-right: 5px;
+}
+
+.buildPlanList ul.planName li
+{
+    display: inline;
+}
+.buildPlanList ul.planName
+{
+    float: left;
+    width: 49%;
+}
+
+.buildPlanList ul.buildSummaryDetails
+{
+    float: right;
+    text-align: right;
+    width: 49%;
+}
+
+
+span.buildSummaryDetails  {
+    display: inline;
+    list-style: none;
+    font-size: 10px !important;
+}
+
+span.buildSummaryDetails * {
+    font-size: 10px !important;
+}
+
+
+span.buildSummaryDetails li {
+    padding: 0 4px 0 0 !important;
+    margin: 0 4px 0 0 !important;
+    border-right: 1px solid gray;
+    display: inline;
+}
+
+span.buildSummaryDetails > span {
+    border-left: 1px solid gray;
+    display: inline;
+    margin: 0 0 0 4px;
+    padding: 0 0 0 4px;
+}
+
+span.buildSummaryDetails > span:first-child {
+    border: 0;
+}

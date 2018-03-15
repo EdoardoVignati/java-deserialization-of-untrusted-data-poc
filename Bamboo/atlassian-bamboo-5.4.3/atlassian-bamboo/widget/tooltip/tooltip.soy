@@ -1,0 +1,25 @@
+{namespace bamboo.widget.tooltip}
+
+/**
+ * Tooltip
+ * @param trigger - selector that should trigger the tooltip
+ * @param? content - content with which to populate the tooltip. Required if $url not specified
+ * @param? url - url of location of content to populate the tooltip. Required if $content not specified
+ * @param? showDelay
+ * @param? width
+ * @param? addMarker - add marker to tooltip trigger. Default: false
+ */
+{template .tooltip}
+    <script>
+        new BAMBOO.Tooltip('{$trigger}', {lb}
+            {if $url}
+                url: '{$url|escapeJsString}'
+            {else}
+                content: '{$content|escapeJsString}'
+            {/if}
+            {if $addMarker},addMarker: {$addMarker}{/if}
+            {if $showDelay},showDelay: {$showDelay}{/if}
+            {if $width},width: {$width}{/if}
+        {rb});
+    </script>
+{/template}

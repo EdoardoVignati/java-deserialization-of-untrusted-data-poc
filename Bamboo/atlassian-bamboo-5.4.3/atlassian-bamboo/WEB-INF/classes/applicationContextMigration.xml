@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+  <bean id="xmlMigrator" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.migration.XmlMigrator">
+        <property name="bootstrapManager" ref="bootstrapManager"/>
+        <property name="persister" ref="persister"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="schemaHelper" ref="schemaHelper"/>
+        <property name="resettableHiLoGeneratorHelper" ref="resettableHiLoGeneratorHelper" />
+        <property name="applicationConfig" ref="applicationConfig" />
+        <property name="upgradeUtilityBean" ref="upgradeUtilityBean" />
+
+        <property name="exporters">
+          <list>
+            <ref bean="userMapper" />
+            <ref bean="groupMapper" />
+            <ref bean="localUserMapper"/>
+            <ref bean="externalEntityMapper"/>
+            <ref bean="localGroupMapper"/>
+            <ref bean="propertyEntryMapper"/>
+            <ref bean="authorMapper" />
+            <ref bean="trustedApplicationsMapper"/>
+            <ref bean="labelMapper" />
+            <ref bean="elasticImageConfigurationMapper" />
+            <ref bean="pipelineMapper" />
+            <ref bean="sharedCapabilityMapper" />
+            <ref bean="instantMessagingServerMapper" />
+            <ref bean="mailServerMapper" />
+            <ref bean="elasticInstanceScheduleMapper" />
+            <ref bean="variableContextBaselineMapper" />
+            <ref bean="projectMapper" />
+            <ref bean="projectDependencyMapper" />
+            <ref bean="repositoryDefinitionMapper"/>
+            <ref bean="planRepositoryLinkMapper"/>
+            <ref bean="repositoryChangesetMapper"/>
+            <ref bean="relevantChangesetMapper"/>
+            <ref bean="commitRootMapper" />
+            <ref bean="commentRootMapper" />
+            <ref bean="linkedJiraIssueRootMapper" />
+            <ref bean="bandanaItemMapper" />
+            <ref bean="aclMapper" />
+            <ref bean="testClassMapper" />
+            <ref bean="testCaseMapper" />
+            <ref bean="testClassResultMapper" />
+            <ref bean="testCaseResultMapper" />
+            <ref bean="testCaseResultErrorMapper" />
+            <ref bean="loginInformationMapper" />
+            <ref bean="artifactDefinitionMapper" />
+            <ref bean="artifactSubscriptionMapper" />
+            <ref bean="artifactMapper"/>
+            <ref bean="artifactLinkMapper" />
+            <ref bean="consumedSubscriptionMapper" />
+            <ref bean="auditLogMapper" />
+            <ref bean="variableDefinitionMapper" />
+            <ref bean="variableSubstitutionMapper" />
+            <ref bean="planVcsRevisionHistoryMapper"/>
+            <ref bean="remoteAgentAuthenticationMapper"/>
+            <ref bean="vcsBranchMapper"/>
+            <ref bean="activeObjectsMapper"/>
+            <ref bean="deploymentProjectMapper"/>
+            <ref bean="deploymentVersionVcsCommitMapper"/>
+            <ref bean="deploymentResultMapper"/>
+            <ref bean="agentAssignmentMapper"/>
+          </list>
+        </property>
+
+        <property name="headerImporters">
+          <list>
+            <ref bean="buildNumberMapper" />
+            <ref bean="serverIdMapper" />
+          </list>
+        </property>
+
+        <property name="importers">
+          <list>
+            <ref bean="userMapper" />
+            <ref bean="groupMapper" />
+            <ref bean="localUserMapper"/>
+            <ref bean="externalEntityMapper"/>
+            <ref bean="localGroupMapper"/>
+            <ref bean="propertyEntryMapper"/>
+            <ref bean="authorMapper" />
+            <ref bean="trustedApplicationsMapper"/>
+            <ref bean="labelMapper" />
+            <ref bean="elasticImageConfigurationMapper" />
+            <ref bean="pipelineMapper" />
+            <ref bean="sharedCapabilityMapper" />
+            <ref bean="legacyJiraServerMapper" />
+            <ref bean="instantMessagingServerMapper" />
+            <ref bean="mailServerMapper" />
+            <ref bean="elasticInstanceScheduleMapper" />
+            <ref bean="variableContextBaselineMapper" />
+            <ref bean="projectMapper" />
+            <ref bean="projectChainMapper" />
+            <ref bean="projectDependencyMapper" />
+            <ref bean="legacyProjectDependencyMapper" />
+            <ref bean="repositoryDefinitionMapper"/>
+            <ref bean="planRepositoryLinkMapper"/>
+            <ref bean="repositoryChangesetMapper"/>
+            <ref bean="relevantChangesetMapper"/>
+            <ref bean="commitRootMapper" />
+            <ref bean="commentRootMapper" />
+            <ref bean="linkedJiraIssueRootMapper" />
+            <ref bean="bandanaItemMapper" />
+            <ref bean="aclMapper" />
+            <ref bean="testClassMapper" />
+            <ref bean="testCaseMapper" />
+            <ref bean="testClassResultMapper" />
+            <ref bean="testCaseResultMapper" />
+            <ref bean="testCaseResultErrorMapper" />
+            <ref bean="loginInformationMapper" />
+            <ref bean="artifactDefinitionMapper" />
+            <ref bean="artifactSubscriptionMapper" />
+            <ref bean="artifactMapper"/>
+            <ref bean="artifactLinkMapper" />
+            <ref bean="consumedSubscriptionMapper" />
+            <ref bean="auditLogMapper" />
+            <ref bean="variableSubstitutionMapper" />
+            <ref bean="planVcsRevisionHistoryMapper"/>
+            <ref bean="remoteAgentAuthenticationMapper"/>
+            <ref bean="vcsBranchMapper"/>
+            <ref bean="deploymentProjectMapper"/>
+            <ref bean="variableDefinitionMapper" /> <!-- should import after plans and deployments -->
+            <ref bean="deploymentVersionVcsCommitMapper"/>
+            <ref bean="deploymentResultMapper"/> <!-- after deploymentProjectMapper and variableContextBaselineMapper -->
+            <ref bean="agentAssignmentMapper"/>
+          </list>
+        </property>
+        <property name="osgiDependentImporters">
+          <list>
+            <ref bean="activeObjectsMapper"/>
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="importExportManager" class="com.atlassian.bamboo.migration.ImportExportManagerImpl" plugin:available="true">
+    <constructor-arg ref="deletionService"/>
+    <constructor-arg ref="xmlMigrator" />
+    <constructor-arg ref="textProvider" />
+    <constructor-arg ref="adminErrorHandler" />
+    <constructor-arg ref="dummyResultsSummaryCache" />
+    <constructor-arg ref="immutablePlanCacheService" />
+    <constructor-arg ref="serverLifecycleManager" />
+  </bean>
+
+  <bean id="dummyResultsSummaryCache" class="com.atlassian.bamboo.migration.beans.DummyResultsSummaryCache">
+    <constructor-arg ref="buildResultsSummaryDao"/>
+    <constructor-arg value="100000"/>
+  </bean>
+
+</beans>

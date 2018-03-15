@@ -1,0 +1,8 @@
+[#-- @ftlvariable name="action" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[@ww.text name='bulkAction.manualBuild.updateBuild' /] [#t]
+[#if bulkAction.getNewDependenciesDisabled(params)]
+    [@ww.text name='bulkAction.manualBuild.withoutDep' /]
+[#else]
+    [@ww.text name='bulkAction.manualBuild.withDep' /]
+[/#if]

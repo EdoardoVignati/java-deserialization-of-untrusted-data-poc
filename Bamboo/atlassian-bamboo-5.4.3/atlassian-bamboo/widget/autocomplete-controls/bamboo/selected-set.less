@@ -1,0 +1,54 @@
+@import "../../../global.less";
+
+.bamboo-selected-set-table {
+  &.empty {
+    display: none;
+  }
+  .remove {
+    .icon-cross-delete();
+    display: inline-block;
+  }
+  .actions {
+    text-align: right;
+  }
+  .multi-select-added {
+    background-color: @primaryHighlightColor;
+  }
+}
+
+@liPadding: 20px;
+
+.bamboo-selected-set-list {
+    display: inline-block;
+    list-style: none;
+    line-height: 1;
+    min-width: 258px;
+    padding: 0;
+
+    &.empty {
+      display: none;
+    }
+    &.disabled .remove {
+      display: none;
+    }
+    > li {
+      min-height: 16px;
+      padding: 1px @liPadding 0 0;
+      position: relative;
+
+      + li {
+        margin-top: @baseSpacing;
+      }
+    }
+    .remove {
+      .icon-cross-delete();
+      position: absolute;
+      right: 0;
+    }
+    + .description {
+      margin-top: @baseSpacing;
+    }
+    .multi-select-added {
+      background-color: @primaryHighlightColor;
+    }
+}

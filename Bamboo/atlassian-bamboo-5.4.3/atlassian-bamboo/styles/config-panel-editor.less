@@ -1,0 +1,241 @@
+@import "../global.less";
+
+/* Config Panel Editor Layout */
+@panelListWidth: 344px;
+@panelListWidthAndGutter: @panelListWidth + @doubleSpacing;
+#panel-editor-setup {
+    border-top: 1px solid @dividerColor;
+    margin: @doubleSpacing 0 0;
+    min-height: 360px;
+    overflow: hidden;
+    padding-left: @panelListWidthAndGutter;
+    position: relative;
+}
+#panel-editor-setup:after {
+    background: @dividerColor;
+    bottom: 0;
+    content: "";
+    left: @panelListWidth;
+    position: absolute;
+    top: 0;
+    width: 1px;
+}
+#panel-editor-list {
+    float: left;
+    margin-left: -@panelListWidthAndGutter;
+    width: @panelListWidth;
+}
+#panel-editor-config {
+    float: left;
+    padding: @baseSpacing 0;
+    position: relative;
+    width: 100%;
+}
+
+/* Item List */
+#panel-editor-list > ul {
+    list-style: none;
+    margin: -1px 0 10px;
+    padding: 0;
+}
+#panel-editor-list > ul > li {
+    border-bottom: 1px solid @dividerColor;
+    border-top: 1px solid @dividerColor;
+    margin: 0 0 -1px;
+    padding: 6px 28px 6px 12px;
+    position: relative;
+}
+#panel-editor-list .item {
+    .transition(background 0.3s ease);
+    cursor: pointer;
+}
+#panel-editor-list .item:hover {
+    background: @bodyBackgroundColor;
+}
+#panel-editor-list .item.active {
+    background: @primaryLinkColor;
+}
+#panel-editor-list .item > input {
+    margin: 0 6px 0 0;
+    vertical-align: middle;
+}
+#panel-editor-list .item > .icon-loading + input {
+    visibility: hidden;
+}
+#panel-editor-list .item-title {
+    border: 0;
+    color: inherit;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+@description-width: 300px;
+#panel-editor-list .item-description {
+    .transition(color 0.3s ease);
+    color: @secondaryTextColor;
+    font-size: 12px;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: @description-width;
+}
+#panel-editor-list > ul.ui-sortable .item-description,
+#panel-editor-list > ul.ui-sortable .item-title {
+    width: (@description-width - 12px);
+}
+
+#panel-editor-list li.invalid h3 {
+    color: #c00;
+}
+#panel-editor-list li.invalid.active h3 {
+    color: #fff;
+}
+#panel-editor-list .item a {
+    .transition(color 0.3s ease);
+    display: block;
+    text-decoration: none;
+}
+#panel-editor-list .item > .icon-loading,
+#panel-editor-list .item > a.delete {
+    line-height: 1;
+    margin-top: -8px;
+    position: absolute;
+    right: 6px;
+    top: 50%;
+}
+#panel-editor-list .item > a.delete {
+    background: @activeDividerColor;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    color: #fff;
+    font: bold 14px/16px Arial, Helvetica, sans-serif;
+    height: 16px;
+    text-align: center;
+    text-decoration: none;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
+    transition: all 0.1s ease;
+    width: 16px;
+}
+#panel-editor-list .item > a.delete:hover {
+    background: @secondaryTextColor;
+}
+#panel-editor-list .item > a.delete:active {
+    background: @bodyTextColor;
+}
+#panel-editor-list .item > a.delete:before {
+    content: "\00D7";
+}
+#panel-editor-list .item > .icon-loading + a.delete,
+#panel-editor-list .item.unsaved > a.delete {
+    display: none;
+}
+#panel-editor-list .item > .icon-loading:first-child {
+    left: 22px;
+    right: auto;
+}
+#panel-editor-list .item.active > .icon-loading {
+    background-image: url(../../../images/icons/wait-326ca6-bg.gif);
+}
+#panel-editor-list .active .item-title {
+    font-weight: bold;
+}
+#panel-editor-list .active .item-description,
+#panel-editor-list .item.active a {
+    color: #fff;
+}
+#panel-editor-list > .aui-toolbar {
+    margin: 0 5px 1em;
+    vertical-align: middle;
+}
+#panel-editor-list > .aui-toolbar + .icon-loading {
+    vertical-align: baseline;
+}
+#panel-editor-config .invalidPlugin {
+    position: relative;
+}
+#panel-editor-config .invalidPlugin h2 {
+    margin-top: 10px;
+}
+#panel-editor-config form.aui .long-field {
+    max-width: 500px;
+    width: 90%;
+}
+#panel-editor-config .aui-message {
+    margin-right: 20px;
+}
+
+/* Sorting styling for config items list */
+#panel-editor-list > ul.ui-sortable > li {
+    padding-left: 24px;
+}
+#panel-editor-list > ul.ui-sortable > .item:before {
+    background: url(../../../images/handle-repeatable.gif) repeat;
+    bottom: 9px;
+    content: "";
+    cursor: move;
+    left: 8px;
+    position: absolute;
+    top: 10px;
+    width: 8px;
+}
+#panel-editor-list .ui-sortable-helper {
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* When no items are available */
+#panel-editor-setup.no-items:after,
+.no-items > #panel-editor-config,
+.no-items > #panel-editor-list > h2,
+.no-items > #panel-editor-list > ul {
+    display: none;
+}
+#panel-editor-setup.no-items {
+    padding: 0;
+}
+.no-items > #panel-editor-list {
+    float: none;
+    margin: 10px 0 0;
+    width: auto;
+}
+#no-item-selected {
+    left: 0;
+    position: absolute;
+    right: 0;
+}
+#no-items-message,
+#no-item-selected > h2,
+#no-item-selected > p {
+    color: #949494;
+    font-size: 32px;
+    margin-top: 2em;
+    text-align: center;
+}
+#no-items-message {
+    display: none;
+}
+#no-item-selected > h2 {
+    border: 0;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+#no-item-selected > p {
+    font-size: 1em;
+    margin-top: 0;
+}
+.no-items > #no-items-message {
+    display: block;
+}
+.no-items > #panel-editor-list > .aui-toolbar {
+    left: -40px;
+    margin-left: 50%;
+}
+.no-items > #panel-editor-list > .aui-toolbar + .icon-loading {
+    margin-left: -40px;
+}

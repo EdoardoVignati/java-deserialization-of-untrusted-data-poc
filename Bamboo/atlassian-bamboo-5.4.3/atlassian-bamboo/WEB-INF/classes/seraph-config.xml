@@ -1,0 +1,77 @@
+<!--  ================================================================ -->
+<!--  The Seraph security configuration.                               -->
+<!--  ================================================================ -->
+
+<security-config>
+    <parameters>
+        <init-param>
+            <param-name>login.url</param-name>
+            <param-value>/userlogin!default.action?os_destination=${originalurl}</param-value>
+        </init-param>
+
+      <init-param>
+        <!--
+          the URL to redirect to when the user explicitly clicks on a login link (rather than being redirected after
+          trying to access a protected resource). Most of the time, this will be the same value as 'login.url'.
+            - same properties as login.url above
+        -->
+        <param-name>link.login.url</param-name>
+        <param-value>/userlogin!default.action?os_destination=${originalurl}</param-value>
+        <!--<param-value>/secure/Dashboard.jspa?os_destination=${originalurl}</param-value>-->
+        <!--<param-value>http://sso.mycompany.com/login?redirectTo=${originalurl}</param-value>-->
+      </init-param>
+
+
+      <init-param>
+            <!-- called my the logout servlet -->
+            <param-name>logout.url</param-name>
+            <param-value>/userLogout.action?os_destination=${originalurl}</param-value>
+        </init-param>
+
+        <!-- The key that the original URL is stored with in the session -->
+        <init-param>
+            <param-name>original.url.key</param-name>
+            <param-value>os_security_originalurl</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>login.cookie.key</param-name>
+            <param-value>seraph.bamboo</param-value>
+        </init-param>
+
+        <!-- Specify 3 characters to make cookie encoding unique for your application, to prevent collisions if more than one Seraph-based app is used.-->
+        <init-param>
+            <param-name>cookie.encoding</param-name>
+            <param-value>BAM</param-value>
+        </init-param>
+
+        <!--only basic authentication available-->
+        <init-param>
+          <param-name>authentication.type</param-name>
+          <param-value>os_authType</param-value>
+        </init-param>
+    </parameters>
+
+    <!-- Determines what roles (permissions) a user has. -->
+    <rolemapper class="com.atlassian.bamboo.user.authentication.BambooRoleMapper"/>
+    <authenticator class="com.atlassian.bamboo.user.authentication.BambooAuthenticator"/>
+    <controller class="com.atlassian.bamboo.user.authentication.BambooSecurityController"/>
+    <elevatedsecurityguard class="com.atlassian.bamboo.user.authentication.BambooElevatedSecurityGuard"/>
+
+    <!-- If you're authenticating against a Crowd server you can use this authenticator for single sign-on.
+         Enable it after configuring your Crowd properties through user management and restart Bamboo. It does not support
+         Crowd property changes at runtime. If you need to switch back to local users, revert the change and
+         restart Bamboo again.
+     -->
+    <!-- <authenticator class="com.atlassian.crowd.integration.seraph.v25.BambooAuthenticator"/> -->
+    
+  <services>
+        <!-- Specifies role requirements for accessing specified URL paths -->
+        <service class="com.atlassian.seraph.service.PathService">
+            <init-param>
+                <param-name>config.file</param-name>
+                <param-value>/seraph-paths.xml</param-value>
+            </init-param>
+        </service>
+    </services>
+</security-config>

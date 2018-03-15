@@ -1,0 +1,3 @@
+HTTP:    https://bitbucket.org/samtardif/jquery-keygen
+Git:     git@bitbucket.org:samtardif/jquery-keygen.git
+Updated: 20130507 24ef6f033988

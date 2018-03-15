@@ -1,0 +1,96 @@
+{namespace bamboo.feature.agent.assignment}
+
+/**
+ * For showing result in search drop down
+ * @param name
+ * @param type
+ * @param agentType
+ */
+{template .agentItemResult}
+    <span>{$name}{sp}<span class="autocomplete-metadata">{call .typeText data="all"/}</span></span>
+{/template}
+
+
+/**
+ * For showing result in list after selection
+ * @param id
+ * @param name
+ * @param type
+ * @param? agentType
+ * @param capabilitiesMatch
+ * @param capabilitiesTooltipUrl -> url to hit to show capabilities tooltip.  Must have context path and '?' already in url
+ */
+{template .agentItem private="true"}
+    <td>
+        {$name}
+    </td>
+    <td>
+        {call .typeText data="all"/}
+        {if $type=='IMAGE'}
+             <input type="hidden" name="images" value="{$id}"/>
+        {else}
+             <input type="hidden" name="agents" value="{$id}"/>
+        {/if}
+    </td>
+    <td class="actions">
+        {if not $capabilitiesMatch}
+            <span id="failed-capability-match-{$id}"  class="aui-icon aui-icon-error"></span>{sp}
+            {call bamboo.widget.tooltip.tooltip}
+                {param trigger: '#failed-capability-match-' + $id/}
+                {param url}
+                  {($capabilitiesTooltipUrl + '&')|noAutoescape}{if $type=='IMAGE'}{'imageConfigurationId'}{else}{'agentId'}{/if}{'=' + $id}
+                {/param}
+                {param showDelay: 300 /}
+            {/call}
+        {/if}
+        <a class="remove"><span class="assistive">{getText('agents.assignment.remove')}</span></a>
+    </td>
+{/template}
+
+/**
+ * @param type
+ * @param agentType
+ */
+{template .typeText private="true"}
+    {if $type == 'IMAGE'}
+         {getText('agents.assignment.image')}
+    {else}
+         {if $agentType == 'LOCAL'}
+              {getText('agents.assignment.local')}
+         {elseif $agentType == 'REMOTE'}
+              {getText('agents.assignment.remote')}
+         {elseif $agentType == 'ELASTIC'}
+              {getText('agents.assignment.elastic')}
+         {/if}
+    {/if}
+{/template}
+
+
+/**
+ * For displaying full list of agent assignments
+ * @param agentAssignmentExecutors
+ * @param? addedAssignment
+ * @param capabilitiesTooltipUrl
+ */
+{template .agentList}
+    {if $agentAssignmentExecutors and length($agentAssignmentExecutors) > 0}
+        {call aui.table}
+            {param theadContent}
+                <tr>
+                  <th>{getText('agents.assignment.name')}</th>
+                  <th>{getText('agents.assignment.type')}</th>
+                  <th></th>
+                </tr>
+            {/param}
+            {param content}
+                {foreach $agentAssignmentExecutor in $agentAssignmentExecutors}
+                    <tr data-id="{$agentAssignmentExecutor.id}" {if $addedAssignment and $addedAssignment.id == $agentAssignmentExecutor.id}class="multi-select-added"{/if}>
+                        {call .agentItem data="$agentAssignmentExecutor"}
+                            {param capabilitiesTooltipUrl: $capabilitiesTooltipUrl /}
+                        {/call}
+                    </tr>
+                {/foreach}
+            {/param}
+        {/call}
+    {/if}
+{/template}

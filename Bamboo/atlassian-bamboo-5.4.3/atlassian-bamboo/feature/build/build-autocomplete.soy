@@ -1,0 +1,23 @@
+{namespace bamboo.feature.build.autocomplete}
+
+/**
+ * Displays select2 result
+ * @param resultSummary
+ */
+{template .result}
+    {sp}{call widget.buildresult.resultStatus}
+        {param resultSummary: $resultSummary /}
+    {/call}
+    {sp}<span class="info">{$resultSummary.buildRelativeTime}</span>
+{/template}
+
+/**
+ * Displays select2 selection
+ * @param resultSummary
+ */
+{template .selection}
+    {call widget.buildresult.resultStatus}
+        {param resultSummary: $resultSummary /}
+    {/call}
+    {sp}{$resultSummary.buildRelativeTime}
+{/template}

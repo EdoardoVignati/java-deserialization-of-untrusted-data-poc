@@ -1,0 +1,23 @@
+@import "../../../global.less";
+
+#deploymentLogs {
+  margin-top: @doubleSpacing;
+
+  & > #buildLog {
+    margin-top: 5px;
+
+    & > table {
+      margin-top: 0;
+    }
+
+    & > .loading,
+    & > .nologs {
+      padding: @halfSpacing;
+    }
+  }
+}
+
+#deployment-errors {
+  padding-top: @doubleSpacing;
+}
+

@@ -1,0 +1,141 @@
+{namespace bamboo.page.deployment.version}
+
+/**
+/**
+ */
+{template .preview}
+    <div id="new-version">
+        <div id="new-version-details">
+            {call widget.icons.icon}
+                {param type: 'loading'/}
+            {/call}
+        </div>
+    </div>
+{/template}
+
+/**
+ *  @param issueCount
+ *  @param issueUrl
+ *  @param commitCount
+ *  @param commitUrl
+ */
+{template .versionDetails}
+    {if $issueCount == 0 and $commitCount == 0}
+        {getText('deployment.execute.preview.version.noissuesorcommits')}
+    {else}
+    <div class="field-group">
+        <label for="issuesField">{getText('deployment.version.create.issues.label')}</label>
+        <span id="issuesField" class="field-value">
+            {if $issueCount > 0}
+                <a class="issue_url"  title="Issues" href="{contextPath() + $issueUrl}">{getText('deployment.execute.preview.version.issues', $issueCount)}</a>
+            {else}
+                {getText('deployment.execute.preview.version.issues.none')}
+            {/if}
+        </span>
+    </div>
+    <div class="field-group">
+        <label for="commitsField">{getText('deployment.version.create.commits.label')}</label>
+        <span id="commitsField" class="field-value">
+            {if $commitCount > 0}
+                <a class="commit_url" title="Commits" href="{contextPath() + $commitUrl}">{getText('deployment.execute.preview.version.commits', $commitCount)}</a>
+            {else}
+                {getText('deployment.execute.preview.version.commits.none')}
+            {/if}
+        </span>
+    </div>
+    {/if}
+{/template}
+
+/**
+ */
+{template .sameBuildResultWarning}
+    {call aui.message.warning}
+        {param content: getText('deployment.version.create.sameResultWarning') /}
+    {/call}
+{/template}
+
+/**
+ *  @param deploymentProjectId
+ *  @param deploymentFromMainBranch
+ *  @param? latestVersion
+ *  @param versionName
+ *  @param? nextVersionName
+ *  @param? versionNameError
+ */
+{template .showVersionNames}
+    // XSS protection (can't use {let $foo: content /} syntax)
+    {let $configureDeploymentProjectVersioningUrl}
+        {contextPath() + '/deploy/config/configureDeploymentProjectVersioning.action?id=' + $deploymentProjectId}
+    {/let}
+
+    <fieldset class="pick-version-section">
+        <h3>{getText('deployment.version.create.pick.name')}</h3>
+
+        {call .latestVersionLabel}
+            {param latestVersion: $latestVersion /}
+        {/call}
+
+        <div class="aui-group">
+            <div class="aui-item version-name-selector">
+                <div class="field-group">
+                    <label for="createDeploymentVersion_versionName">{getText('deployment.version.create.new.version')}</label>
+                    <input type="text" name="versionName" value="{$versionName}" id="createDeploymentVersion_versionName" class="text ">
+                    <div class="description">{getText('deployment.version.create.new.version.description')}</div>
+                    <div id="version-name-error" class="error control-form-error hidden">{if $versionNameError}{$versionNameError}{/if}</div>
+                </div>
+
+                {if $deploymentFromMainBranch}
+                    <div id="fieldArea_createDeploymentVersion_nextVersionName" class="field-group">
+                        <label>{getText('deployment.version.create.following.version.label')}</label>
+                        <span class="field-value">{$nextVersionName}</span>
+                        <div class="description">{getText('deployment.version.create.following.version.want.different', $configureDeploymentProjectVersioningUrl)|noAutoescape}</div>
+                    </div>
+                {/if}
+            </div>
+            <div class="aui-item version-name-selector-note">
+                {if $deploymentFromMainBranch}
+                    {getText('deployment.version.create.new.description', $configureDeploymentProjectVersioningUrl)|noAutoescape}
+                {else}
+                    {getText('deployment.version.create.simplified.new.description')}
+                {/if}
+            </div>
+        </div>
+    </fieldset>
+{/template}
+
+/**
+ * @param? latestVersion
+ */
+{template .latestVersionLabel}
+    {if $latestVersion}
+        <div id="fieldArea_createDeploymentVersion_lastVersionName" class="field-group">
+            <label>{getText('deployment.version.create.last.created.label')}</label>
+            <span id="createDeploymentVersion_lastVersionName" class="field-value"><a href="{contextPath()}/deploy/viewDeploymentVersion.action?versionId={$latestVersion.id}">{$latestVersion.name}</a></span>
+
+            // those variables are here on purpose
+            // we need to evaluate them and escape properly before concatenation to url - as there auto escaping is off
+            {let $creationDate}
+                {call bamboo.widget.time.relative}
+                    {param datetime: $latestVersion.creationDate /}
+                {/call}
+            {/let}
+            {let $userName}
+                {$latestVersion.creatorUserName}
+            {/let}
+            {let $userDisplayName}
+                {$latestVersion.creatorDisplayName}
+            {/let}
+
+            {if $latestVersion.creatorUserName}
+                <div class="description">
+                    {getText('deployment.version.create.last.created.by', contextPath() + '/browse/user/' + $userName,  $userDisplayName, $creationDate)|noAutoescape}
+                </div>
+            {else}
+                <div class="description">
+                    {getText('deployment.version.create.last.created', $creationDate)|noAutoescape}
+                </div>
+            {/if}
+        </div>
+    {/if}
+{/template}
+

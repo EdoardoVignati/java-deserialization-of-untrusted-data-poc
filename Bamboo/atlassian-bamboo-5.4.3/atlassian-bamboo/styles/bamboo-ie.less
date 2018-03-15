@@ -1,0 +1,51 @@
+/** * The structure of this file pre-supposes one condition: * -
+That the file is served via a conditional comment of [if lt IE 9] **/
+
+.jiraTeaser ul {
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+}
+ol.quarantine-test-history > .failed > span:before,
+ol.quarantine-test-history > .failed > span:after {
+    background: transparent;
+    bottom: 0;
+    color: #fff;
+    content: "X";
+    font-size: 16px;
+    height: auto;
+    left: 0;
+    line-height: 11px;
+    right: 0;
+    text-align: center;
+    text-indent: 0;
+    top: 0;
+    width: auto;
+}
+
+.aui-avatar-badged {
+
+    .reviewed {
+        padding-top: 0px;
+    }
+
+    .approved {
+        background-image: url(../../../images/deployment/review-approved-badge.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+            url='../../../images/deployment/review-approved-badge.png', sizingMethod='scale'
+        );
+    }
+
+    .broken {
+        background-image: url(../../../images/deployment/review-broken-badge.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(
+            src='../../../images/deployment/review-broken-badge.png', sizingMethod='scale'
+        );
+    }
+
+}

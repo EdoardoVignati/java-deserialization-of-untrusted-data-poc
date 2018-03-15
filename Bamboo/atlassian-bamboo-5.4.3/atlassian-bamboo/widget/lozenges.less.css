@@ -1,0 +1,15 @@
+.lozenge{background-color:#dddddd;border:1px solid #dddddd;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;color:#555;display:inline-block;font-size:11px;font-weight:bold;line-height:1;padding:2px 5px 1px;text-align:center;text-transform:uppercase;white-space:nowrap;}.lozenge.lozenge-subtle{background-color:#fff !important;}
+.lozenge.lozenge-success{background-color:#14892c;border-color:#ffffff;color:#ffffff;}.lozenge.lozenge-success.lozenge-subtle{color:#14892c;}
+.lozenge.lozenge-success.lozenge-subtle{border-color:rgba(20, 137, 44, 0.33999999999999997);}
+.lozenge.lozenge-error{background-color:#d04437;border-color:#ffffff;color:#ffffff;}.lozenge.lozenge-error.lozenge-subtle{color:#d04437;}
+.lozenge.lozenge-error.lozenge-subtle{border-color:rgba(208, 68, 55, 0.33999999999999997);}
+.lozenge.lozenge-current{background-color:#ffd351;border-color:#594300;color:#594300;}.lozenge.lozenge-current.lozenge-subtle{border-color:rgba(255, 211, 81, 0.33999999999999997);}
+.lozenge.lozenge-complete{background-color:#4a6785;border-color:#ffffff;color:#ffffff;}.lozenge.lozenge-complete.lozenge-subtle{color:#4a6785;}
+.lozenge.lozenge-complete.lozenge-subtle{border-color:rgba(74, 103, 133, 0.33999999999999997);}
+.lozenge.lozenge-moved{background-color:#815b3a;border-color:#ffffff;color:#ffffff;}.lozenge.lozenge-moved.lozenge-subtle{color:#815b3a;}
+.lozenge.lozenge-moved.lozenge-subtle{border-color:rgba(129, 91, 58, 0.33999999999999997);}
+.lozenge.branch-lozenge{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-o-text-overflow:ellipsis;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;background-color:#f5f5f5;border:1px solid #cccccc;color:#707070;font-size:13px;font-weight:normal;line-height:16px;margin:0 3px 3px;max-width:100%;padding:3px 5px;text-transform:none !important;vertical-align:middle;}.lozenge.branch-lozenge .branch>.aui-icon{padding-right:5px;vertical-align:text-bottom;}
+td .lozenge.branch-lozenge{max-width:200px;margin:0;}
+.lozenge.monospace{font-family:Courier,"Courier New",monospace;}
+.lozenge+.lozenge{margin-left:5px;}
+.lozenge-newline{display:block;}.lozenge-newline .lozenge{margin-left:0px;margin-top:8px;}

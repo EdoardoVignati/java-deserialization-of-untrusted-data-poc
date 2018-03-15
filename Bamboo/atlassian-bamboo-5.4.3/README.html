@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <title>Atlassian Bamboo 5.4.3-#4210- Standalone README</title>
+    <style type="text/css">
+        body, p, td, table, tr, .bodytext {
+            font-family: Verdana, arial, sans-serif;
+            font-size: 11px;
+            line-height: 16px;
+            color: #000000;
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+            background-color: #f0f0f0;
+        }
+
+        A:link, A:visited, A:active, A:hover {
+            color: #003366;
+        }
+
+        h1 {
+            font-size: 24px;
+            line-height: normal;
+            font-weight: bold;
+            border-bottom: #3c78b5;
+            border-width: 0 0 1px 0;
+            border-style: solid;
+        }
+
+        h2 {
+            font-size: 14px;
+            line-height: normal;
+            font-weight: bold;
+            padding: 5px 0 0 0;
+        }
+
+        #Content {
+            text-align: left;
+            background-color: #fff;
+            border-style: solid;
+            border-color: #003366;
+            border-width: 10px 0px 1px 0px;
+            padding: 0px 10px 10px 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="Content">
+    <h1>BAMBOO 5.4.3 - README</h1>
+
+    <p>Thank you for downloading Bamboo 5.4.3 - Standalone distribution.
+        This distribution comes with a built-in Tomcat 7.0.40 web server
+        and hsql database, so it runs (almost) out the box.</p>
+
+
+    <h2>Installing Bamboo</h2>
+
+    <ol>
+        <li>
+            Install a Java Development Kit (JDK) version 1.6 or above from
+            <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a>.
+        </li>
+
+        <li>
+            Set the <b>JAVA_HOME</b> variable to where you installed Java.
+        </li>
+
+        <li>Set your <a href="https://confluence.atlassian.com/display/BAMBOO/Bamboo+installation+guide+for+Linux">Bamboo home</a> directory.
+            Instructions how to set your Bamboo Home directory can be found here:
+            <a href="https://confluence.atlassian.com/display/BAMBOO/Bamboo+installation+guide+for+Linux">https://confluence.atlassian.com/display/BAMBOO/Bamboo+installation+guide+for+Linux</a>
+        </li>
+
+        <li>Run bin/start-bamboo.sh (*nix) or bin\start-bamboo.bat (Windows). Check that
+            there are no errors on the console. See below for troubleshooting
+            advice.
+        </li>
+
+        <li>Point your browser at <a href="http://localhost:8085/">http://localhost:8085</a>. You should see
+            Bamboo's Setup Wizard.
+        </li>
+    </ol>
+
+    <p>Full documentation is available online at:<br/>
+        <a href="https://confluence.atlassian.com/display/BAMBOO/Bamboo+installation+guide+for+Linux">https://confluence.atlassian.com/display/BAMBOO/Bamboo+installation+guide+for+Linux</a>
+
+
+    <h2>Problems</h2>
+
+    <p>A common startup problem is when another program has claimed port 8085,
+        which Bamboo is configured to run on by default. To avoid this port
+        conflict, Bamboo's port can be changed in conf/server.xml.</p>
+
+    <p>If you have any installation (or other) problems, please see the
+        resources listed at <a
+                href="https://support.atlassian.com">https://support.atlassian.com</a>.
+
+    <h2>Questions?</h2>
+
+    <p>Questions? Try the <a
+            href="https://confluence.atlassian.com/display/BAMBOO/Bamboo+Documentation+Home/">online
+        documentation</a>, ask on the <a
+            href="http://forums.atlassian.com/index.jspa">forums</a>, or <a
+            href="https://support.atlassian.com">ask Atlassian directly</a>.
+    </p>
+
+    <br>
+
+</body>
+</html>

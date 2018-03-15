@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+
+  <!-- Circular references FTW! -->
+  <bean id="lazyBandanaManager" class="com.atlassian.bamboo.spring.LazyComponentProxyFactoryBean">
+    <constructor-arg value="com.atlassian.bandana.BandanaManager" />
+    <constructor-arg value="bandanaManager" />
+  </bean>
+
+  <bean id="bandanaManager" class="com.atlassian.bandana.DefaultBandanaManager" init-method="init" plugin:available="true">
+    <constructor-arg ref="bandanaPersister" />
+  </bean>
+
+  <bean id="bandanaPersister" class="com.atlassian.bamboo.bandana.DefaultBandanaPersister">
+    <constructor-arg ref="xStreamManager" />
+    <constructor-arg ref="bandanaItemDao" />
+  </bean>
+
+  <bean id="bandanaItemDao" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.bandana.BandanaItemDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+      </bean>
+    </property>
+  </bean>
+
+</beans>

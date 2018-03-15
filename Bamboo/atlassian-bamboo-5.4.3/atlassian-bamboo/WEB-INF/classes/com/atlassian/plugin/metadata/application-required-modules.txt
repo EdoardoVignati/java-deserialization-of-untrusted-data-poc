@@ -1,0 +1,2 @@
+# Any plugin module specified in this file will not be able to be disabled, even though the remaining plugin modules will.
+# Modules keys should be the complete key (in the form of pluginKey:moduleKey), i.e. com.atlassian.upm.atlassian-universal-plugin-manager-plugin:applicationProperties

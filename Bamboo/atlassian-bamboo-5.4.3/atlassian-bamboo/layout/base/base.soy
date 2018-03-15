@@ -1,0 +1,98 @@
+{namespace bamboo.layout}
+
+/**
+ * Base Layout
+ * @param? headerImageContent
+ * @param? headerMainContent
+ * @param? headerActionsButtons
+ * @param? headerActionsContent
+ * @param? headerExtraContent
+ * @param? navItems
+ * @param? pageNavContent
+ * @param? pageNavClass
+ * @param? pageItemContent
+ * @param? pageItemClass
+ * @param? pageSidebarContent
+ * @param? pageHelpPanels
+ * @param content
+ * @param? pageFooterContent
+ */
+{template .base}
+    <section id="content" role="main">
+        {if ($headerImageContent and $headerImageContent != '') or ($headerMainContent and $headerMainContent != '') or ($headerActionsContent and $headerActionsContent != '') or ($headerActionsButtons and $headerActionsButtons != '')}
+            {call aui.page.pageHeader}
+                {param content}
+                    {if $headerImageContent and $headerImageContent != ''}
+                        {call aui.page.pageHeaderImage}
+                            {param content: $headerImageContent /}
+                        {/call}
+                    {/if}
+                    {if $headerMainContent and $headerMainContent != ''}
+                        {call aui.page.pageHeaderMain}
+                            {param content: $headerMainContent /}
+                        {/call}
+                    {/if}
+                    {if ($headerActionsContent and $headerActionsContent != '') or ($headerActionsButtons and $headerActionsButtons != '')}
+                        {call aui.page.pageHeaderActions}
+                            {param content}
+                                {if $headerActionsContent and $headerActionsContent != ''}
+                                    {$headerActionsContent|noAutoescape}
+                                {/if}
+                                {if $headerActionsButtons and $headerActionsButtons != ''}
+                                    {call aui.buttons.buttons}
+                                        {param extraClasses: 'aui-dropdown2-trigger-group' /}
+                                        {param content: $headerActionsButtons /}
+                                    {/call}
+                                {/if}
+                            {/param}
+                        {/call}
+                    {/if}
+                {/param}
+            {/call}
+        {/if}
+        {if $headerExtraContent and $headerExtraContent != ''}
+            <div class="bamboo-page-header-extra">{$headerExtraContent|noAutoescape}</div>
+        {/if}
+        {if $navItems and length($navItems)}
+            {call bamboo.widget.nav.horizontal}
+                {param items: $navItems /}
+            {/call}
+        {/if}
+        {call aui.page.pagePanel}
+            {param content}
+                {if $pageNavContent and $pageNavContent != ''}
+                    {call aui.page.pagePanelNav}
+                        {param extraClasses: $pageNavClass /}
+                        {param content: $pageNavContent /}
+                    {/call}
+                {/if}
+                {if $pageItemContent and $pageItemContent != ''}
+                    {call aui.page.pagePanelItem}
+                        {param extraClasses: $pageItemClass /}
+                        {param content: $pageItemContent /}
+                    {/call}
+                {/if}
+                {call aui.page.pagePanelContent}
+                    {param content: $content /}
+                {/call}
+                {if ($pageSidebarContent and $pageSidebarContent != '') or ($pageHelpPanels and length($pageHelpPanels))}
+                    {call aui.page.pagePanelSidebar}
+                        {param content}
+                            {if $pageSidebarContent and $pageSidebarContent != ''}{$pageSidebarContent|noAutoescape}{/if}
+                            {if $pageHelpPanels and length($pageHelpPanels)}
+                                {foreach $pageHelpPanel in $pageHelpPanels}
+                                    {call bamboo.widget.help.panel data="$pageHelpPanel" /}
+                                {/foreach}
+                            {/if}
+                        {/param}
+                    {/call}
+                {/if}
+            {/param}
+        {/call}
+        {if $pageFooterContent and $pageFooterContent != ''}
+            <footer class="bamboo-page-footer">
+                {$pageFooterContent|noAutoescape}
+            </footer>
+        {/if}
+    </section>
+{/template}

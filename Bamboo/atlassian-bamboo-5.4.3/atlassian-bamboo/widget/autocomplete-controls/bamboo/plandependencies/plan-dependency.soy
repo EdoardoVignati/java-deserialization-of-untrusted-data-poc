@@ -1,0 +1,39 @@
+{namespace bamboo.widget.autocomplete.planDependency}
+
+/**
+ * @param plans
+ * @param? extraClasses
+ * @param? isReadOnly
+ */
+{template .list}
+    <ul class="{length($plans) == 0 ? 'empty' : ''}{call aui.renderExtraClasses data="all" /}">
+        {foreach $plan in $plans}
+            <li data-id="{$plan.id}">
+                {call .item data="$plan"}{param isReadOnly: $isReadOnly /}{/call}
+            </li>
+        {/foreach}
+    </ul>
+{/template}
+
+/**
+ * @param id
+ * @param projectName
+ * @param? planName
+ * @param? isEditable
+ * @param? isReadOnly
+ */
+{template .item}
+    <a href="{contextPath() + '/chain/admin/config/editChainDependencies.action?buildKey=' + $id}">{$projectName}{if $planName} &rsaquo; {$planName}{/if}</a>
+    {if not ($isEditable == false)}
+        {if not $isReadOnly}
+            <a class="remove"></a>
+            <input type="hidden" name="childPlanKeys" value="{$id}" />
+        {/if}
+    {else}
+        {call widget.lozenges.lozenge}
+            {param text: getText('chain.dependency.generated') /}
+            {param subtle: true /}
+            {param extraClasses: 'dependencies-generated' /}
+        {/call}
+    {/if}
+{/template}

@@ -1,0 +1,58 @@
+@import "../../../../global.less";
+
+.dashboard-project {
+    padding-bottom: @baseSpacing;
+
+    table.aui > tbody {
+        tr.error td.deployment {
+            border-right: 5px @errorTextColor solid;
+        }
+
+        tr.first {
+            border: 0px;
+            border-top: 1px solid #ccc;
+
+            td {
+                border-bottom: 1px solid #ccc;
+                border-top: 1px solid #ccc;
+            }
+        }
+
+        tr {
+            border-bottom: 0px;
+
+            td {
+                vertical-align: middle;
+                border-bottom: 1px solid #ccc;
+                border-top: 1px solid #ccc;
+                height: 28px;
+
+                .release-info {
+                    float: left;
+                    margin-right: @baseSpacing;
+                    margin-top: 4px;
+                }
+
+                .reviewed-user-avatar {
+                    margin-top: 4px;
+                }
+            }
+
+            td.deployment {
+                border: 0px;
+            }
+
+            td.operations {
+                a {
+                    margin-right: 2px;
+                }
+            }
+        }
+
+        tr.last {
+            td {
+                border-bottom: 1px solid #ccc;
+            }
+        }
+    }
+}

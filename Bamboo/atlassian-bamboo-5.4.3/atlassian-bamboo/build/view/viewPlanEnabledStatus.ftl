@@ -1,0 +1,7 @@
+[#-- @ftlvariable name="action" type="com.atlassian.bamboo.ww2.actions.chains.admin.ViewPlanConfiguration" --]
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.ww2.actions.chains.admin.ViewPlanConfiguration" --]
+[#if immutablePlan.suspendedFromBuilding]
+    [@ww.text name='bulkAction.disablePlan.disabled' /]
+[#else]
+    [@ww.text name='bulkAction.disablePlan.enabled' /]
+[/#if]

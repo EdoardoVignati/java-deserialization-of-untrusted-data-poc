@@ -1,0 +1,12 @@
+.welcome-message{-webkit-border-radius:6.02px;-moz-border-radius:6.02px;border-radius:6.02px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border:1px solid #cccccc;color:#333;margin:20px auto 0;overflow:hidden;padding:20px;width:940px;}.welcome-message:before{content:url(../../../images/heart.png);float:right;height:137px;margin-left:20px;width:151px;}
+.welcome-message .aui-message{margin-right:171px;}
+.welcome-title{border:0;font-size:24px;font-weight:normal;line-height:1.25;}
+.welcome-blurb{margin:10px 0 0;}
+.welcome-actions{margin-top:20px;}
+.welcome-next-steps{margin:40px auto 0;width:940px;}
+.infographic{-webkit-border-radius:6.02px;-moz-border-radius:6.02px;border-radius:6.02px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border:1px solid #cccccc;margin:20px auto 0;overflow:hidden;padding:20px;width:940px;}.infographic img{margin-top:10px;}
+.infographic .artifactText,.infographic .versionText,.infographic .environmentText{padding:10px;float:left;height:200px;}
+.infographic .artifactText{width:217px;}
+.infographic .versionText{width:332px;}
+.infographic .environmentText{width:282px;}
+.infographic .artifactText,.infographic .versionText{border-right:3px solid #f5f5f5;}

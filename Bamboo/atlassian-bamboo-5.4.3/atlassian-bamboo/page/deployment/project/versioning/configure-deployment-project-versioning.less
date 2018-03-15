@@ -1,0 +1,40 @@
+@import "../../../../global.less";
+
+.deployment-project-version-naming {
+    .add-variable {
+        padding-left: 145px;
+    }
+    #add-variable-button {
+        float: right;
+    }
+    #preview-button {
+        margin-left: @baseSpacing;
+    }
+}
+
+#variable-increment-checkboxes {
+    .no-variables {
+        font-weight: normal;
+        padding-top: 0;
+    }
+}
+
+#version-preview {
+    padding-right: @doubleSpacing;
+
+    dl {
+       .word-break();
+       .details-dl(18em);
+    }
+}
+
+.version-preview-hint {
+    border-left: 1px solid @dividerColor;
+    margin-left: @baseSpacing;
+    width: 30%;
+
+    p {
+        font-size: 12px;
+        padding-top: @halfSpacing;
+    }
+}

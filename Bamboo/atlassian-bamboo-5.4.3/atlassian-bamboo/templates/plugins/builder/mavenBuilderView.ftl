@@ -1,0 +1,12 @@
+[#import "/lib/build.ftl" as bd]
+
+[#if build.buildDefinition.builder.key == "mvn2" || build.buildDefinition.builder.key == "mvn3" ]
+    [@ww.label labelKey='builder.maven2.projectFile' name='build.buildDefinition.builder.projectFile' hideOnNull='true' /]
+[/#if]
+[@ww.label labelKey='builder.maven.goal' name='build.buildDefinition.builder.goal' /]
+[@bd.showJdk /]
+[@ww.label labelKey='builder.common.env' name='build.buildDefinition.builder.environmentVariables' hideOnNull='true'/]
+[@ww.label labelKey='builder.common.sub' name='build.buildDefinition.builder.workingSubDirectory' hideOnNull='true' /]
+[#if build.buildDefinition.builder.hasTests()]
+    [@ww.label labelKey='builder.common.tests.directory' name='build.buildDefinition.builder.testResultsDirectory' hideOnNull='true' /]
+[/#if]

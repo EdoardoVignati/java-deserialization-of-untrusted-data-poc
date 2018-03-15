@@ -1,0 +1,12 @@
+<propertysets>
+  <propertyset name="jirajdbc" class="com.atlassian.confluence.user.providers.jira.JiraJdbcPropertySet"/>
+  <propertyset name="conditional" class="com.atlassian.confluence.user.providers.jira.ConditionalPropertySet"/>
+  <propertyset name="aggregate" class="com.opensymphony.module.propertyset.aggregate.AggregatePropertySet"/>
+  <propertyset name="cached" class="com.atlassian.core.propertyset.CachingPropertySet"/>
+  <propertyset name="map" class="com.opensymphony.module.propertyset.map.MapPropertySet"/>
+  <propertyset name="memory" class="com.opensymphony.module.propertyset.memory.MemoryPropertySet"/>
+  <propertyset name="serializable" class="com.opensymphony.module.propertyset.memory.SerializablePropertySet"/>
+  <propertyset name="hibernate" class="bucket.user.propertyset.BucketPropertySet"/>
+  <propertyset name="bucket" class="bucket.user.propertyset.BucketPropertySet"/>
+  <propertyset name="xml" class="com.opensymphony.module.propertyset.xml.XMLPropertySet"/>
+</propertysets>

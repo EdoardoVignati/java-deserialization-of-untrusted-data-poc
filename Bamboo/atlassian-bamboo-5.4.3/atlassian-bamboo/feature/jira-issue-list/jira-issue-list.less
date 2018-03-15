@@ -1,0 +1,130 @@
+@import "../../global.less";
+@import "../../widget/lozenges.less";
+
+.jira-issues {
+    &.aui > thead th {
+        padding-top: 0; // removes the spacing above the text so that the 10px margin between heading and content is preserved
+    }
+    // Status Lozenge - colours taken from JIRA
+    .status-lozenge {
+        .lozenge-base();
+        .text-overflow();
+        width: 84px;
+
+        &.status-done,
+        &.status-resolved {
+            .lozenge-colours(#4A6785);
+        }
+        &.status-open,
+        &.status-todo {
+            .lozenge-colours(#14892C);
+        }
+        &.status-inprogress {
+            .lozenge-colours(#FFD351, #594300, 33%);
+        }
+        &.status-waitingforqa,
+        &.status-reopened {
+            .lozenge-colours(#991b99);
+        }
+        &.status-closed {
+            //.lozenge-colours(#343434);
+        }
+        &.status-technicalreview,
+        &.status-tobereviewed {
+            .lozenge-colours(#2a8686);
+        }
+    }
+
+    // Issue errors (couldn't retrieve details)
+    .details-error {
+        color: @secondaryTextColor;
+        font-style: italic;
+    }
+
+    // Columns
+    .type {
+        padding-right: 4px;
+        width: 16px;
+
+        img {
+            display: block;
+        }
+    }
+    .key {
+        padding-left: 4px;
+        white-space: nowrap;
+        width: 90px;
+    }
+    .status {
+        width: 120px;
+        text-align: center;
+    }
+
+    // Issues table loading
+    &.loading {
+        .details-error > span {
+            display: none;
+        }
+        .icon-jiraissue-unknown {
+            background: url(../../../images/icons/wait.gif) no-repeat 50% 50%;
+        }
+    }
+}
+.jira-issue,
+.single-issue-loading,
+.single-issue-retrieval-error {
+    background: @bodyBackgroundColor;
+    border: 1px solid @dividerColor;
+    .border-radius(3px);
+    color: #333;
+    display: inline-block;
+    line-height: 16px;
+    min-height: 16px;
+    padding: 2px 4px;
+
+    a {
+        text-decoration: underline;
+    }
+    & > a {
+        background: no-repeat 0 0;
+        display: inline-block;
+        font-weight: bold;
+        min-height: 16px;
+        padding-left: 20px;
+    }
+}
+.jira-issue {
+    .description {
+        &:before,
+        &:after {
+            content: " - ";
+        }
+    }
+    .status-lozenge {
+        color: #777;
+        font-size: 11px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+.single-issue-loading {
+    & > a {
+        background-image: url(../../../images/icons/wait.gif);
+    }
+}
+.single-issue-retrieval-error {
+    & > a {
+        background-image: url(../../../images/icons/jira_type_unknown.gif);
+
+        & + .error-message:before {
+            content: " - ";
+        }
+    }
+    .error-message.unspecified {
+        font-style: italic;
+    }
+    .oauth-init {
+        background: url(../../../images/icons/lock_16_grey.png) no-repeat 0 0;
+        padding-left: 18px;
+    }
+}

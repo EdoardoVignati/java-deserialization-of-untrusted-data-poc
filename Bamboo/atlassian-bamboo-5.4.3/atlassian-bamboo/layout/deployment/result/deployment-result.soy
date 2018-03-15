@@ -1,0 +1,175 @@
+{namespace bamboo.layout}
+
+/**
+ * Deployment Result Layout
+ * @param content
+ * @param deploymentProject
+ * @param deploymentResult
+ * @param environment
+ */
+{template .deploymentResult}
+    {let $actionsDropdownId: 'deployment-result-actions' /}
+    {call .deployment data="all"}
+        {param headerText: getText('deployment.result.header', $deploymentResult.environment.name, $deploymentResult.deploymentVersionName) /}
+        {param parentCrumbs: [
+            ['link': contextPath() + '/deploy/viewAllDeploymentProjects.action', 'text': getText('deployment.breadcrumb.allProjects')],
+            ['link': contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $deploymentProject.id, 'text': $deploymentProject.name],
+            ['link': contextPath() + '/deploy/viewEnvironment.action?id=' + $deploymentResult.environment.id, 'text': 'Environment: ' + $deploymentResult.environment.name]
+        ] /}
+        {param headerActionsButtons}
+            {let $cancelUrl: '/deploy/viewDeploymentResult.action?deploymentResultId=' +  $deploymentResult.id /}
+            {call aui.buttons.buttons}
+                 {param content}
+                    {if $deploymentResult.lifeCycleState == 'PENDING' or $deploymentResult.lifeCycleState == 'QUEUED' or $deploymentResult.lifeCycleState == 'IN_PROGRESS'}
+                        {call aui.buttons.button}
+                            {param id: 'stop-deployment' /}
+                            {param tagName: 'a' /}
+                            {param text: ' ' + getText('deployment.result.actions.stop') /}
+                            {param extraAttributes: ['href': contextPath() + '/deploy/stopDeployment.action?deploymentResultId=' + $deploymentResult.id] /}
+                            {param extraClasses: 'mutative' /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'icon-build-stop' /}
+                        {/call}
+                    {elseif $deploymentResult.deploymentVersion}
+                        {call bamboo.layout.menus.deployDropdown}
+                            {param environments: $deploymentProject.environments /}
+                            {param currentUrl: $cancelUrl /}
+                            {param rerunEnvironment: $environment /}
+                            {param versionId : $deploymentResult.deploymentVersion.id /}
+                            {param heading: getText('deployment.execute.dropdown.promote') /}
+                        {/call}
+                    {/if}
+                {/param}
+            {/call}
+            {if $deploymentProject.operations.allowedToCreateVersion or $environment.operations.canEdit or $deploymentResult.operations.canDelete}
+                {call aui.buttons.buttons}
+                    {param content}
+                        {call aui.buttons.button}
+                            {param id: 'configure-result-actions'/}
+                            {param text: ' ' /}
+                            {param tagName: 'a' /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'aui-icon-small aui-iconfont-more' /}
+                            {param dropdown2Target: 'result-actions' /}
+                        {/call}
+                    {/param}
+                {/call}
+                {call aui.dropdown2.contents}
+                    {param id: 'result-actions' /}
+                    {param content}
+                        <div class="aui-dropdown2-section">
+                            <ul>
+                                {if $deploymentProject.operations.allowedToCreateVersion}
+                                    {let $actionUrl: contextPath() + '/deploy/createDeploymentVersion.action?deploymentProjectId=' + $deploymentProject.id /}
+                                     <li>
+                                        <a id='create-deployment-version'
+                                           href="{$actionUrl}&returnUrl={$cancelUrl|escapeUri}"
+                                           title="{getText('deployment.project.create.version.tooltip')}"
+                                           class="aui-icon-container">
+                                            {call widget.icons.fontIcon}{param type: 'add'/}{/call}{sp}{getText('deployment.project.create.version')}
+                                        </a>
+                                    </li>
+                                {/if}
+                                {if $environment.operations.canEdit}
+                                    <li>
+                                        <a id='edit-environment'
+                                           class="aui-icon-container"
+                                           href="{contextPath() + '/deploy/config/configureDeploymentProject.action?id=' +  $deploymentProject.id + '&environmentId=' + $environment.id}">
+                                            {call widget.icons.fontIcon}{param type: 'edit'/}{/call}{sp}{getText('deployment.environment.configure')}
+                                        </a>
+                                    </li>
+                                {/if}
+                            </ul>
+                        </div>
+                        {if $deploymentResult.operations.canDelete}
+                            <div class="aui-dropdown2-section">
+                                <ul>
+                                    {let $actionUrl: contextPath() + '/deploy/confirmDeleteDeploymentResult.action?deploymentResultId=' + $deploymentResult.id /}
+                                    <li>
+                                        <a id='delete-result' href="{$actionUrl}&cancelUrl={$cancelUrl|escapeUri}"
+                                           title="{getText('deployment.result.delete.confirm.title')}" class="aui-icon-container delete-deployment-result">
+                                            {call widget.icons.fontIcon}{param type: 'remove'/}{/call}{sp}{getText('deployment.result.actions.delete')}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        {/if}
+                    {/param}
+                    {param extraClasses: 'aui-style-default aui-dropdown2-in-page-header' /}
+                {/call}
+            {/if}
+        {/param}
+        {param headerExtraContent}
+            <div id="deployment-status-ribbon">
+                {call .resultDeploymentStatusRibbon}
+                    {param deploymentResult: $deploymentResult /}
+                    {param environment: $environment/}
+                {/call}
+            </div>
+        {/param}
+        {param content}
+            {$content|noAutoescape}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param deploymentResult
+ * @param environment
+ */
+{template .resultDeploymentStatusRibbon}
+    {call .deploymentStatusRibbon}
+        {param lifeCycleState: $deploymentResult.lifeCycleState /}
+        {param deploymentState: $deploymentResult.deploymentState /}
+        {param content}
+            {getText('deployment.result.deploying.to', $deploymentResult.deploymentVersionName, $environment.name)}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param lifeCycleState
+ * @param deploymentState
+ * @param content
+ */
+{template .deploymentStatusRibbon private="true"}
+    {let $state}
+        {if $lifeCycleState == 'FINISHED'}
+            {switch $deploymentState}
+                {case 'UNKNOWN'}Unknown
+                {case 'SUCCESS'}Successful
+                {case 'FAILED'}Failed
+            {/switch}
+        {else}
+            {switch $lifeCycleState}
+                {case 'PENDING'}Pending
+                {case 'QUEUED'}Queued
+                {case 'IN_PROGRESS'}InProgress
+                {case 'NOT_BUILT'}NotBuilt
+            {/switch}
+        {/if}
+    {/let}
+    {let $statusText}
+        {if $lifeCycleState == 'FINISHED'}
+            {switch $deploymentState}
+                {case 'UNKNOWN'}{getText('deployment.result.state.unknown')}
+                {case 'SUCCESS'}{getText('deployment.result.state.success')}
+                {case 'FAILED'}{getText('deployment.result.state.failed')}
+            {/switch}
+        {else}
+            {switch $lifeCycleState}
+                {case 'PENDING'}{getText('deployment.result.state.queued')}
+                {case 'QUEUED'}{getText('deployment.result.state.queued')}
+                {case 'IN_PROGRESS'}{getText('deployment.result.state.inProgress')}
+                {case 'NOT_BUILT'}{getText('deployment.result.state.notBuilt')}
+            {/switch}
+        {/if}
+    {/let}
+    {call widget.status.statusRibbon}
+        {param statuses: [[
+            'state': $state,
+            'content': '<span>' + $statusText + '</span>: ' + $content
+        ]] /}
+        {param extraClasses: 'build-status-ribbon' /}
+    {/call}
+{/template}

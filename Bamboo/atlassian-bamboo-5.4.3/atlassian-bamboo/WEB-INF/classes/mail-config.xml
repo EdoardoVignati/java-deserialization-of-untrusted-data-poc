@@ -1,0 +1,8 @@
+<mail-config>
+  <manager class="com.atlassian.bamboo.mail.BambooMailServerManager">
+    <property>
+      <name>config-file</name>
+      <value>bamboo-mail.cfg.xml</value>
+    </property>
+  </manager>
+</mail-config>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+  <!-- Managers -->
+
+  <bean id="chainStateFactory" class="com.atlassian.bamboo.chains.ChainStateFactoryImpl">
+    <constructor-arg ref="planVcsRevisionHistoryService"/>
+    <constructor-arg ref="chainResultManager"/>
+  </bean>
+
+  <bean id="chainResultManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.chains.ChainResultManagerImpl">
+        <constructor-arg ref="buildResultsSummaryManager"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+        <constructor-arg ref="buildExecutionManagerLimitedConcurrencyCaller"/>
+        <constructor-arg ref="errorUpdateHandler"/>
+        <constructor-arg ref="textProvider"/>
+        <constructor-arg ref="artifactLinkManager"/>
+        <constructor-arg ref="persister"/>
+      </bean>
+    </property>
+    <property name="preInterceptors">
+      <list>
+        <bean class="com.atlassian.bamboo.author.AuthorCreatorServiceInterceptor">
+          <constructor-arg ref="authorCreatorService"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="chainExecutionManager" class="com.atlassian.bamboo.chains.ChainExecutionManagerImpl" lazy-init="true">
+    <constructor-arg ref="planStatePersisterService"/>
+    <constructor-arg ref="jobExecutionManager"/>
+    <constructor-arg ref="chainResultManager"/>
+    <constructor-arg ref="chainStateFactory"/>
+    <constructor-arg ref="buildContextFactory"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="chainPluginSupport"/>
+    <constructor-arg ref="errorUpdateHandler"/>
+    <constructor-arg ref="authorCreatorService"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="buildNumberGeneratorService"/>
+    <constructor-arg ref="buildDirectoryManager"/>
+    <constructor-arg ref="branchIntegrationHelper"/>
+    <constructor-arg ref="customVariableContext"/>
+    <constructor-arg ref="planExecutionLockService"/>
+    <constructor-arg ref="planVcsRevisionHistoryService"/>
+  </bean>
+
+  <!-- ChainExecutionManager dependencies -->
+
+  <bean id="jobExecutionManager" class="com.atlassian.bamboo.chains.JobExecutionManagerImpl">
+    <constructor-arg ref="buildExecutionManager"/>
+    <constructor-arg ref="stopBuildManager"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+  </bean>
+
+  <bean id="buildContextFactory" class="com.atlassian.bamboo.chains.BuildContextFactoryImpl">
+    <constructor-arg ref="artifactSubscriptionManager"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="buildResultsSummaryManager"/>
+    <constructor-arg ref="taskManager"/>
+    <constructor-arg ref="testQuarantineManager"/>
+    <constructor-arg ref="administrationConfigurationManager"/>
+    <constructor-arg ref="branchIntegrationService"/>
+    <constructor-arg ref="featureManager"/>
+    <constructor-arg ref="buildContextBuilderFactory"/>
+  </bean>
+
+  <bean id="buildContextBuilderFactory" class="com.atlassian.bamboo.build.context.BuildContextBuilderFactoryImpl">
+    <constructor-arg ref="branchIntegrationService"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="credentialsAccessor"/>
+  </bean>
+
+  <bean id="chainPluginSupport" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.chains.ChainPluginSupport"/>
+    <property name="interceptorNames">
+      <list>
+        <value>hibernateInterceptor</value>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.chains.ChainPluginSupportImpl">
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="buildResultsSummaryManager"/>
+        <constructor-arg ref="pluginAccessor"/>
+        <constructor-arg ref="errorUpdateHandler"/>
+        <constructor-arg ref="customVariableContextRunner"/>
+        <constructor-arg ref="taskManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="stageStatusHelper" class="com.atlassian.bamboo.chains.StageStatusHelperImpl" plugin:available="true">
+    <constructor-arg ref="textProvider"/>
+  </bean>
+</beans>

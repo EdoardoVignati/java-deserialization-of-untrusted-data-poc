@@ -1,0 +1,173 @@
+{namespace bamboo.feature.deployment.project.projectList}
+
+/**
+ * Project List Container
+ * @param id
+ * @param showProject
+ * @param currentUrl
+ * @param? projectId
+ */
+{template .container}
+    <div id="{$id}">
+        {call widget.icons.icon}
+            {param type: 'loading'/}
+        {/call}
+    </div>
+    <script>
+        new Bamboo.Feature.DeploymentProjectList({lb}
+            el: '#{$id|escapeJsString}',
+            showProject: {$showProject},
+            fetchUrl: '{contextPath() + '/rest/api/latest/deploy/dashboard/'}{if $projectId}{$projectId}{/if}',
+            currentUrl: '{$currentUrl}'
+        {rb});
+    </script>
+{/template}
+
+/**
+ * Project List
+ * @param projectsWithEnvironmentStatuses - list of projects
+ * @param currentUrl
+ * @param? showProject
+ */
+{template .projectList}
+    <div class="dashboard-project">
+        {if $projectsWithEnvironmentStatuses and length($projectsWithEnvironmentStatuses) > 0}
+            <table class="aui">
+                <colgroup>
+                    {if $showProject}
+                        <col width="20%"/>
+                        <col width="28%"/>
+                        <col width="18%"/>
+                        <col width="15%"/>
+                        <col width="15%"/>
+                        <col width="70px"/>
+                    {else}
+                        <col width="34%"/>
+                        <col width="24%"/>
+                        <col width="20%"/>
+                        <col width="18%"/>
+                        <col width="70px"/>
+                    {/if}
+                </colgroup>
+                <thead>
+                    <tr>
+                        {if $showProject}<th>{getText('deployment.version.details.project')}</th>{/if}
+                        <th>{getText('deployment.version.deploymentStatus.environment')}</th>
+                        <th>{getText('deployment.version.deploymentStatus.version')}</th>
+                        <th>{getText('deployment.version.deploymentStatus.result')}</th>
+                        <th>{getText('deployment.version.deploymentStatus.date')}</th>
+                        <th>{getText('global.heading.actions')}</th>
+                    </tr>
+                </thead>
+                {foreach $projectWithEnvironmentStatuses in $projectsWithEnvironmentStatuses}
+                    {if $projectWithEnvironmentStatuses.environmentStatuses and length($projectWithEnvironmentStatuses.environmentStatuses) > 0}
+                        {foreach $environmentStatus in $projectWithEnvironmentStatuses.environmentStatuses}
+                            <tr id="{'environment-' + $environmentStatus.environment.id}"
+                                class="
+                                    {if isFirst($environmentStatus)}first{/if}{sp}
+                                    {if isLast($environmentStatus)}last{/if}{sp}
+                                    {if $environmentStatus.deploymentResult and (
+                                        ($environmentStatus.deploymentResult.lifeCycleState == 'FINISHED' and ($environmentStatus.deploymentResult.deploymentState == 'FAILED' or $environmentStatus.deploymentResult.deploymentState == 'UNKNOWN')) or
+                                        ($environmentStatus.deploymentResult.lifeCycleState == 'NOT_BUILT')
+                                    )}error{/if}
+                                ">
+                                {if $showProject}
+                                    <td class="deployment">
+                                        {if isFirst($environmentStatus)}
+                                            <a class="deployment-project-name"
+                                                href="{contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $projectWithEnvironmentStatuses.deploymentProject.id}"
+                                                {if $projectWithEnvironmentStatuses.deploymentProject.description}title="{$projectWithEnvironmentStatuses.deploymentProject.description}"{/if}
+                                            >
+                                                {$projectWithEnvironmentStatuses.deploymentProject.name}
+                                            </a>
+                                        {/if}
+                                    </td>
+                                {/if}
+                                {call .environment data="$environmentStatus"}
+                                    {param currentUrl: $currentUrl /}
+                                {/call}
+                            </tr>
+                        {/foreach}
+                    {else}
+                        <tr class="first">
+                            {if $showProject}
+                                <td class="deployment">
+                                    <a class="deployment-project-name" href="{contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $projectWithEnvironmentStatuses.deploymentProject.id}">
+                                        {$projectWithEnvironmentStatuses.deploymentProject.name}
+                                    </a>
+                                </td>
+                            {/if}
+                            <td colspan="5" class="empty-text">
+                                {getText('deployment.project.empty')}
+                                {if $projectWithEnvironmentStatuses.deploymentProject.operations.canEdit}
+                                    {sp}{getText('deployment.project.empty.create', contextPath() + '/deploy/config/createEnvironment.action?deploymentProjectId=' + $projectWithEnvironmentStatuses.deploymentProject.id + '&returnUrl=' + $currentUrl)|noAutoescape}
+                                {/if}
+                            </td>
+                        </tr>
+                    {/if}
+                {/foreach}
+            </table>
+        {else}
+            <p>{getText('deployment.welcome.message')|noAutoescape}</p>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * Environment
+ * @param environment
+ * @param deploymentResult
+ * @param currentUrl
+ */
+{template .environment}
+    <td><a href="{contextPath() + '/deploy/viewEnvironment.action?id=' + $environment.id}">{$environment.name}</a></td>
+    {if $deploymentResult}
+        <td>
+            {call bamboo.feature.deployment.result.version}
+                {param deploymentVersion: $deploymentResult.deploymentVersion /}
+                {param deploymentVersionName: $deploymentResult.deploymentVersionName /}
+                {param subtle: true/}
+            {/call}
+        </td>
+        <td>
+            {call bamboo.feature.deployment.result.environmentState}
+                {param deploymentResult: $deploymentResult /}
+                {param showDetailsLinkAlways: true /}
+            {/call}
+        </td>
+        <td>
+            {call bamboo.feature.deployment.result.finishedTimeOrDuration data="$deploymentResult"}
+                {param hideLink: true /}
+            {/call}
+        </td>
+    {else}
+        <td>&nbsp;</td>
+        <td colspan="2" class="empty-text">{getText('deployment.version.deploymentStatus.never')}<a>
+    {/if}
+    <td class="operations">
+        {if $environment.operations.canEdit}
+            {call widget.icons.auiFontLink}
+                {param iconType: 'edit' /}
+                {param relativeUrl: '/deploy/config/configureDeploymentProject.action?id=' + $environment.deploymentProjectId + '&environmentId=' + $environment.id + '&returnUrl=' + $currentUrl /}
+                {param text: getText('deployment.environment.configure') /}
+            {/call}
+        {/if}
+        {sp}
+        {if $environment.operations.allowedToExecute}
+            {if $environment.operations.canExecute}
+                <a href="{contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environment.id + '&returnUrl=' + $currentUrl}" title="{getText('deployment.execute.button')}">
+                    {call widget.icons.icon}
+                        {param type: 'deploy' /}
+                        {param text: getText('deployment.execute.button') /}
+                    {/call}
+                </a>
+            {else}
+                {call widget.icons.icon}
+                    {param type: 'deploy-disabled' /}
+                    {param text: $environment.operations.cantExecuteReason /}
+                    {param showTitle: true /}
+                {/call}
+            {/if}
+        {/if}
+    </td>
+{/template}

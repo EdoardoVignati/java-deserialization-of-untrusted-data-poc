@@ -1,0 +1,1 @@
+[@ww.checkbox name='firstErrorOccuranceOnly' value='${firstErrorOccuranceOnly}' label='First Occurance Only' descriptionKey='Only notify on the first occurance of a particular error.' /]

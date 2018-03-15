@@ -1,0 +1,119 @@
+{namespace bamboo.feature.deployment.version.versionList}
+
+/**
+ * Version List Container
+ * @param id
+ * @param deploymentProject
+ * @param? versions
+ * @param? limit
+ * @param? isHistory
+ */
+{template .container}
+    {let $tableId: $id + '-table' /}
+    {let $suppliedVersions: ($versions ? $versions : []) /}
+    <div id="{$id}" class="version-list">
+        {call .list}
+            {param id: $tableId /}
+            {param deploymentProject: $deploymentProject /}
+            {param versions: $suppliedVersions /}
+            {param limit: ($limit ? $limit : 10) /}
+            {param isHistory: $isHistory/}
+        {/call}
+    </div>
+{/template}
+
+
+/**
+ * @param? id
+ * @param deploymentProject
+ * @param versions
+ * @param limit
+ * @param isHistory
+ */
+{template .list}
+    {call aui.table}
+        {param id: $id /}
+        {param columnsContent}
+            <colgroup>
+                <col width="20%"/>
+                <col width="128px"/>
+                <col/>
+                <col/>
+                <col/>
+            </colgroup>
+        {/param}
+        {param theadContent}
+            <tr>
+                <th>{getText('deployment.project.version.name')}</th>
+                <th>{getText('deployment.project.version.branch')}</th>
+                <th>{getText('deployment.project.version.flagged')}</th>
+                <th>{getText('deployment.version.details.created')}</th>
+                {if $isHistory}
+                    <th>{getText('deployment.project.version.wasDeployedOn')}</th>
+                {else}
+                    <th>{getText('deployment.project.version.deployedOn')}</th>
+                {/if}
+            </tr>
+        {/param}
+        {param content}
+            {if length($versions)}
+                {foreach $version in $versions}
+                    {if index($version) < $limit}
+                        {call .item}
+                            {param version: $version.deploymentVersion /}
+                            {param deployedOnEnvironments: $version.environments /}
+                        {/call}
+                    {/if}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+    {if length($versions) > $limit}
+        <script>
+            new BAMBOO.DEPLOYMENT.VersionList('#{$id|escapeJsString}', {$deploymentProject.id}, {lb}
+                size: {length($versions)},
+                maxResult: {$limit},
+                pageSize: {$limit}
+            {rb});
+        </script>
+    {/if}
+{/template}
+
+/**
+ * @param version
+ * @param? deployedOnEnvironments
+ */
+{template .item}
+    <tr>
+        <td>
+            {call bamboo.widget.deployment.version.versionInfo}
+                {param version: $version /}
+                {param showBranch: false /}
+            {/call}
+        </td>
+        <td>
+            {call bamboo.widget.deployment.version.branch data="$version" /}
+        </td>
+        <td>
+            {if $version.versionStatus}
+                {call widget.status.deploymentVersionStatus}
+                    {param deploymentVersionState: $version.versionStatus.versionState /}
+                {/call}
+            {/if}
+        </td>
+        <td>
+            {call bamboo.widget.time.timestamp}
+                {param datetime: $version.creationDate /}
+                {param format: 'full' /}
+            {/call}
+        </td>
+        <td>
+            {if $deployedOnEnvironments}
+                {foreach $environment in $deployedOnEnvironments}
+                    {if index($environment) > 0},{sp}{/if}
+                    <a href="{contextPath() + '/deploy/viewEnvironment.action?id=' + $environment.id}">{$environment.name}<a>
+                {/foreach}
+            {/if}
+        </td>
+    </tr>
+{/template}

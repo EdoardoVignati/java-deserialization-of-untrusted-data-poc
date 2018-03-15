@@ -1,0 +1,155 @@
+{namespace bamboo.layout.menus}
+
+/**
+ * Builds the 'Deploy' drop down action button, only containing environments that the user can deploy to.
+ * @param environments
+ * @param currentUrl
+ * @param? highlightedEnvironment Used in contextual scenarios (i.e., on a specific environment's page).
+ * @param? rerunEnvironment Only used on the deployment result page. We need to include a 'rerun' option at the top of the list.
+ * @param? versionId If given, this version will be auto-selected when you get to the deployment preview screen.
+ * @param? heading If given, this heading text will be inserted above the list of environments.
+ */
+{template .deployDropdown}
+    {let $environmentsListDropdown}
+        {call .deployDropdownContent}
+            {param environments: $environments /}
+            {param currentUrl: $currentUrl /}
+            {param highlightedEnvironment: $highlightedEnvironment /}
+            {param rerunEnvironment: $rerunEnvironment /}
+            {param versionId: $versionId /}
+            {param heading: $heading /}
+        {/call}
+    {/let}
+    {if $environmentsListDropdown}
+        {call aui.dropdown2.contents}
+            {param id: 'deploy-environments-list' /}
+            {param content}
+                {$environmentsListDropdown|noAutoescape}
+            {/param}
+            {param extraClasses: 'aui-style-default aui-dropdown2-in-page-header' /}
+        {/call}
+        {call aui.buttons.buttons}
+            {param content}
+                {call aui.buttons.button}
+                    {param text: ' ' + getText('deployment.environment.deploy')/}
+                    {param tagName: 'a' /}
+                    {param id: 'deployToEnvironment' /}
+                    {param iconType: 'aui' /}
+                    {param iconClass: 'icon-deploy' /}
+                    {param dropdown2Target: 'deploy-environments-list' /}
+                {/call}
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param environments
+ * @param currentUrl
+ * @param? highlightedEnvironment
+ * @param? rerunEnvironment
+ * @param? versionId
+ * @param? heading
+ */
+{template .deployDropdownContent private="true"}
+    {let $environmentsList}
+        {call .listEnvironments data="all" /}
+    {/let}
+
+    // We only want to show the dropdown if there is actually something inside it that they can click.
+    // So, we will only show the highlighted/rerun options IF
+    // * They can actually deploy to the highlighted env / rerun the deployment
+    // OR
+    // * They can deploy to another environment (i.e., there are contents in the environmentsList)
+    // In the case where they are unable to deploy to the highlighted environment BUT they ARE able to deploy to
+    // a different environment, the deploy dropdown will display but the highlighted environment will be disabled.
+    {if $highlightedEnvironment and ($highlightedEnvironment.operations.allowedToExecute or $environmentsList)}
+        {call .displayTopEnvironment}
+            {param environment: $highlightedEnvironment/}
+            {param currentUrl: $currentUrl/}
+            {param canExecuteText: $highlightedEnvironment.name /}
+            {param allowedToExecuteText: $highlightedEnvironment.name /}
+            {param notAllowedText: $highlightedEnvironment.name /}
+            {param versionId: $versionId/}
+        {/call}
+    {/if}
+    {if $rerunEnvironment and ($rerunEnvironment.operations.allowedToExecute or $environmentsList)}
+        {if $rerunEnvironment}
+            {call .displayTopEnvironment}
+                {param environment: $rerunEnvironment/}
+                {param currentUrl: $currentUrl/}
+                {param canExecuteText: getText('deployment.execute.dropdown.rerun')/}
+                {param allowedToExecuteText: getText('deployment.execute.dropdown.rerun')/}
+                {param notAllowedText: getText('deployment.execute.dropdown.rerun')/}
+                {param versionId: $versionId/}
+            {/call}
+        {/if}
+    {/if}
+
+    {if $environmentsList}
+        <div class="aui-dropdown2-section">
+            {if $heading}
+                <strong>{$heading}</strong>
+            {/if}
+            <ul>
+                {$environmentsList|noAutoescape}
+            </ul>
+        </div>
+    {/if}
+{/template}
+
+
+/**
+ * @param environment
+ * @param currentUrl
+ * @param canExecuteText
+ * @param allowedToExecuteText
+ * @param notAllowedText
+ * @param? versionId
+ */
+{template .displayTopEnvironment private="true"}
+    <div class="aui-dropdown2-section">
+        <ul>
+            <li>
+                {if $environment.operations.canExecute}
+                    {let $actionUrl: contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environment.id + ($versionId ? '&versionId=' + $versionId : '')/}
+                    <a id="deploy-{$environment.id}"
+                       href="{$actionUrl + '&returnUrl='}{$currentUrl|escapeUri}">
+                        {$canExecuteText}
+                    </a>
+                {elseif $environment.operations.allowedToExecute}
+                    <div class="disabled-environment" title="{$environment.operations.cantExecuteReason}">{$allowedToExecuteText}</div>
+                {else}
+                    <div class="disabled-environment" title="{getText('deployment.execute.dropdown.nopermission')}">{$notAllowedText}</div>
+                {/if}
+            </li>
+        </ul>
+    </div>
+{/template}
+
+/**
+ * @param environments
+ * @param currentUrl
+ * @param? highlightedEnvironment
+ * @param? rerunEnvironment
+ * @param? versionId
+ */
+{template .listEnvironments private="true"}
+    {foreach $environment in $environments}
+        {if $environment.id != $highlightedEnvironment.id and $environment.id != $rerunEnvironment.id}
+            {if $environment.operations.canExecute}
+                <li>
+                    {let $actionUrl: contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environment.id  + ($versionId ? '&versionId=' + $versionId : '') /}
+                    <a id="deploy-{$environment.id}"
+                       href="{$actionUrl + '&returnUrl='}{$currentUrl|escapeUri}">
+                       {$environment.name}
+                    </a>
+                </li>
+            {elseif $environment.operations.allowedToExecute}
+                <li>
+                    <div class="disabled-environment" title="{$environment.operations.cantExecuteReason}">{$environment.name}</div>
+                </li>
+            {/if}
+        {/if}
+    {/foreach}
+{/template}

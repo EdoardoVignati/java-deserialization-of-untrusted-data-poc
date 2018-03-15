@@ -1,0 +1,131 @@
+@import "../../global.less";
+
+.comments {
+    @avatarSize: 32px;
+
+    // Comment form
+    form.aui {
+        padding-left: @avatarSize + @baseSpacing;
+        padding-top: @baseSpacing;
+
+        .avatar {
+            height: @avatarSize;
+            left: 0;
+            position: absolute;
+            top: @baseSpacing;
+            width: @avatarSize;
+        }
+        .field-group {
+            margin: 0;
+            padding: 0;
+
+            label {
+                .hide-accessibly();
+            }
+        }
+        textarea {
+            border: 1px solid #ccc;
+            .border-radius();
+            .box-sizing();
+            height: @avatarSize * 2;
+            margin: 0;
+            padding: @halfSpacing;
+            .transition(height 0.3s ease);
+        }
+        .buttons-container {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .buttons {
+            position: relative;
+
+            .button,
+            .cancel {
+                margin: @baseSpacing @baseSpacing 0 0;
+            }
+        }
+        &.collapsed {
+            textarea {
+                height: @avatarSize;
+            }
+            .buttons-container {
+                display: none;
+            }
+        }
+    }
+    // Comment list
+    & > ol {
+        .reset-list-style();
+
+        & > li {
+            overflow: hidden;
+            padding: 0 0 0 (@avatarSize + @baseSpacing);
+            position: relative;
+
+            & + li {
+                border-top: 1px solid @dividerColor;
+                margin-top: @baseSpacing;
+                padding-top: @baseSpacing;
+
+                .avatar {
+                    top: @baseSpacing;
+                }
+            }
+        }
+        h3,
+        h4 {
+            border: 0;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 0;
+
+            // Comment content
+            & + p {
+                margin: @halfSpacing 0;
+            }
+        }
+        .avatar {
+            .border-radius();
+            height: @avatarSize;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: @avatarSize;
+        }
+        .icon-loading {
+            margin-top: -8px;
+            position: absolute;
+            right: 6px;
+            top: 50%;
+        }
+        & + form.aui {
+            border-top: 1px solid @dividerColor;
+            margin-top: @baseSpacing;
+        }
+    }
+    time {
+        border: 0;
+        color: @secondaryTextColor;
+        font-size: 12px;
+    }
+    .ops {
+        color: @secondaryTextColor;
+        display: inline;
+        font-size: 12px;
+        padding-right: 0.5em;
+
+        a {
+            color: @secondaryTextColor;
+        }
+        & + time:before {
+            content: "\2022";
+            padding-right: 0.5em;
+        }
+    }
+    // Job comment list
+    & > h3 {
+        font-size: 16px;
+        line-height: 1.25;
+    }
+}

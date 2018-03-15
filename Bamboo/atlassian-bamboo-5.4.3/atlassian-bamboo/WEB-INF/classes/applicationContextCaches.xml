@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring context for caching managers and services -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+  <bean id="cachingPermissionManagerFacade" class="com.atlassian.bamboo.security.BambooCachingPermissionManagerFacade" parent="bambooPermissionManagerNoTx" scope="prototype"/>
+
+  <bean id="repositoryCachingFacade" class="com.atlassian.bamboo.repository.RepositoryCachingFacadeImpl" plugin:available="true"/>
+
+  <bean id="dashboardCachingManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces">
+      <list>
+        <value>com.atlassian.bamboo.caching.DashboardCachingManager</value>
+      </list>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <idref bean="transactionReadOnlyInterceptor"/>
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.caching.DashboardCachingManagerImpl">
+        <constructor-arg ref="immutablePlanCacheService"/>
+        <constructor-arg ref="planDao"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="immutablePlanCacheService" class="com.atlassian.bamboo.plan.cache.ImmutablePlanCacheServiceImpl" plugin:available="true">
+    <constructor-arg ref="immutablePlanManager"/>
+    <constructor-arg ref="planDao"/>
+    <constructor-arg ref="transactionTemplate"/>
+    <constructor-arg ref="hibernateConfig"/>
+    <constructor-arg ref="hibernateTemplateWithANewSession"/>
+  </bean>
+
+  <bean id="cachedPlanManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces">
+      <list>
+        <value>com.atlassian.bamboo.plan.FilteringPlanManager</value>
+        <value>com.atlassian.bamboo.plan.cache.CachedPlanManager</value>
+      </list>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.plan.cache.CachedPlanManagerImpl">
+        <constructor-arg ref="immutablePlanCacheService"/>
+      </bean>
+    </property>
+  </bean>
+  <alias name="cachedPlanManager" alias="filteringPlanManager"/>
+
+</beans>

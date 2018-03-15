@@ -1,0 +1,32 @@
+.in-place-edit .in-place-edit-view .icon-edit{display:none;}
+.in-place-edit .in-place-edit-view:hover .icon-edit{display:inline-block;}
+.inline-edit-view{display:inline-block;min-height:1.4em;padding:4px;width:95%;}
+.inline-edit-field+.icon-loading{margin-left:-24px;}
+.variables-list .error{color:#D04437;margin-top:5px;}
+.variables-list .operations{text-align:left;vertical-align:middle;width:auto;}
+.variables-list .delete-variable{padding:5px;}
+.variables-list .inline-edit-field.text,.variables-list .inline-edit-field.select{display:none;margin:0;max-width:300px;margin-right:4px;}
+.variables-list .bamboo-single-select .bamboo-single-select-field.text,.variables-list .bamboo-single-select .bamboo-single-select-field.select{max-width:500px;}
+.variables-list .input-password{display:inline;max-width:500px;}.variables-list .input-password input{float:left;margin-right:4px;max-width:300px;}
+.variables-list .input-password button{float:left;}
+.variables-list .add-variable,.variables-list .add-variable:hover{background:#ebf2f9;}
+.variables-list .add-variable.inactive{background:transparent;}
+.variables-list .add-variable .inline-edit-field{display:inline;}
+.variables-list .add-variable .bamboo-single-select.inline-edit-field{display:inline-block;}
+.variables-list .add-variable .hidden{display:none;}
+.variables-list>tbody>tr{-webkit-transition:background 0.3s ease;-moz-transition:background 0.3s ease;-ms-transition:background 0.3s ease;-o-transition:background 0.3s ease;transition:background 0.3s ease;vertical-align:top;}.variables-list>tbody>tr:hover{background:#f0f0f0;}.variables-list>tbody>tr:hover .inline-edit-view{background:#ffffff;border:1px solid #cccccc;padding:3px;position:relative;}.variables-list>tbody>tr:hover .inline-edit-view:after{background:url(../../../images/edit_12.png) no-repeat;content:"";height:12px;margin-top:-6px;position:absolute;right:6px;top:50%;width:12px;}
+.variables-list>tbody>tr.active{background:#ebf2f9;}.variables-list>tbody>tr.active .text,.variables-list>tbody>tr.active .select{display:block;}
+.variables-list>tbody>tr.active .createinput-password input{max-width:300px;}
+.variables-list>tbody>tr.active .clear-variable{margin-left:4px;}
+.variables-list>tbody>tr.active .operations a{display:none;}
+.variables-list>tbody>tr.active .operations a.cancel-variable{padding-left:6px;}
+.variables-list>tbody>tr.active .operations a.cancel-variable,.variables-list>tbody>tr.active .operations button{display:inline;}
+.variables-list>tbody>tr small>div{clear:both;}
+.variables-list input::-ms-clear,.variables-list input::-ms-reveal{display:none;}
+.variables-hint{color:#707070;margin-top:10px;}
+.variables .variables-container{overflow:auto;}
+.variables table{margin-top:10px;}
+.variables td{padding:0;vertical-align:top;}
+.variables tr+tr>td{padding-top:10px;}
+.variables td.name{color:#707070;padding-right:10px;white-space:nowrap;}
+.variable-override-text{padding-top:2px;padding-left:4px;}

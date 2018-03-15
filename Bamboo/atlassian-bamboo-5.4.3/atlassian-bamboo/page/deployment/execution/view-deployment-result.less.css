@@ -1,0 +1,3 @@
+#deploymentLogs{margin-top:20px;}#deploymentLogs >#buildLog{margin-top:5px;}#deploymentLogs >#buildLog >table{margin-top:0;}
+#deploymentLogs >#buildLog >.loading,#deploymentLogs >#buildLog >.nologs{padding:5px;}
+#deployment-errors{padding-top:20px;}

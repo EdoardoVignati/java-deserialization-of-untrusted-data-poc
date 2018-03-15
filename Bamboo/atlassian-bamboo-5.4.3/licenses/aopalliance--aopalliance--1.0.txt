@@ -1,0 +1,3 @@
+From http://aopalliance.sourceforge.net/ retrieved on 8-Feb-2013:
+
+LICENCE: all the source code provided by AOP Alliance is Public Domain.

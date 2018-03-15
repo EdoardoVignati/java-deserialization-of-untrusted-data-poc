@@ -1,0 +1,5 @@
+.project-summary #projectEnvironments{margin-top:20px;}
+.details-list{margin-top:20px;margin-bottom:20px;}.details-list .aui-message{float:left;}
+.details-list dt.artifacts{padding-top:10px;}
+.details-list dd.artifacts{margin-top:20px;}.details-list dd.artifacts .aui-message{margin-top:-10px;}
+.no-versions{color:#707070;margin-left:auto;margin-right:auto;text-align:center;}

@@ -1,0 +1,59 @@
+{namespace bamboo.widget.deployment.version}
+
+/**
+ * Displays release name, branch name lozenge and status lozenge
+ * @param version
+ * @param? showBranch
+ * @param? showVersionStatus
+ */
+{template .versionInfo}
+    {if $version}
+        {if $showVersionStatus and $version.versionStatus}
+            <div class="release-info">
+                {call .name data="$version" /}
+            </div>
+        {else}
+            {call .name data="$version" /}
+        {/if}
+        {if $showBranch}
+            {sp}{call .branch data="$version" /}
+        {/if}
+        {if $showVersionStatus and $version.versionStatus}
+            {sp}{call widget.status.deploymentVersionStatusInfo}
+                {param avatar : $version.versionStatus.gravatarUrl /}
+                {param userName : $version.versionStatus.userName /}
+                {param displayName : $version.versionStatus.displayName /}
+                {param deploymentVersionState: $version.versionStatus.versionState /}
+            {/call}
+        {/if}
+    {/if}
+{/template}
+
+/**
+ * Displays release name
+ * @param id
+ * @param name
+ */
+{template .name}
+    <a href="{contextPath()}/deploy/viewDeploymentVersion.action?versionId={$id}">{$name}</a>
+{/template}
+
+/**
+ * Displays branch name lozenge
+ * @param planBranchName
+ * @param? label
+ */
+{template .branch}
+    <span class="lozenge-newline">
+        {if $label}<span class="inline-label">{$label}</span> {/if}
+        <span class="lozenge branch-lozenge monospace" title="{$planBranchName}">
+            <span class="branch">
+                {call aui.icons.icon}
+                   {param icon: 'devtools-branch-small'/}
+                   {param useIconFont: true/}
+                {/call}
+                <span class="name">{$planBranchName}</span>
+            </span>
+        </span>
+    </span>
+{/template}

@@ -1,0 +1,33 @@
+{namespace widget.agent}
+
+/**
+ * @param id
+ * @param name
+ * @param type
+ * @param? showAdminLink
+*/
+{template .renderAgentNameLink}
+    {if $type == 'ELASTIC'}
+        {if has_global_permission('RESTRICTEDADMINISTRATION')}
+            <a href="{contextPath() + '/admin/elastic/manageElasticInstances.action'}">
+                {call widget.icons.icon}
+                    {param type: 'elastic'/}
+                    {param text: '(elastic)'/}
+                    {param showTitle: true/}
+                {/call}
+            </a>
+        {else}
+            {call widget.icons.icon}
+                {param type: 'elastic'/}
+                {param text: '(elastic)'/}
+                {param showTitle: true/}
+            {/call}
+        {/if}
+        //[@dj.tooltip target='${definition.id}Elastic' text="This agent is running in the Amazon Elastic Compute Cloud" /]
+    {/if}
+    {if $showAdminLink}
+        <a href="{contextPath() + '/admin/agent/viewAgent.action?agentId=' + $id}">{$name}</a>
+    {else}
+        <a href="{contextPath() + '/agent/viewAgent.action?agentId=' + $id}">{$name}</a>
+    {/if}
+{/template}

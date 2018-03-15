@@ -1,0 +1,25 @@
+{namespace bamboo.build.generate}
+
+/**
+ * This template is used at build time to generate a soy template listing the LGPL libraries
+ * that Bamboo ships with.
+ *
+ * @param lgplLibraries
+ */
+{template .licenseTemplates}
+{lb}namespace bamboo.page.about{rb}{\n}
+{literal}
+/**
+ *
+ */
+{/literal}
+{lb}template .lgplLibraries{rb}{\n}
+    <ul>{\n}
+    {foreach $lib in $lgplLibraries}
+        {if $lib.isLGPL}
+            <li>{$lib.name} ({if $lib.url}<a href="{$lib.url}" target="_blank">{/if}{$lib.artifactGAV}{if $lib.url}</a>{/if})</li>{\n}
+        {/if}
+    {/foreach}
+    </ul>{\n}
+{lb}/template{rb}
+{/template}

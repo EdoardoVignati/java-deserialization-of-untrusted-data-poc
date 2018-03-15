@@ -1,0 +1,32 @@
+@import "../../global.less";
+@import "../../styles/aui-overrides.less";
+@import "../../styles/main.less";
+@import "../../styles/main2.less";
+@import "../../styles/global-static.less";
+@import "../../styles/forms.less";
+
+/*Other setup specific stuff*/
+.installation-option {
+    margin-top: 16px;
+    position: relative;
+
+    > h4 {
+        margin: 0;
+    }
+    > p {
+        color: @secondaryTextColor;
+        margin: 0;
+        width: 70%;
+    }
+    > input {
+        margin: 0;
+        position: absolute;
+        right: 0;
+        top: 1.5em;
+    }
+}
+
+.aui-theme-default .external-database-type,
+.aui-theme-default .mysql-messages > .aui-message {
+    margin-left: 20px !important;
+}

@@ -1,0 +1,27 @@
+.deployment-project-description{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;-o-text-overflow:ellipsis;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;color:#707070;}
+.configure-project-details{border-bottom:1px solid #cccccc;margin-bottom:10px;padding-bottom:10px;}.configure-project-details>.aui-toolbar{padding-top:10px;}
+.configure-project-environments{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;margin-top:20px;min-height:85px;overflow:hidden;padding:20px 0 0 60px;position:relative;}.configure-project-environments:before{border-color:transparent transparent transparent #cccccc;border-style:solid;border-width:10px 0 10px 10px;content:"";left:40px;position:absolute;top:57.5px;}
+.configure-project-environments:after{-webkit-border-bottom-left-radius:10px;-moz-border-radius-bottomleft:10px;border-bottom-left-radius:10px;border-color:transparent transparent #cccccc #cccccc;border-style:solid;border-width:5px;content:"";height:65px;left:0;position:absolute;top:-5px;width:35px;}
+.configure-project-environments>.new-environment:first-child{margin-top:20px;}
+.configure-project-environment-list{list-style:none;max-width:800px;padding:0;}
+.configure-project-environment{-webkit-border-top-right-radius:3.01px;-moz-border-radius-topright:3.01px;border-top-right-radius:3.01px;-webkit-border-bottom-right-radius:3.01px;-moz-border-radius-bottomright:3.01px;border-bottom-right-radius:3.01px;border:1px solid #cccccc;position:relative;}.configure-project-environment:before{border-color:transparent transparent transparent #cccccc;border-style:solid;border-width:10px 0 10px 10px;bottom:0;content:"";left:-21px;margin-bottom:-77.5px;position:absolute;}
+.configure-project-environment:after{-webkit-border-bottom-left-radius:10px;-moz-border-radius-bottomleft:10px;border-bottom-left-radius:10px;border-color:transparent transparent #cccccc #cccccc;border-style:solid;border-width:5px;bottom:0;content:"";left:-61px;margin-bottom:-70px;position:absolute;top:-5px;width:35px;}
+.configure-project-environment:last-child:before,.configure-project-environment:last-child:after{content:normal;}
+.configure-project-environment +.configure-project-environment{margin-top:20px;}
+.configure-project-environment >.aui-page-header{padding:10px 10px 10px 60px;left:0;position:absolute;right:0;top:0;z-index:1;}
+.configure-project-environment >div{overflow:hidden;padding:10px 10px 10px 60px;position:relative;}.configure-project-environment >div:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;background:#f5f5f5;border-right:1px solid #cccccc;bottom:0;content:"";left:0;position:absolute;top:0;width:50px;}
+.configure-project-environment >div>h3,.configure-project-environment >div>h4{display:inline-block;}
+.configure-project-environment .configure-project-environment-overview{display:none;}
+.configure-project-environment .configure-project-environment-details .configure-project-environment-status-icon+.aui-toolbar2{margin-top:0;}.configure-project-environment .configure-project-environment-details .configure-project-environment-status-icon+.aui-toolbar2 .aui-button{margin-top:0;}
+.configure-project-environment .configure-project-environment-overview,.configure-project-environment .configure-project-environment-details{padding-top:50px;}
+.configure-project-environment .configure-project-environment-tasks,.configure-project-environment .configure-project-environment-other{border-top:1px solid #cccccc;}
+.configure-project-environment.collapsed .configure-project-environment-overview{display:block;}
+.configure-project-environment.collapsed .configure-project-environment-details,.configure-project-environment.collapsed .configure-project-environment-tasks,.configure-project-environment.collapsed .configure-project-environment-other{display:none;}
+.configure-project-environment .environment-edit{margin-left:10px;}.configure-project-environment .environment-edit.hidden{display:none;}
+.configure-project-environment .environment-description{color:#707070;}
+.configure-project-environment.selected{background:#ebf2f9;}
+.configure-project-environment .configuration-status-help{color:#d04437;padding-left:10px;}
+.configure-project-environment-status-lozenge{margin-left:10px;}
+.configure-project-environment-status-icon{left:9px;margin-top:-16px;position:absolute;top:50%;}.configure-project-environment-status-icon.aui-iconfont-approve{color:#14892c;}
+.configure-project-environment-status-icon.aui-iconfont-info{color:#d04437;}
+form#permissions .buttons-container{margin-top:20px;}

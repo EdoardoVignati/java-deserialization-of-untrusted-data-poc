@@ -1,0 +1,37 @@
+{namespace widget.plan}
+
+/**
+ * Displays plan name and link. Supports branches. Does not support jobs. Yet.
+ * @param plan
+ * @param? url url to be used for link. If not supplied default browse url will be used
+ */
+{template .renderPlanNameLink}
+<a href="{if $url}{$url}{else}{contextPath() + '/browse/' + $plan.key}{/if}" {if $plan.description}title="{$plan.description}"{/if}>
+   {$plan.project.name}{sp}&rsaquo;{sp}
+       {if $plan.master}
+           {$plan.master.buildName}{sp}&rsaquo;{sp}
+           {call aui.icons.icon}
+               {param icon: 'devtools-branch-small'/}
+               {param useIconFont: true/}
+           {/call}
+           {sp}
+       {/if}
+       {$plan.buildName}
+    </a>
+{/template}
+
+/**
+ * Same as the one above, but doesn't display the branch.
+ * @param plan
+ * @param? url
+ */
+{template .renderPlanNameLinkWithoutBranch}
+    <a href="{if $url}{$url}{else}{contextPath() + '/browse/' + $plan.key}{/if}" {if $plan.description}title="{$plan.description}"{/if}>
+    {$plan.project.name}{sp}&rsaquo;{sp}
+       {if $plan.master}
+           {$plan.master.buildName}
+       {else}
+           {$plan.buildName}
+       {/if}
+    </a>
+{/template}

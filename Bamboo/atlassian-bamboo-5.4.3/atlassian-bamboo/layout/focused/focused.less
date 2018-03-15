@@ -1,0 +1,32 @@
+@import "../../global.less";
+
+.aui-page-focused {
+    .aui-page-panel-content {
+        > h2 {
+            border-bottom: 1px solid @dividerColor;
+            padding-bottom: @baseSpacing;
+            width: 100%;
+        }
+        > .toolbar:first-child {
+            padding-top: @halfSpacing; // (h2 line-height - .toolbar line-height) / 2
+        }
+    }
+
+    form .buttons-container {
+        border-top: 1px solid @dividerColor;
+        padding-top: @doubleSpacing;
+    }
+
+    form .form-content-container {
+        margin-bottom: @baseSpacing;
+    }
+
+    .tasks-back-button {
+        border-top: 1px solid @dividerColor;
+        margin-top: @baseSpacing;
+        padding-top: @doubleSpacing;
+        position: relative;
+        width: 100%;
+    }
+}
+

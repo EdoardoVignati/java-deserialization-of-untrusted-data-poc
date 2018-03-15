@@ -1,0 +1,7 @@
+form#createDeploymentVersion .aui-group{margin-top:0px;}
+form#createDeploymentVersion .select-build-result,form#createDeploymentVersion .changes-since{padding-top:10px;}
+form#createDeploymentVersion .result-selector,form#createDeploymentVersion .version-name-selector{padding-right:20px;padding-top:0px;}
+form#createDeploymentVersion .result-selector-note,form#createDeploymentVersion .version-name-selector-note{border-left:1px solid #cccccc;color:#707070;font-size:12px;padding-top:10px;width:30%;}
+form#createDeploymentVersion .field-value{display:inline-block;font-weight:normal;padding-top:5px;}
+form#createDeploymentVersion .deployment-preview{margin-top:0px;width:70%;}
+form#createDeploymentVersion #new-version-details{min-height:70px;margin-top:0px;}

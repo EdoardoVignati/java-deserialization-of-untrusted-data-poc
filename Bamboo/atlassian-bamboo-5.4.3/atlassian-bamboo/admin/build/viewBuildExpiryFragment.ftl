@@ -1,0 +1,8 @@
+[@ww.label labelKey='buildExpiry.enable.type' value='${buildExpiryConfig.buildExpiryTypesLabel}' /]
+[#if buildExpiryConfig.duration > 0]
+    [@ww.label labelKey='buildExpiry.enable.timing' value='${buildExpiryConfig.duration} ${buildExpiryConfig.period}' /]
+[/#if]
+[@ww.label labelKey='buildExpiry.enable.builds' value='${buildExpiryConfig.buildsToKeep}' hideOnNull='true' /]
+[#if buildExpiryConfig.excludeLabels?exists && buildExpiryConfig.excludeLabels=='true']
+    [@ww.label labelKey='buildExpiry.enable.excludeLabels.labels' value='${buildExpiryConfig.labelsToKeep}' hideOnNull='true' /]
+[/#if]

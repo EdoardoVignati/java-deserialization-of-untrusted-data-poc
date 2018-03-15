@@ -1,0 +1,186 @@
+{namespace bamboo.feature.jiraIssueList}
+
+/**
+ * @param issues
+ * @param? loading
+ * @param? defaultIssueType
+ * @param? defaultIssueIconUrl
+ * @param? jiraTabUrl
+ * @param? maxIssues
+ * @param? issuesCount
+ * @param? hideStatus
+ */
+{template .jiraIssueList}
+    <table class="aui jira-issues{if $loading} loading{/if}">
+        <thead>
+            <tr>
+                <th colspan="2" class="issue">Issue</th>
+                <th class="description">Description</th>
+                {if not $hideStatus}
+                    <th class="status">Status</th>
+                {/if}
+            </tr>
+        </thead>
+        {if $issuesCount > $maxIssues}
+            <tfoot>
+                <tr>
+                    <td colspan="{$hideStatus ? 3 : 4}">
+                        /*
+                            Next line should be i18n'd with something like:
+                            {getText('buildResult.jiraIssues.more', ($issuesCount - $maxIssues))}
+                            ... but getText() doesn't seem to support passing in params!
+                        */
+                        <a href="{$jiraTabUrl}">{($issuesCount - $maxIssues) + ' more issue' + (($issuesCount - $maxIssues) > 1 ? 's' : '')}&hellip;</a>
+                    </td>
+                </tr>
+            </tfoot>
+        {/if}
+        <tbody>
+            {foreach $issue in $issues}
+                {if $issue.url and $issue.url.href and $issue.key and $issue.summary}
+                    {call .jiraIssueListItem}
+                        {param key: $issue.key /}
+                        {param url: $issue.url /}
+                        {param summary: $issue.summary /}
+                        {param issueType: ($issue.issueType ? $issue.issueType : $defaultIssueType) /}
+                        {param iconUrl: ($issue.iconUrl ? $issue.iconUrl : $defaultIssueIconUrl) /}
+                        {param status: $issue.status /}
+                        {param statusClass: $issue.statusClass /}
+                        {param statusIconUrl: $issue.statusIconUrl /}
+                        {param hideStatus: $hideStatus/}
+                    {/call}
+                {else}
+                    {call .jiraIssueListItemNoConnection}
+                        {param key: ($issue.issueKey? $issue.issueKey : $issue.key) /}
+                        {param hideStatus: $hideStatus/}
+                    {/call}
+                {/if}
+            {/foreach}
+        </tbody>
+    </table>
+{/template}
+
+/**
+ * @param key
+ * @param url
+ * @param summary
+ * @param issueType
+ * @param iconUrl
+ * @param status
+ * @param statusIconUrl
+ * @param? statusClass
+ * @param? hideStatus
+ * @param? showStatusIcon
+ */
+{template .jiraIssueListItem}
+    <tr data-issue-key="{$key|id}">
+        <td class="type">
+            <a href="{$url.href}" title="{getText('issue.link.jira.title')}"><img src="{$iconUrl}" alt="{$issueType}" /></a>
+        </td>
+        <td class="key">
+            <a href="{$url.href}">{$key|id}</a>
+        </td>
+        <td class="description">{$summary}</td>
+        {if not $hideStatus}
+            <td class="status">
+                {if $showStatusIcon}
+                    <img src="{$statusIconUrl}" alt="" />
+                {/if}
+                <span class="status-lozenge lozenge-subtle{if $statusClass} status-{$statusClass|id}{/if}" title="{$status}">{$status}</span>
+            </td>
+        {/if}
+    </tr>
+{/template}
+
+/**
+ * @param key
+ * @param? hideStatus
+ */
+{template .jiraIssueListItemNoConnection}
+    <tr>
+        <td class="type">
+            {call widget.icons.icon}
+                {param type: 'jiraissue-unknown' /}
+                {param text: 'Unknown Issue Type' /}
+                {param showTitle: true /}
+            {/call}
+        </td>
+        <td class="key">{$key}</td>
+        <td{if not $hideStatus} colspan="2"{/if} class="details-error"><span>{getText('issue.link.retrieval.error')}</span></td>
+    </tr>
+{/template}
+
+/**
+ * @param key
+ * @param url
+ * @param summary
+ * @param issueType
+ * @param iconUrl
+ * @param status
+ */
+{template .singleIssue}
+    <span class="jira-issue"{if $key} data-key="{$key|id}"{/if}>
+        <a href="{if $url.href}{$url.href}{else}{$url}{/if}" title="{getText('issue.link.jira.title')} ({$issueType})" style="background-image: url({$iconUrl});">{$key}</a>
+        <span class="description">{$summary}</span>
+        <span class="status-lozenge">{$status}</span>
+    </span>
+{/template}
+
+/**
+ * @param key
+ * @param? keyLink
+ */
+{template .singleIssueLoading}
+    <span class="single-issue-loading">
+        <a{if $keyLink} href="{$keyLink}"{/if}>{$key|id}</a>
+    </span>
+{/template}
+
+/**
+ * @param? key
+ * @param? keyLink
+ * @param authenticationRedirectUrl
+ * @param authenticationInstanceName
+ */
+{template .singleIssueOAuth}
+    {call .singleIssueRetrievalError}
+        {param key: $key /}
+        {param keyLink: $keyLink /}
+        {param errorDetails}
+            {call .linkedIssueOAuth}
+                {param authenticationRedirectUrl: $authenticationRedirectUrl /}
+                {param authenticationInstanceName: $authenticationInstanceName /}
+                {param reason: 'to see issue details' /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param? key
+ * @param? keyLink
+ * @param? errorDetails
+ */
+{template .singleIssueRetrievalError}
+    <span class="single-issue-retrieval-error"{if $key} data-key="{$key|id}"{/if}>
+        {if $key}
+            <a{if $keyLink} href="{$keyLink}"{/if}>{$key|id}</a>
+        {/if}
+        <span class="error-message{if not $errorDetails} unspecified{/if}">
+            {if $errorDetails}
+                {$errorDetails|noAutoescape}
+            {else}
+                {getText('issue.link.retrieval.error')}
+            {/if}
+        </span>
+    </span>
+{/template}
+
+/**
+ * @param authenticationRedirectUrl
+ * @param authenticationInstanceName
+ * @param? reason
+ */
+{template .linkedIssueOAuth}
+    <a class="oauth-init" href="{$authenticationRedirectUrl}">Authenticate</a> {if $authenticationInstanceName} with {$authenticationInstanceName}{/if} {$reason}
+{/template}

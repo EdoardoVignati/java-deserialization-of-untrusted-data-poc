@@ -1,0 +1,5 @@
+.aui-page-focused .aui-page-panel-content>h2{border-bottom:1px solid #cccccc;padding-bottom:10px;width:100%;}
+.aui-page-focused .aui-page-panel-content>.toolbar:first-child{padding-top:5px;}
+.aui-page-focused form .buttons-container{border-top:1px solid #cccccc;padding-top:20px;}
+.aui-page-focused form .form-content-container{margin-bottom:10px;}
+.aui-page-focused .tasks-back-button{border-top:1px solid #cccccc;margin-top:10px;padding-top:20px;position:relative;width:100%;}

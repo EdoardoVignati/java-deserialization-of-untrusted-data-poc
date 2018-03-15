@@ -1,0 +1,104 @@
+@import "../global.less";
+
+// Lozenges
+.lozenge-base() {
+    @default-background: #ddd;
+    background-color: @default-background;
+    border: 1px solid @default-background;
+    .border-radius(3px);
+    color: #555;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1;
+    padding: 2px 5px 1px;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    &.lozenge-subtle {
+        background-color: #fff !important;
+    }
+}
+.lozenge-colours(@background) {
+    .lozenge-colours(@background, #ffffff);
+}
+.lozenge-colours(@background, @foreground) {
+    .lozenge-colours(@background, @foreground, 66%);
+}
+.lozenge-colours(@background, #ffffff, @subtle-border-percentage) {
+    &.lozenge-subtle {
+        color: @background;
+    }
+}
+.lozenge-colours(@background, @foreground, @subtle-border-percentage) {
+    background-color: @background;
+    border-color: @foreground;
+    color: @foreground;
+
+    &.lozenge-subtle {
+        border-color: fadeout(@background, @subtle-border-percentage);
+    }
+}
+.lozenge {
+    .lozenge-base();
+
+    &.lozenge-success {
+        .lozenge-colours(@lozengeStartColor);
+    }
+    &.lozenge-error {
+        .lozenge-colours(@lozengeErrorColor);
+    }
+    &.lozenge-current {
+        .lozenge-colours(@lozengeWarningColor, #594300);
+    }
+    &.lozenge-complete {
+        .lozenge-colours(@lozengeDoneColor);
+    }
+    &.lozenge-moved {
+        .lozenge-colours(@lozengeModifiedColor);
+    }
+    // branch lozenge styling stolen from Stash
+    &.branch-lozenge {
+        .box-sizing(border-box);
+        .text-overflow();
+        background-color: #f5f5f5;
+        border: 1px solid #cccccc;
+        color: #707070;
+        font-size: 13px;
+        font-weight: normal;
+        line-height: 16px;
+        margin: 0 3px 3px;
+        max-width: 100%;
+        padding: 3px 5px;
+        text-transform: none !important;
+        vertical-align: middle;
+
+
+        .branch {
+            >.aui-icon {
+                padding-right: 5px;
+                vertical-align: text-bottom;
+            }
+        }
+        // branch lozenge in table should have limited length and no margin
+        td & {
+            max-width: 200px;
+            margin: 0;
+        }
+    }
+    &.monospace {
+        font-family: Courier,"Courier New",monospace;
+    }
+    + .lozenge {
+        margin-left: @halfSpacing
+    }
+}
+.lozenge-newline {
+  display: block;
+
+  .lozenge {
+    margin-left: 0px;
+    margin-top: 8px;
+  }
+}

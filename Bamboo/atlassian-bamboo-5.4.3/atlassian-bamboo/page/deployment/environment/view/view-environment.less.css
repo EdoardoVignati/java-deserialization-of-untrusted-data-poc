@@ -1,0 +1,8 @@
+#environment .environment-status{float:left;margin-bottom:40px;}
+#environment .environment-warning{float:right;-webkit-border-radius:3.01px;-moz-border-radius:3.01px;border-radius:3.01px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border:1px solid #cccccc;margin-top:10px;margin-right:20px;padding:40px;}#environment .environment-warning .image{margin:0 auto;width:96px;height:96px;background-image:url(../../../images/deployment/deployment-fail-large.png);background-repeat:no-repeat;background-position:center;}
+#environment .environment-empty{margin-top:20px;margin-bottom:20px;text-align:center;color:#999;}#environment .environment-empty h2{font-size:24px;margin:0px;}
+#environment .environment-empty p{font-size:14px;}
+#environment .environment-empty .image{background-image:url(../../../images/environment/no-deployments.png);background-repeat:no-repeat;background-position:center;margin-bottom:10px;height:60px;}
+#environment .environment-history:before,#environment .environment-history:after{content:"";display:table;}
+#environment .environment-history:before{clear:both;}
+#environment .environment-history{*zoom:1;}

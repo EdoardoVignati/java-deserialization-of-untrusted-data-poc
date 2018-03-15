@@ -1,0 +1,44 @@
+{namespace bamboo.widget.nav.breadcrumb}
+
+/**
+ * Display a list of bread crumbs for a header
+ * @param? parentCrumbs all the crumbs that are parents of this page
+ * @param? currentCrumb a crumb representing the current page.
+ * @param? id
+ */
+{template .crumbContainer}
+    <ol {if $id}id="{$id}"{/if} class="aui-nav aui-nav-breadcrumbs">
+        {if $parentCrumbs and length($parentCrumbs) > 0}
+             {foreach $crumb in $parentCrumbs}
+                {call .showParentCrumb data="$crumb"/}
+             {/foreach}
+        {/if}
+        {if $currentCrumb}
+            {call .showCurrentCrumb data="$currentCrumb"/}
+        {/if}
+    </ol>
+{/template}
+
+/**
+* Display a single parent crumb.
+* @param link href
+* @param text display name for bread crumb (must already be determined, can not pass in i18n string)
+* @param? id of the breadcrumb link
+* @param? extraClasses
+*/
+{template .showParentCrumb}
+    <li{call aui.renderExtraClasses data="all"}{param isFullAttr: true /}{/call}>
+        <a href="{$link}"{if $id} id="breadcrumb:{$id}"{/if}>{$text}</a>
+    </li>
+{/template}
+
+/**
+ * Display the current crumb
+ * @param text display name for breadCrumb (must already be determined, can not pass in i18n string)
+ * @param? extraClasses
+ */
+{template .showCurrentCrumb}
+    <li class="aui-nav-selected{call aui.renderExtraClasses data="all" /}">
+        {$text}
+    </li>
+{/template}

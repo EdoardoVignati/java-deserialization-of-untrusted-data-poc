@@ -1,0 +1,156 @@
+@import "../global.less";
+
+@iconSize: 16px;
+@leftGutter: (@halfSpacing + @iconSize + @halfSpacing); // left icon padding + icon + right icon padding
+
+.plan-sidebar {
+    border-right: 1px solid @dividerColor;
+    width: 218px;
+
+    &.collapsed {
+        width: 0;
+    }
+}
+#plan-navigator,
+#config-sidebar {
+    position: relative;
+}
+#config-sidebar h2 {
+    background: @bodyBackgroundColor;
+    border-bottom: 1px solid @dividerColor;
+    border-top: 1px solid #fff;
+    font-size: 1em;
+    font-weight: normal;
+    line-height: 31px;
+    margin: 0;
+    padding: 0 @baseSpacing 0 @leftGutter;
+    position: relative;
+
+    &.collapsed,
+    &.expanded {
+        cursor: pointer;
+    }
+    &[data-item-count]:after {
+        .item-count-lozenge();
+
+        content: attr(data-item-count);
+        line-height: 1.3077;
+        margin-top: -9px;
+        position: absolute;
+        right: @baseSpacing;
+        top: 50%;
+    }
+    &.active {
+        border-top: 1px solid @primaryLinkColor;
+    }
+    > a {
+        .transition(color 0.15s ease);
+        color: inherit;
+        display: block;
+        margin: 0 -16px 0 -@leftGutter;
+        padding: 0 16px 0 @leftGutter;
+        position: relative;
+
+        &:hover {
+            color: #000;
+        }
+    }
+    > .icon {
+        left: @halfSpacing;
+        margin-top: -(@iconSize / 2);
+        position: absolute;
+        top: 50%;
+
+        &.animating {
+            .transition(all 0.35s ease); /* transition duration needs to be less than the jQuery slideUp/slideDown duration (default 400ms) to avoid weirdness */
+
+            &.icon-expand {
+                .transform-rotate(90deg);
+            }
+            &.icon-collapse {
+                .transform-rotate(-90deg);
+            }
+        }
+    }
+}
+#config-sidebar > p {
+    color: @secondaryTextColor;
+    margin: 0;
+    padding: @halfSpacing @baseSpacing @halfSpacing @leftGutter;
+    position: relative;
+}
+#config-sidebar h3 {
+    border: 0;
+    font-size: inherit;
+    font-weight: bold;
+    padding: @halfSpacing @baseSpacing @halfSpacing @leftGutter;
+}
+#config-sidebar .stage-manual h3 {
+    padding-right: (@baseSpacing + @iconSize + @baseSpacing);
+}
+#config-sidebar ul,
+#config-sidebar > ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+#config-sidebar > ul,
+#config-sidebar > ol,
+#config-sidebar > p {
+    border-bottom: 1px solid @dividerColor;
+}
+#config-sidebar ul a {
+    display: block;
+    overflow: hidden;
+    padding: @halfSpacing @baseSpacing @halfSpacing @leftGutter;
+    text-overflow: ellipsis;
+}
+#config-sidebar > ol ul a {
+    padding-left: (@leftGutter + @iconSize + @halfSpacing);
+}
+#config-sidebar > ol .icon {
+    left: @leftGutter;
+    position: absolute;
+    top: 7px;
+}
+#config-sidebar > ol .icon-stage-manual {
+    left: auto;
+    right: @baseSpacing;
+}
+#config-sidebar li {
+    position: relative;
+}
+#config-sidebar .active {
+    background: @primaryLinkColor;
+    font-weight: bold;
+    z-index: 1;
+
+    &:before,
+    &:after {
+        @arrowSize: 5px;
+        border: @arrowSize solid transparent;
+        border-right-color: @dividerColor;
+        content: "";
+        height: 0;
+        margin-top: -@arrowSize;
+        overflow: hidden;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 0;
+    }
+    &:after {
+        border-right-color: #fff;
+        right: -1px;
+    }
+    > a {
+        color: #fff !important;
+        text-decoration: none;
+    }
+}
+
+/* Branch List */
+#config-sidebar .branches {
+    .box-shadow(0, 1px, 0, @dividerColor); // use box-shadow instead of border so that if there's a big list it collapses into the bottom border of the container
+    border-bottom: 0;
+}

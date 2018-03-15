@@ -1,0 +1,16 @@
+.comments form.aui{padding-left:42px;padding-top:10px;}.comments form.aui .avatar{height:32px;left:0;position:absolute;top:10px;width:32px;}
+.comments form.aui .field-group{margin:0;padding:0;}.comments form.aui .field-group label{border:0 none;clip:rect(0pt, 0pt, 0pt, 0pt);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;}
+.comments form.aui textarea{border:1px solid #ccc;-webkit-border-radius:3.01px;-moz-border-radius:3.01px;border-radius:3.01px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;height:64px;margin:0;padding:5px;-webkit-transition:height 0.3s ease;-moz-transition:height 0.3s ease;-ms-transition:height 0.3s ease;-o-transition:height 0.3s ease;transition:height 0.3s ease;}
+.comments form.aui .buttons-container{border:0;margin:0;padding:0;}
+.comments form.aui .buttons{position:relative;}.comments form.aui .buttons .button,.comments form.aui .buttons .cancel{margin:10px 10px 0 0;}
+.comments form.aui.collapsed textarea{height:32px;}
+.comments form.aui.collapsed .buttons-container{display:none;}
+.comments >ol{list-style:none;padding:0;}.comments >ol >li{overflow:hidden;padding:0 0 0 42px;position:relative;}.comments >ol >li +li{border-top:1px solid #cccccc;margin-top:10px;padding-top:10px;}.comments >ol >li +li .avatar{top:10px;}
+.comments >ol h3,.comments >ol h4{border:0;font-size:1em;font-weight:bold;margin:0;}.comments >ol h3 +p,.comments >ol h4 +p{margin:5px 0;}
+.comments >ol .avatar{-webkit-border-radius:3.01px;-moz-border-radius:3.01px;border-radius:3.01px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;height:32px;left:0;position:absolute;top:0;width:32px;}
+.comments >ol .icon-loading{margin-top:-8px;position:absolute;right:6px;top:50%;}
+.comments >ol +form.aui{border-top:1px solid #cccccc;margin-top:10px;}
+.comments time{border:0;color:#707070;font-size:12px;}
+.comments .ops{color:#707070;display:inline;font-size:12px;padding-right:0.5em;}.comments .ops a{color:#707070;}
+.comments .ops +time:before{content:"\2022";padding-right:0.5em;}
+.comments >h3{font-size:16px;line-height:1.25;}

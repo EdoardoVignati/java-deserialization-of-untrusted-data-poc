@@ -1,0 +1,50 @@
+/*********************************************/
+/* Bamboo Javascript status css         */
+/*********************************************/
+
+#plan-status {
+    background: #fff;
+    border: 1px solid #bbb;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    color: #036;
+    padding: 0 11px;
+}
+#plan-status p {
+    background: url(../../../images/jt/icn_building.gif) no-repeat 100% 50%;
+    line-height: 26px;
+	margin: 0;
+	padding: 0 25px 0 0;
+}
+#plan-status p.success a,
+#plan-status p.continuable a{
+    color: #090;
+}
+#plan-status p.success {
+	background-image: url(../../../images/iconsv3/plan_successful_16.png);
+}
+#plan-status p.continuable {
+    background-image: url(../../../images/iconsv3/plan_successful_partial_16.png);
+}
+#plan-status p.failed a {
+    color: #c00;
+}
+#plan-status p.failed {
+	background-image: url(../../../images/iconsv3/plan_failed_16.png);
+}
+#plan-status p.current {
+	background-image: url(../../../images/jt/icn_building.gif);
+}
+#plan-status p.queued {
+	background-image: url(../../../images/iconsv3/queued_16.png);
+}
+#plan-status p.none {
+	background-image: url(../../../images/iconsv3/plan_disabled_16.png);
+}
+#plan-status p.notBuilt a {
+    color: #333;
+}
+#plan-status p.notBuilt {
+    background-image: url(../../../images/iconsv3/plan_canceled_16.png);
+}

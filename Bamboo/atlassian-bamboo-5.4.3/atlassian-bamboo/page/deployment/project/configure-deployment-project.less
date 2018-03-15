@@ -1,0 +1,197 @@
+@import "../../../global.less";
+
+@arrowLineRadius: @baseSpacing;
+@arrowSize: @baseSpacing;
+@arrowColour: @dividerColor;
+@firstArrowHeight: (@tripleSpacing * 2) + (@arrowLineRadius / 2);
+@statusWidth: @baseSpacing * 5;
+
+.deployment-project-description {
+    .box-sizing();
+    .text-overflow();
+    color: @secondaryTextColor;
+}
+
+.configure-project-details {
+    border-bottom: 1px solid @dividerColor;
+    margin-bottom: @baseSpacing;
+    padding-bottom: @baseSpacing;
+
+    > .aui-toolbar {
+        padding-top: @baseSpacing;
+    }
+}
+.configure-project-environments {
+    .box-sizing();
+    margin-top: @doubleSpacing;
+    min-height: @firstArrowHeight + (@arrowSize * 2);
+    overflow: hidden;
+    padding: @doubleSpacing 0 0 (@doubleSpacing * 3);
+    position: relative;
+
+    &:before {
+        border-color: transparent transparent transparent @arrowColour;
+        border-style: solid;
+        border-width: @arrowSize 0 @arrowSize @arrowSize;
+        content: "";
+        left: @doubleSpacing * 2;
+        position: absolute;
+        top: @firstArrowHeight - (@arrowSize / 2) - (@arrowSize / 4);
+    }
+    &:after {
+        .border-bottom-left-radius(@arrowLineRadius);
+        border-color: transparent transparent @arrowColour @arrowColour;
+        border-style: solid;
+        border-width: @halfSpacing;
+        content: "";
+        height: @firstArrowHeight;
+        left: 0;
+        position: absolute;
+        top: -(@arrowLineRadius / 2);
+        width: @tripleSpacing + @halfSpacing;
+    }
+    > .new-environment:first-child {
+        margin-top: @doubleSpacing;
+    }
+}
+.configure-project-environment-list {
+    list-style: none;
+    max-width: 800px;
+    padding: 0;
+}
+.configure-project-environment {
+    @borderWidth: 1px;
+    @offsetArrowLineBottom: -70px;
+    .border-top-right-radius(@baseBorderRadius);
+    .border-bottom-right-radius(@baseBorderRadius);
+    border: @borderWidth solid @dividerColor;
+    position: relative;
+
+    &:before {
+        border-color: transparent transparent transparent @arrowColour;
+        border-style: solid;
+        border-width: @arrowSize 0 @arrowSize @arrowSize;
+        bottom: 0;
+        content: "";
+        left: -(@doubleSpacing + @borderWidth);
+        margin-bottom: @offsetArrowLineBottom - (@arrowSize / 2) - (@arrowSize / 4);
+        position: absolute;
+    }
+    &:after {
+        .border-bottom-left-radius(@arrowLineRadius);
+        border-color: transparent transparent @arrowColour @arrowColour;
+        border-style: solid;
+        border-width: @halfSpacing;
+        bottom: 0;
+        content: "";
+        left: -((@doubleSpacing * 3) + @borderWidth);
+        margin-bottom: @offsetArrowLineBottom;
+        position: absolute;
+        top: -(@arrowLineRadius / 2);
+        width: @tripleSpacing + @halfSpacing;
+    }
+    &:last-child {
+        &:before,
+        &:after {
+            content: normal;
+        }
+    }
+    & + .configure-project-environment {
+        margin-top: @doubleSpacing;
+    }
+    & > .aui-page-header {
+        padding: @baseSpacing @baseSpacing @baseSpacing (@statusWidth + @baseSpacing);
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+    }
+    & > div {
+        overflow: hidden;
+        padding: @baseSpacing @baseSpacing @baseSpacing (@statusWidth + @baseSpacing);
+        position: relative;
+
+        &:before {
+            .box-sizing();
+            background: @bodyBackgroundColor;
+            border-right: 1px solid @dividerColor;
+            bottom: 0;
+            content: "";
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: @statusWidth;
+        }
+        > h3,
+        > h4 {
+            display: inline-block;
+        }
+    }
+    .configure-project-environment-overview {
+        display: none;
+    }
+    .configure-project-environment-details .configure-project-environment-status-icon + .aui-toolbar2 {
+        margin-top: 0;
+
+        .aui-button {
+            margin-top: 0;
+        }
+    }
+    .configure-project-environment-overview,
+    .configure-project-environment-details {
+        padding-top: 50px;
+    }
+    .configure-project-environment-tasks,
+    .configure-project-environment-other {
+        border-top: 1px solid @dividerColor;
+    }
+    &.collapsed {
+        .configure-project-environment-overview {
+            display: block;
+        }
+        .configure-project-environment-details,
+        .configure-project-environment-tasks,
+        .configure-project-environment-other {
+            display: none;
+        }
+    }
+    .environment-edit {
+       margin-left: @baseSpacing;
+
+       &.hidden {
+           display: none;
+       }
+    }
+    .environment-description {
+        color: @secondaryTextColor;
+    }
+    &.selected {
+        background: @primaryHighlightColor;
+    }
+    .configuration-status-help {
+        color: @errorTextColor;
+        padding-left: @baseSpacing;
+    }
+}
+.configure-project-environment-status-lozenge {
+    margin-left: @baseSpacing;
+}
+.configure-project-environment-status-icon {
+    @iconSize: 32px;
+    left: (@statusWidth - @iconSize) / 2;
+    margin-top: -(@iconSize / 2);
+    position: absolute;
+    top: 50%;
+
+    &.aui-iconfont-approve {
+        color: @lozengeStartColor;
+    }
+    &.aui-iconfont-info {
+        color: @lozengeErrorColor;
+    }
+}
+
+form#permissions .buttons-container {
+    margin-top: @doubleSpacing;
+}

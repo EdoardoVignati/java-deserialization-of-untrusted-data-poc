@@ -1,0 +1,105 @@
+{namespace bamboo.page.deployment.project.versioning}
+
+/**
+ * @param nextVersionName
+ * @param subsequentVersionName
+ */
+{template .preview}
+    <dl>
+        <dt>{getText('deployment.project.version.preview.next')}</dt>
+        <dd>{$nextVersionName}</dd>
+        <dt>{getText('deployment.project.version.preview.subsequent')}</dt>
+        <dd>{$subsequentVersionName}</dd>
+    </dl>
+{/template}
+
+/**
+ * @param incrementableVariables
+ * @param buildVariables
+ */
+{template .variables}
+    <h3>{getText('deployment.project.version.addvariable.incrementable')}</h3>
+    {call .variableTable}
+        {param variables: $incrementableVariables /}
+        {param showType: true /}
+        {param id: 'incrementable-variables'/}
+    {/call}
+    <h3>{getText('deployment.project.version.addvariable.build')}</h3>
+    <p>{getText('deployment.project.version.addvariable.build.description')}</p>
+    {call .variableTable}
+        {param variables: $buildVariables /}
+        {param showType: false /}
+        {param id: 'build-variables'/}
+    {/call}
+{/template}
+
+/**
+ * @param variables
+ * @param showType
+ * @param id
+ */
+{template .variableTable private="true"}
+    <table class="aui" id="{$id}">
+        <colgroup>
+            <col width="30%"/>
+            <col width="*"/>
+            {if $showType}<col />{/if}
+            <col width="60"/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>{getText('global.heading.variable.name')}</th>
+            <th>{getText('global.heading.value')}</th>
+            {if $showType}<th>{getText('deployment.project.version.addvariable.type')}</th>{/if}
+            <th class="operations">{getText('global.heading.actions')}</th>
+        </tr>
+        </thead>
+        <tbody>
+            {foreach $variable in $variables}
+                <tr>
+                    <td>{$variable.key}</td>
+                    <td>{$variable.value}</td>
+                    {if $showType}<td>{$variable.variableType}</td>{/if}
+                    <td class="operations">
+                        <a class="add-variable" data-variable-key="{$variable.key}">{getText('deployment.project.version.addvariable.add')}</a>
+                    </td>
+                </tr>
+            {/foreach}
+        </tbody>
+    </table>
+{/template}
+
+/**
+ */
+{template .variableIncrementContainer}
+        <fieldset class="group">
+            <legend><span>{getText('deployment.project.version.autoincrement.variable')}</span></legend>
+            <input type="hidden" value="variablesToAutoIncrement" name="checkBoxFields">
+                <div class="field-group" id="variable-increment-checkboxes">
+                    {call widget.icons.icon}
+                        {param type: 'loading'/}
+                    {/call}
+                </div>
+        </fieldset>
+{/template}
+
+/**
+ * @param variables
+ */
+{template .variableIncrementContents}
+    {if $variables and length($variables) > 0}
+        {foreach $variable in $variables}
+            <div class="checkbox">
+                <input id="variablesToAutoIncrement-{$variable.value}" class="checkbox" type="checkbox" {if $variable.checked}checked="checked"{/if} value="{$variable.value}" name="variablesToAutoIncrement">
+                <label for="variablesToAutoIncrement-{$variable.value}">{$variable.label}</label>
+            </div>
+        {/foreach}
+    {else}
+        {call aui.form.value}
+            {param content: getText('deployment.project.version.autoincrement.variable.none')/}
+            {param extraClasses: 'no-variables'/}
+        {/call}
+    {/if}
+     <div class="description">{getText('deployment.project.version.autoincrement.variable.description')}</div>
+{/template}
+

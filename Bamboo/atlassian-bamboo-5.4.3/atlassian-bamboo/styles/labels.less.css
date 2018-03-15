@@ -1,0 +1,4 @@
+.labels-dialog form.aui+.label-list,.labels-dialog form.aui+.label-none{display:inline-block;margin-top:10px;}
+.label-sort>span{display:inline-block;}
+.label-display{line-height:2em;list-style:none;padding:0;}.label-display>li{display:inline-block;padding:2px;vertical-align:middle;}
+#plan-labels{display:inline-block;vertical-align:text-bottom;}#plan-labels.label-none{display:none;}

@@ -1,0 +1,14 @@
+#plan-status-history{-webkit-border-radius:3.01px;-moz-border-radius:3.01px;border-radius:3.01px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;background:#fff;border:1px solid #cccccc;display:inline-block;margin-right:10px;padding:1px 5px;position:relative;vertical-align:middle;}#plan-status-history>ol{display:table;float:left;list-style:none;margin:0 5px;padding:0;}#plan-status-history>ol>li{border-right:1px solid #ddd;display:table-cell;}#plan-status-history>ol>li:first-child{border-left:1px solid #ddd;}
+#plan-status-history .sequence-break:before{border-right:1px solid #ddd;color:#707070;content:"\2026";display:block;float:left;height:16px;padding:5px;}
+#plan-status-history .sequence-break>a{float:left;}
+#plan-status-history li>a{-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-ms-transition:all 0.2s ease;-o-transition:all 0.2s ease;transition:all 0.2s ease;display:block;padding:5px;}#plan-status-history li>a:hover{background:#f0f0f0;}
+#plan-status-history .current>a{background:#ebf2f9;}
+#plan-status-history .icon{display:block;}
+#plan-status-history .previous,#plan-status-history .next{float:left;overflow:hidden;padding:5px;text-decoration:none;}#plan-status-history .previous>span,#plan-status-history .next>span{-webkit-transition:all 0.2s ease;-moz-transition:all 0.2s ease;-ms-transition:all 0.2s ease;-o-transition:all 0.2s ease;transition:all 0.2s ease;border:8px solid;border-color:transparent #bbb;display:block;height:0;overflow:hidden;text-indent:-9999px;width:0;}
+#plan-status-history .previous>span{border-left-width:0;}
+#plan-status-history .next>span{border-right-width:0;}
+#plan-status-history a.previous:hover>span,#plan-status-history a.next:hover>span{border-color:transparent #505050;}
+#plan-status-history span.previous>span,#plan-status-history span.next>span{border-color:transparent #f0f0f0;}
+#plan-status-history>p{color:#707070;font-size:12px;line-height:1;margin:0;padding:7px 8px;}
+#inline-dialog-plan-status-history-info{top:65px !important;}#inline-dialog-plan-status-history-info .icon+strong,#inline-dialog-plan-status-history-info .lozenge{margin-left:5px;}
+#inline-dialog-plan-status-history-info p{margin-top:5px;}

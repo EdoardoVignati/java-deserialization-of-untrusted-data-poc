@@ -1,0 +1,10 @@
+.deployment-project-version-naming .add-variable{padding-left:145px;}
+.deployment-project-version-naming #add-variable-button{float:right;}
+.deployment-project-version-naming #preview-button{margin-left:10px;}
+#variable-increment-checkboxes .no-variables{font-weight:normal;padding-top:0;}
+#version-preview{padding-right:20px;}#version-preview dl{word-wrap:break-word;overflow-wrap:break-word;}#version-preview dl,#version-preview dl dl{overflow:hidden;padding-left:18em;}
+#version-preview dl dt{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;color:#707070;clear:left;float:left;margin-left:-18em;margin-top:10px;padding-right:10px;text-align:right;width:18em;}#version-preview dl dt:first-child,#version-preview dl dt:first-child +dd{margin-top:0 !important;}
+#version-preview dl dd{float:left;margin-top:10px;width:100%;}#version-preview dl dd+dd{margin-top:5px;}
+#version-preview dl dl dt{margin-top:5px;text-align:left;}
+#version-preview dl dl dd{margin-top:5px;}
+.version-preview-hint{border-left:1px solid #cccccc;margin-left:10px;width:30%;}.version-preview-hint p{font-size:12px;padding-top:5px;}

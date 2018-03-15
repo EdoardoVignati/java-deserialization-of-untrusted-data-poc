@@ -1,0 +1,156 @@
+@import "../global.less";
+
+/* Page Layout/Typography */
+dl, dt, dd {
+  padding: 0;
+}
+
+dt, dd {
+  margin: 0;
+}
+
+#plan-errors,
+.aui-message:first-child + h1,
+.aui-message:first-child + meta + h1,
+.aui-message:first-child + .floating-toolbar,
+.aui-message:first-child + .floating-toolbar + h1 {
+  margin: @baseSpacing 0 0;
+}
+
+h1,
+.toolbar + h2,
+.toolbar + h3,
+.floating-toolbar + h2,
+.floating-toolbar + h3,
+.aui-theme-default meta:first-child + form.aui,
+.aui-theme-default meta:first-child + meta + form.aui {
+  margin-top: 0;
+}
+
+/* AUI Tabs */
+.aui-tabs > .tabs-pane {
+  margin-top: @baseSpacing;
+  overflow: hidden;
+}
+
+/* Page Header + Tabs as primary content overrides */
+.aui-theme-default #content > .aui-page-header + .aui-tabs {
+  margin-top: 0;
+}
+
+/* Page Header actions alignment */
+.aui-page-header-actions > .aui-buttons {
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* Need some sort of additional place where extra page header bits can sit */
+.bamboo-page-header-extra {
+  margin-top: -@baseSpacing;
+  padding: 0 @doubleSpacing;
+
+  + .aui-navgroup {
+    margin-top: @doubleSpacing;
+  }
+}
+
+/* Need some sort of page footer in AUI */
+.bamboo-page-footer {
+  padding: @doubleSpacing;
+}
+
+.aui-theme-default #content > .aui-tabs + .bamboo-page-footer {
+  margin-top: -@doubleSpacing;
+}
+
+/* Bamboo Dropdown overrides */
+.section .aui-dropdown {
+  margin-left: 0;
+}
+
+/* For split Dropdowns */
+.aui-dd-parent .drop-wrap {
+  border-left: 1px dotted #999;
+  display: inline-block;
+  height: 15px;
+  margin-left: 2px;
+  padding-left: 2px;
+}
+
+.aui-dd-parent .drop-wrap .aui-dropdown-trigger {
+  display: inline-block;
+}
+
+/* Dropdowns in header */
+.aui-dropdown2-in-header,
+.aui-dropdown2-in-page-header {
+  z-index: 1;
+}
+
+/* AUI Item */
+.aui-group > .aui-item > h1:first-child,
+.aui-group > .aui-item > h2:first-child,
+.aui-group > .aui-item > h3:first-child,
+.aui-group > .aui-item > h4:first-child,
+.aui-group > .aui-item > h5:first-child,
+.aui-group > .aui-item > h6:first-child {
+  margin-top: 0;
+}
+
+/* AUI Forms */
+form.aui .buttons-container > .buttons {
+  font-size: 0;
+
+  > .field-group {
+    font-size: @baseFontSize;
+  }
+}
+
+form.aui .group legend {
+  padding-left: 0;
+}
+
+form.aui .cancel {
+  font-size: @baseFontSize;
+}
+
+form.aui .button + .aui-button,
+form.aui .aui-button + .button {
+  margin-left: @baseSpacing;
+}
+
+/* Icons in Buttons, links and Dropdown2 */
+.aui-button .aui-icon,
+a .aui-icon {
+    color: @secondaryTextColor;
+}
+.aui-button-primary .aui-icon,
+.aui-header .aui-icon,
+.aui-dropdown2 .active .aui-icon,
+.aui-button[aria-disabled="true"] .aui-icon {
+    color: inherit;
+}
+.aui-button[aria-disabled="true"] .aui-icon:not([class*="iconfont"]) {
+    .opacity(0.7);
+}
+
+/* Toolbar2 fixes (temporary until we get http://ecosystem.atlassian.net/browse/AUI-1618 */
+.aui-toolbar2 {
+    margin: 0;
+}
+.aui-toolbar2-primary > .aui-buttons,
+.aui-toolbar2-secondary > .aui-buttons {
+    margin: 0 10px 0 0;
+}
+
+/* Using primary-button with Dialog */
+.aui-dialog {
+    .aui-button.aui-button-primary {
+        margin-right: 10px;
+    }
+}
+
+/* Define minimum height for page-panel */
+.aui-page-panel-inner {
+    min-height: 400px;
+}

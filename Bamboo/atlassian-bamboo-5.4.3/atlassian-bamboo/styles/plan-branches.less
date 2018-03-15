@@ -1,0 +1,121 @@
+@import "../global.less";
+
+#integration-strategies {
+    margin: 1px 0 10px;
+    width: 820px;
+    padding: 4px 0 0;
+
+    .aui-item + .aui-item {
+        width: 420px;
+    }
+}
+form.aui .integration-strategy {
+    @boxPadding: @baseSpacing;
+    .border-radius(5px);
+    .box-sizing();
+    .transition(all .2s ease);
+    border: 1px solid @dividerColorLight;
+    margin: 0;
+    overflow: hidden;
+    padding: 0 @boxPadding 28px;
+    width: 400px;
+
+    &.active {
+        border-color: @dividerColor;
+
+        .field-group,
+        .group {
+            opacity: 1;
+        }
+        > .radio {
+            background: @primaryHighlightColor;
+        }
+    }
+    .field-group {
+        padding-left: 100px;
+    }
+    .group {
+        padding-left: 0;
+    }
+    .field-group,
+    .group {
+        .transition(opacity .2s ease);
+        opacity: 0.5;
+    }
+    label {
+        margin-left: -100px;
+        text-align: left;
+        width: 90px;
+    }
+    .field-value {
+        font-weight: normal;
+        white-space: nowrap;
+        width: 275px;
+    }
+    > .radio {
+        @radioGutter: 20px;
+        .border-radius(4px);
+        .border-bottom-left-radius(0);
+        .border-bottom-right-radius(0);
+        .transition(all .2s ease);
+        border-bottom: 1px solid @dividerColorLight;
+        color: @secondaryTextColor;
+        margin: 0 -@baseSpacing 12px;
+        padding: @baseSpacing @boxPadding @baseSpacing (@boxPadding + @radioGutter);
+
+        > input.radio {
+            left: @baseSpacing;
+            margin-top: 2px;
+        }
+        > label {
+            font-size: 16px;
+            margin: 0;
+            width: auto;
+        }
+        > .icon-help {
+            margin-left: @halfSpacing;
+        }
+    }
+    .select {
+        width: 100%;
+    }
+    legend > span {
+        color: @secondaryTextColor;
+        text-align: left;
+        width: 90px;
+    }
+    legend .icon-successful {
+        display: inline-block;
+        margin-left: 2px;
+        position: static;
+        width: 16px;
+    }
+    .group .checkbox {
+        white-space: nowrap;
+    }
+    .checkbox > label {
+        margin-left: 0;
+    }
+    .checkout-lozenge {
+      width: 275px;
+    }
+    .push-lozenge {
+      position: absolute;
+      width: 255px;
+    }
+}
+
+#executeManualDeployment {
+    .radio > fieldset.field-group {
+        margin-left: 70px;
+        margin-top: @baseSpacing;
+    }
+}
+
+/* Branches Splash Screen */
+#branch-splash-content {
+    .box-sizing();
+    background: url(../../../images/branch-illustration.png) no-repeat 30px 0;
+    height: 100%;
+    padding: 0 40px 0 300px;
+}

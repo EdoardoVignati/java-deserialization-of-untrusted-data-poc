@@ -1,0 +1,187 @@
+@import "../../../global.less";
+
+.autocomplete {
+    .border-bottom-left-radius(4px);
+    .border-bottom-right-radius(4px);
+    .box-shadow(0, 3px, 9px, rgba(0, 0, 0, 0.18));
+    .box-sizing();
+    background: #fff;
+    border: 1px solid @dividerColor;
+    border-color: rgba(0, 0, 0, 0.18);
+    margin-top: 1px;
+    max-width: 500px;
+    min-width: 128px;
+    position: absolute;
+    z-index: 4000;
+
+    > ul {
+        list-style: none;
+        padding: 0;
+
+        > li {
+            line-height: 16px;
+
+            &:last-child {
+                .border-bottom-left-radius(4px);
+                .border-bottom-right-radius(4px);
+            }
+            &.active {
+                background: @primaryLinkColor;
+                color: #fff;
+                cursor: pointer;
+
+                > span > .autocomplete-metadata {
+                  color: white;
+                }
+            }
+            &.autocomplete-nomatch {
+                color: @secondaryTextColor;
+                font-style: italic;
+                padding: 5px;
+            }
+            > span {
+                .text-overflow();
+                display: block;
+                padding: 5px;
+
+                > .autocomplete-metadata {
+                  color: @secondaryTextColor;
+                  font-style: italic;
+                  position: absolute;
+                  right: 5px;
+                }
+            }
+        }
+    }
+    .avatar {
+        float: left;
+        height: 16px;
+        margin-right: 5px;
+        width: 16px;
+    }
+}
+
+.bamboo-single-select {
+    .box-sizing();
+    display: inline-block;
+    max-width: 250px; // should match default max-width of AUI form fields
+    position: relative;
+    width: 100%;
+
+    > .bamboo-single-select-icon {
+        @selectIconWidth: 22px;
+        @selectBorderWidth: 1px;
+        .border-radius();
+        .border-bottom-left-radius(0);
+        .border-top-left-radius(0);
+        .box-sizing();
+        border-color: @dividerColor;
+        border-style: solid;
+        border-width: 0 0 0 @selectBorderWidth;
+        bottom: 1px;
+        height: auto;
+        padding: 4px 0;
+        position: absolute;
+        right: 1px;
+        top: 1px;
+        width: @selectIconWidth + @selectBorderWidth;
+
+        &.drop-menu {
+            background: #f2f2f2;
+            .linear-gradient(#fff, #f2f2f2, top);
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 20px;
+            text-decoration: none;
+            text-shadow: 0 1px 0 white;
+
+            &::-moz-focus-inner {
+                border: 0;
+                padding: 0;
+            }
+            &:hover,
+            &:focus {
+                background: #f7f7f7;
+                .linear-gradient(#fff, #f7f7f7, top);
+                border-color: #999;
+            }
+            &:hover {
+                border-color: @dividerColor;
+
+                &:after {
+                    border-top-color: #333;
+                }
+            }
+            &:active {
+                background: #f2f2f2;
+                box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+                text-shadow: none;
+            }
+            &:after {
+                @dropIconRadius: 4px;
+                border: @dropIconRadius solid transparent;
+                border-top-color: #707070;
+                bottom: 50%;
+                content: "";
+                height: 0;
+                margin-bottom: -(@dropIconRadius * 1.5);
+                position: absolute;
+                right: (@selectIconWidth - (@dropIconRadius * 2)) / 2;
+                width: 0;
+            }
+        }
+        &.loading:after {
+            @loadingIconWidth: 16px;
+            @loadingIconHeight: 16px;
+            background-image: url(data:image/gif;base64,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);
+            background-position: 0 0;
+            background-repeat: no-repeat;
+            border: 0;
+            height: @loadingIconHeight;
+            margin-bottom: -(@loadingIconHeight / 2);
+            right: (@selectIconWidth - @loadingIconWidth) / 2;
+            width: @loadingIconWidth;
+        }
+    }
+    > .bamboo-single-select-field.active ~ .drop-menu {
+        background: #ddd;
+        background: -moz-linear-gradient(top, #ccc 0%, #ddd 13%);
+        background: -webkit-linear-gradient(top, #ccc 0%, #ddd 13%);
+        background: -o-linear-gradient(top, #ccc 0%, #ddd 13%);
+        background: -ms-linear-gradient(top, #ccc 0%, #ddd 13%);
+        background: linear-gradient(to bottom, #ccc 0%, #ddd 13%);
+
+        &:active {
+            background: #ddd;
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+    }
+    > .bamboo-single-select-entity-icon {
+        @entityIconSize: 16px;
+        background-repeat: no-repeat;
+        -moz-background-size: @entityIconSize;
+        background-size: @entityIconSize;
+        display: none;
+        height: @entityIconSize;
+        left: 6px;
+        margin-top: -(@entityIconSize / 2);
+        position: absolute;
+        top: 50%;
+        width: @entityIconSize;
+    }
+}
+form.aui .bamboo-single-select {
+    > .bamboo-single-select-field {
+        max-width: none;
+        padding-right: 28px;
+        width: 100%;
+    }
+    &.bamboo-single-select-has-entity-icon {
+        > .bamboo-single-select-field {
+            padding-left: 26px;
+        }
+        > .bamboo-single-select-entity-icon {
+            display: block;
+        }
+    }
+}

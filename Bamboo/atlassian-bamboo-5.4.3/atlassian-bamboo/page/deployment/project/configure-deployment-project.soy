@@ -1,0 +1,355 @@
+{namespace bamboo.page.deployment.project}
+
+/**
+ * Configure Deployment Project
+ * @param deploymentProject
+ * @param environments
+ * @param relatedPlan
+ * @param deploymentProjectItems
+ * @param? currentUrl
+ * @param? selectedEnvironmentId
+ */
+{template .configureDeploymentProject}
+    <div class="configure-project-details">
+        <h2>{getText('deployment.project.what')}</h2>
+        {call bamboo.feature.deployment.build.showRelatedPlanDetails}
+            {param relatedPlan: $relatedPlan /}
+            {param deploymentProjectItems: $deploymentProjectItems /}
+        {/call}
+        {call .toolbar}
+            {param content}
+                {if $deploymentProject.operations.canEdit}
+                    {call aui.buttons.button}
+                        {param text: getText('deployment.project.editrelatedplan.button') /}
+                        {param tagName: 'a' /}
+                        {param id: 'editDeploymentProject' /}
+                        {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureDeploymentProjectDetails.action?id=' + $deploymentProject.id ] /}
+                    {/call}
+                    {call aui.buttons.button}
+                        {param text: getText('deployment.project.what.version.naming') /}
+                        {param tagName: 'a' /}
+                        {param id: 'editVersionNamingScheme' /}
+                        {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureDeploymentProjectVersioning.action?id=' + $deploymentProject.id ] /}
+                    {/call}
+                    {call aui.buttons.button}
+                        {param text: getText('deployment.project.what.permissions') /}
+                        {param tagName: 'a' /}
+                        {param id: 'editDeploymentProjectPermissions' /}
+                        {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureDeploymentProjectPermissions.action?deploymentProjectId=' + $deploymentProject.id] /}
+                    {/call}
+                {/if}
+            {/param}
+        {/call}
+    </div>
+    <div class="configure-project-environments">
+        {if length($environments)}
+            <ol class="configure-project-environment-list">
+                {foreach $environment in $environments}
+                    {call .environment data="$environment"}
+                        {param currentUrl: $currentUrl /}
+                        {param deploymentProject: $deploymentProject /}
+                        {param collapsed: (length($environments) > 1 and $selectedEnvironmentId != $environment.id) /}
+                        {param selected: ($selectedEnvironmentId == $environment.id) /}
+                        {param firstOnList: (index($environment) == 0)/}
+                        {param lastOnList: (index($environment) == length($environments) - 1)/}
+                    {/call}
+                {/foreach}
+            </ol>
+        {/if}
+
+        {call .toolbar}
+            {param extraClasses: [ 'new-environment' ] /}
+            {param content}
+                {if $deploymentProject.operations.canEdit}
+                    {call aui.buttons.button}
+                        {param text: ' ' + getText('deployment.project.environment.create') /}
+                        {param tagName: 'a' /}
+                        {param id: 'addEnvironment' /}
+                        {param iconClass: 'aui-icon-small aui-iconfont-add' /}
+                        {param iconType: 'aui' /}
+                        {param type: (length($environments) ? null : 'primary') /}
+                        {param extraAttributes: [ 'href': contextPath() + '/deploy/config/createEnvironment.action?deploymentProjectId=' + $deploymentProject.id ] /}
+                    {/call}
+                {/if}
+            {/param}
+        {/call}
+    </div>
+    <script>
+        new BAMBOO.DEPLOYMENT.Config();
+    </script>
+{/template}
+
+/**
+ * Environment
+ * @param id
+ * @param name
+ * @param operations
+ * @param position
+ * @param? description
+ * @param? configurationState 'CREATED', 'DETAILED' or 'TASKED'
+ * @param deploymentProject
+ * @param? currentUrl
+ * @param? collapsed
+ * @param? selected
+ * @param? firstOnList
+ * @param? lastOnList
+ * @param triggersNumberString
+ * @param agentsNumberString
+ * @param notificationsNumberString
+ * @param variablesNumberString
+ */
+{template .environment}
+    {let $envActionsDropdownId: 'ops-environment-' + $id/}
+    <li class="configure-project-environment{$collapsed ? ' collapsed' : ''}{$selected ? ' selected' : ''}" id="configure-project-environment-{$id}">
+        {call aui.page.pageHeader}
+            {param content}
+                {call aui.page.pageHeaderMain}
+                    {param content}
+                        <h3>{getText('deployment.project.environment.edit.title', $name)}
+                            {if $operations.canEdit}
+                                {call aui.buttons.button}
+                                    {param text: ''/}
+                                    {param tagName: 'a' /}
+                                    {param type: 'subtle' /}
+                                    {param id: 'editEnvironment' + $id /}
+                                    {param iconClass: 'aui-icon-small aui-iconfont-edit'/}
+                                    {param iconType: 'aui' /}
+                                    {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironment.action?id=' + $id + '&deploymentProjectId=' + $deploymentProject.id ] /}
+                                    {param extraClasses}environment-edit{if $collapsed} hidden{/if}{/param}
+                                {/call}
+                            {/if}
+                        </h3>
+                    {/param}
+                {/call}
+                {call aui.page.pageHeaderActions}
+                    {param content}
+                        <div class="aui-buttons">
+                        {if $operations.allowedToExecute}
+                            {if $operations.canExecute}
+                                {call aui.buttons.button}
+                                    {param text: ' ' + getText('deployment.project.environment.deploy') /}
+                                    {param type: 'subtle' /}
+                                    {param tagName: 'a' /}
+                                    {param iconType: 'aui' /}
+                                    {param iconClass: 'icon-deploy' /}
+                                    {param id: 'executeDeployment' + $id /}
+                                    {param extraAttributes: [
+                                        'href': contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $id + '&returnUrl=' + $currentUrl
+                                    ] /}
+                                {/call}
+                            {else}
+                                {call aui.buttons.button}
+                                    {param text: ' ' + getText('deployment.project.environment.deploy') /}
+                                    {param type: 'subtle' /}
+                                    {param iconType: 'aui' /}
+                                    {param iconClass: 'icon-deploy' /}
+                                    {param id: 'executeDeployment' + $id /}
+                                    {param isDisabled: true /}
+                                    {param extraAttributes: [
+                                        'title': $operations.cantExecuteReason
+                                    ] /}
+                                {/call}
+                            {/if}
+                        {/if}
+                        <span class="overview{if not $collapsed} hidden{/if}">
+                            {if $operations.canEdit}
+                                {call aui.buttons.button}
+                                    {param text: ' '  + getText('deployment.project.environment.maximise')/}
+                                    {param type: 'subtle' /}
+                                    {param iconType: 'aui' /}
+                                    {param iconClass: 'aui-icon-small aui-iconfont-edit'/}
+                                    {param extraClasses: ['toggle'] /}
+                                {/call}
+                            {else}
+                                {call aui.buttons.button}
+                                    {param text: ' '  + getText('deployment.project.environment.maximise.view')/}
+                                    {param type: 'subtle' /}
+                                    {param iconType: 'aui' /}
+                                    {param iconClass: 'aui-icon-small aui-iconfont-view'/}
+                                    {param extraClasses: ['toggle'] /}
+                                {/call}
+                            {/if}
+                        </span>
+                        {call aui.dropdown2.contents}
+                            {param id: $envActionsDropdownId/}
+                            {param content}
+                                <ul>
+                                    <li>
+                                        <a id="action-view-environment-{$id}"
+                                           href="{contextPath() + '/deploy/viewEnvironment.action?id=' + $id}"
+                                           title="{getText('deployment.project.environment.view')}"
+                                           class="aui-icon-container">
+                                           <span class="aui-icon aui-icon-small aui-iconfont-view"></span>{getText('deployment.project.environment.view')}
+                                        </a>
+                                    </li>
+                                    {if $operations.canDelete}
+                                        {let $actionUrl: contextPath() + '/deploy/confirmDeleteEnvironment.action?id=' + $id /}
+                                        {let $cancelUrl: '/deploy/config/configureDeploymentProject.action?id=' + $deploymentProject.id /}
+                                        <li><a id="action-delete-environment-{$id}"
+                                               href="{$actionUrl + '&cancelUrl='}{$cancelUrl|escapeUri}"
+                                               title="{getText('deployment.project.environment.delete')}"
+                                               class="aui-icon-container"><span class="aui-icon aui-icon-small aui-iconfont-remove"></span>{getText('deployment.project.environment.delete')}</a></li>
+                                    {/if}
+                                    {if $deploymentProject.operations.canEdit and not $firstOnList}
+                                        <li>
+                                            <a href="{contextPath() + '/deploy/config/moveEnvironmentUp.action?id=' + $id + '&currentPosition=' + $position}"
+                                                title="{getText('deployment.project.environment.moveup')}"
+                                                class="aui-icon-container mutative">
+                                                <span class="aui-icon aui-icon-small icon-move-up"></span>{getText('deployment.project.environment.moveup')}
+                                            </a>
+                                        </li>
+                                    {/if}
+                                    {if $deploymentProject.operations.canEdit and not $lastOnList}
+                                        <li>
+                                            <a href="{contextPath() + '/deploy/config/moveEnvironmentDown.action?id=' + $id + '&currentPosition=' + $position}"
+                                               title="{getText('deployment.project.environment.movedown')}"
+                                               class="aui-icon-container mutative">
+                                               <span class="aui-icon aui-icon-small icon-move-down"></span>{getText('deployment.project.environment.movedown')}
+                                            </a>
+                                        </li>
+                                    {/if}
+                                </ul>
+                            {/param}
+                            {param extraClasses: ['aui-style-default'] /}
+                        {/call}
+                        <span class="full-info {if $collapsed}hidden{/if}">
+                            {call aui.buttons.button}
+                                {param text: ' ' + getText('deployment.project.actions.button') /}
+                                {param tagName: 'a' /}
+                                {param type: 'subtle' /}
+                                {param iconType: 'aui' /}
+                                {param iconClass: 'aui-icon-small aui-iconfont-configure' /}
+                                {param dropdown2Target: $envActionsDropdownId /}
+                            {/call}
+                            {call aui.buttons.button}
+                                {param text: ' ' + getText('deployment.project.environment.minimise') /}
+                                {param tagName: 'a' /}
+                                {param type: 'subtle' /}
+                                {param iconType: 'aui' /}
+                                {param iconClass: 'aui-icon-small icon-collapse-all'/}
+                                {param extraClasses: ['toggle', 'aui-icon-container'] /}
+                                {param extraAttributes: ['title': getText('deployment.project.environment.minimise')] /}
+                            {/call}
+                        </div>
+                    {/param}
+                {/call}
+
+            {/param}
+        {/call}
+        <div class="configure-project-environment-overview">
+            {call .environmentStatus}
+                {param complete: ($configurationState == 'TASKED') /}
+                {param hideLozenge: true /}
+            {/call}
+            {if $description}
+                <div class="environment-description">{$description}</div>
+            {/if}
+        </div>
+        <div class="configure-project-environment-details">
+            {call .environmentStatus}
+                {param complete: ($configurationState == 'DETAILED' or $configurationState == 'TASKED') /}
+            {/call}
+            {if $description}
+                <div class="environment-description">{$description}</div>
+            {/if}
+        </div>
+        <div class="configure-project-environment-tasks">
+            <h4>{getText('deployment.project.environment.how')}</h4>
+            {call .environmentStatus}
+                {param complete: ($configurationState == 'TASKED') /}
+            {/call}
+            <p>{getText('deployment.project.environment.how.description')}</p>
+            {call .toolbar}
+                {param content}
+                    {if $operations.canEdit}
+                        {call aui.buttons.button}
+                            {param text: (($configurationState == 'TASKED') ? getText('deployment.project.environment.tasks.edit') : getText('deployment.project.environment.tasks.setup')) /}
+                            {param tagName: 'a' /}
+                            {param id: 'editEnvironmentTasks' + $id /}
+                            {param type: (($configurationState == 'TASKED') ? null : 'primary') /}
+                            {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironmentTasks.action?environmentId=' + $id ] /}
+                        {/call}
+                    {/if}
+                {/param}
+            {/call}
+        </div>
+        <div class="configure-project-environment-other">
+            <h4>{getText('deployment.project.environment.other')}</h4>
+            <p>{getText('deployment.project.environment.other.description')}</p>
+            {call .toolbar}
+                {param content}
+                    {if $operations.canEdit}
+                        {call widget.override.aui.badgeButton}
+                            {param text: getText('chain.triggers') /}
+                            {param tagName: 'a' /}
+                            {param id: 'editEnvironmentTriggers' + $id /}
+                            {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironmentTriggers.action?environmentId=' + $id ] /}
+                            {param badgeText: $triggersNumberString /}
+                        {/call}
+                        {call widget.override.aui.badgeButton}
+                            {param text: getText('deployment.project.environment.agents') /}
+                            {param tagName: 'a' /}
+                            {param id: 'configureEnvironmentAgents' + $id /}
+                            {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironmentAgents.action?environmentId=' + $id ] /}
+                            {param badgeText: $agentsNumberString /}
+                        {/call}
+                        {call widget.override.aui.badgeButton}
+                            {param text: getText('environment.notifications') /}
+                            {param tagName: 'a' /}
+                            {param id: 'configureDeploymentsNotifications' + $id /}
+                            {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironmentNotifications.action?environmentId=' + $id ] /}
+                            {param badgeText: $notificationsNumberString /}
+                        {/call}
+                        {call widget.override.aui.badgeButton}
+                            {param text: getText('deployment.variables') /}
+                            {param tagName: 'a' /}
+                            {param id: 'editEnvironmentVariables' + $id /}
+                            {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironmentVariables.action?environmentId=' + $id ] /}
+                            {param badgeText: $variablesNumberString /}
+                        {/call}
+                        {call aui.buttons.button}
+                            {param text: getText('environment.permissions') /}
+                            {param tagName: 'a' /}
+                            {param id: 'configureEnvironmentPermissions' + $id /}
+                            {param extraAttributes: [ 'href': contextPath() + '/deploy/config/configureEnvironmentPermissions.action?environmentId=' + $id ] /}
+                        {/call}
+                    {/if}
+                {/param}
+            {/call}
+        </div>
+    </li>
+{/template}
+
+/**
+ * Toolbar Boilerplate (need a better way of doing this in AUI I think)
+ * @param content
+ * @param? extraClasses
+ */
+{template .toolbar private="true"}
+    {call aui.toolbar2.toolbar2}
+        {param extraClasses: ($extraClasses ? $extraClasses : null) /}
+        {param content}
+            {call aui.toolbar2.item}
+                {param item: 'primary' /}
+                {param content: $content /}
+            {/call}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * Config Status Icon
+ * @param complete true/false
+ * @param hideLozenge true/false
+ */
+{template .environmentStatus private="true"}
+    {if not $hideLozenge and not $complete}
+        {call widget.lozenges.auilozenge}
+            {param colour: 'error' /}
+            {param text: getText('deployment.status.incomplete') /}
+            {param extraClasses: [ 'configure-project-environment-status-lozenge' ] /}
+        {/call}
+        <span class="configuration-status-help">{getText('deployment.project.environment.tasks.help')}</span>
+    {/if}
+    <span class="configure-project-environment-status-icon aui-icon aui-icon-large aui-iconfont-{$complete ? 'approve' : 'info'}"></span>
+{/template}

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+  <bean id="agentServerManager" class="com.atlassian.bamboo.agent.classserver.AgentServerManagerImpl">
+    <constructor-arg ref="bootstrapManager"/>
+    <constructor-arg>
+      <map>
+        <entry key="bamboo.agent.brokerUrl" value="${bamboo.jms.broker.client.uri}"/>
+        <entry key="bamboo.agent.heartbeatInterval" value="${bamboo.agent.heartbeatInterval}"/>
+      </map>
+    </constructor-arg>
+  </bean>
+
+  <alias name="elasticAgentManager" alias="elasticInstanceManager"/>
+
+  <bean id="elasticAccountBean" class="com.atlassian.bamboo.agent.elastic.server.ElasticAccountBeanImpl" plugin:available="true">
+    <constructor-arg ref="administrationConfigurationManager"/>
+    <constructor-arg ref="eventPublisher"/>
+  </bean>
+
+  <bean id="awsAccountBean" class="com.atlassian.bamboo.agent.elastic.aws.AwsAccountBeanImpl" plugin:available="true">
+    <constructor-arg ref="elasticAccountBean"/>
+    <constructor-arg>
+      <bean class="com.atlassian.aws.AWSManagerImpl">
+        <constructor-arg>
+          <bean class="com.atlassian.aws.Ec2ClientFactoryImpl"/>
+        </constructor-arg>
+        <constructor-arg ref="elasticScheduledExecutorService"/>
+      </bean>
+    </constructor-arg>
+    <property name="maximumEbsVolumeStatusAgeSeconds" value="${bamboo.agent.elastic.defaultMaximumAwsResourceStatusAgeSeconds}"/>
+    <property name="maximumInstanceStatusAgeSeconds" value="${bamboo.agent.elastic.defaultMaximumAwsResourceStatusAgeSeconds}"/>
+    <property name="maximumSpotRequestStatusAgeSeconds" value="${bamboo.agent.elastic.defaultMaximumAwsResourceStatusAgeSeconds}"/>
+  </bean>
+
+
+  <bean id="elasticAgentManager" class="com.atlassian.bamboo.agent.elastic.server.ElasticInstanceManagerImpl" plugin:available="true">
+    <constructor-arg ref="awsAccountBean"/>
+    <constructor-arg ref="administrationConfigurationManager"/>
+    <constructor-arg value="${bamboo.agent.elastic.startupTimeoutSeconds}"/>
+    <constructor-arg ref="elasticScheduledExecutorService"/>
+    <constructor-arg>
+      <bean class="com.atlassian.bamboo.agent.elastic.tunnel.KeyStoreFactoryImpl"/>
+    </constructor-arg>
+    <constructor-arg>
+      <bean class="com.atlassian.bamboo.agent.elastic.tunnel.SSLContextFactoryImpl">
+        <constructor-arg index="0">
+          <bean class="javax.net.ssl.KeyManagerFactory" factory-method="getDefaultAlgorithm"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+          <bean class="javax.net.ssl.TrustManagerFactory" factory-method="getDefaultAlgorithm"/>
+        </constructor-arg>
+      </bean>
+    </constructor-arg>
+    <constructor-arg ref="bootstrapManager"/>
+    <constructor-arg ref="errorHandler"/>
+    <property name="tunnelTimeoutMinutes" value="${bamboo.agent.elastic.tunnelTimeoutMinutes}"/>
+  </bean>
+
+
+  <bean id="elasticScheduledExecutorService" class="com.atlassian.bamboo.executor.NamedExecutors" factory-method="newScheduledThreadPool">
+    <constructor-arg value="10"/>
+    <constructor-arg value="elastic"/>
+  </bean>
+
+  <bean id="resourceResolver" class="com.atlassian.bamboo.utils.ResourceResolver">
+    <constructor-arg ref="bootstrapManager"/>
+  </bean>
+
+  <bean id="defaultAgentCapabilityManager" class="com.atlassian.bamboo.v2.build.agent.capability.DefaultAgentCapabilityManagerImpl">
+    <constructor-arg ref="resourceResolver"/>
+  </bean>
+
+
+</beans>

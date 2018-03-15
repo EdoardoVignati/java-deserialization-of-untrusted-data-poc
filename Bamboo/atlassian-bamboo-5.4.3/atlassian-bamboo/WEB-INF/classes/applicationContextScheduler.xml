@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+  
+  <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="quartzProperties">
+      <props>
+          <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+          <prop key="org.quartz.threadPool.class">com.atlassian.bamboo.quartz.SystemAuthorizedThreadPool</prop>
+      </props>
+    </property>
+    <property name="jobFactory" ref="jobFactory"/>
+    <property name="triggerListeners">
+      <list>
+        <bean class="com.atlassian.bamboo.quartz.PreventJobExecutionUntilCompletedTriggerListener" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="jobFactory" class="com.atlassian.bamboo.quartz.AutowiringJobFactory"/>
+
+  <bean id="scheduleBackupBean" class="com.atlassian.bamboo.configuration.ScheduleBackupBeanImpl">
+    <property name="scheduler" ref="scheduler"/>
+  </bean>
+
+  <bean id="bambooTriggers" class="org.springframework.beans.factory.config.ListFactoryBean">
+    <property name="sourceList">
+      <list>
+        <ref bean="elasticIpCleanupTrigger"/>
+        <ref bean="expiryTickerTrigger"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="bambooSchedulers" class="org.springframework.beans.factory.config.ListFactoryBean">
+    <property name="sourceList">
+      <list>
+        <ref local="elasticInstanceScheduleScheduler" />
+        <ref local="buildExpiryScheduler" />
+        <ref local="elasticInstancesMonitor" />
+        <ref local="orphanedBuildMonitorJobScheduler"/>
+        <ref local="deletionScheduler"/>
+        <ref local="rememberMeTokenExpiryScheduler"/>
+        <ref local="planVcsRevisionHistoryCleanupScheduler"/>
+        <ref local="userRefreshJobScheduler"/>
+        <ref local="branchExpiryScheduler"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="elasticIpCleanupTrigger" class="com.atlassian.bamboo.quartz.BambooSimpleTriggerBean">
+    <property name="jobDetail">
+      <bean class="com.atlassian.bamboo.quartz.BambooJobDetailBean">
+        <constructor-arg value="com.atlassian.bamboo.agent.elastic.server.ElasticIpCleanupJob"/>
+      </bean>
+    </property>
+    <property name="repeatIntervalMinutes" value="18"/>
+  </bean>
+
+  <bean id="expiryTickerTrigger" class="com.atlassian.bamboo.quartz.BambooSimpleTriggerBean">
+    <property name="jobDetail">
+      <bean class="com.atlassian.bamboo.quartz.BambooJobDetailBean">
+        <constructor-arg value="com.atlassian.bamboo.build.logger.ExpiryTickerJob"/>
+      </bean>
+    </property>
+    <property name="repeatIntervalMinutes" value="1"/>
+  </bean>
+
+  <bean id="expiryTicker" class="com.atlassian.bamboo.utils.expirables.ExpiryTickerImpl"/>
+
+  <bean id="elasticInstanceScheduleScheduler" class="com.atlassian.bamboo.agent.elastic.schedule.ElasticInstanceScheduleScheduler">
+    <constructor-arg ref="elasticInstanceScheduleDao"/>
+    <constructor-arg ref="scheduler"/>
+  </bean>
+
+  <bean id="buildExpiryScheduler" class="com.atlassian.bamboo.build.expiry.BuildExpiryScheduler">
+    <constructor-arg ref="administrationConfigurationManager"/>
+    <constructor-arg ref="scheduler"/>
+  </bean>
+
+
+  <bean id="heartBeatCheckerJobScheduler" class="com.atlassian.bamboo.v2.build.agent.HeartBeatCheckerJobScheduler">
+    <constructor-arg value="${bamboo.agent.heartbeatCheckInterval}"/>
+    <property name="scheduler" ref="scheduler"/>
+  </bean>
+
+  <bean id="buildMonitorJobScheduler" class="com.atlassian.bamboo.build.monitoring.BuildMonitorJobScheduler">
+    <property name="buildCheckInterval" value="${bamboo.buildHangingMonitor.checkInterval}"/>
+    <property name="scheduler" ref="scheduler"/>
+    <property name="buildHangingMonitor" ref="buildHangingMonitor"/>
+  </bean>
+
+  <bean id="branchDetectionJobScheduler" class="com.atlassian.bamboo.plan.branch.BranchDetectionJobScheduler">
+    <constructor-arg ref="scheduler"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+  </bean>
+
+  <bean id="buildHangingMonitor" class="com.atlassian.bamboo.build.monitoring.BuildHangingMonitor">
+    <property name="administrationConfigurationAccessor" ref="administrationConfigurationAccessor"/>
+    <property name="buildExecutionManager" ref="buildExecutionManager"/>
+    <property name="buildLoggerManager" ref="buildLoggerManager"/>
+    <property name="cachedPlanManager" ref="cachedPlanManager"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+  </bean>
+
+  <bean id="buildQueueMonitorJobScheduler" class="com.atlassian.bamboo.build.monitoring.BuildQueueMonitorJobScheduler">
+    <property name="buildQueueCheckInterval" value="${bamboo.buildQueueMonitor.checkInterval}"/>
+    <property name="scheduler" ref="scheduler"/>
+    <property name="buildQueueMonitor" ref="buildQueueMonitor"/>
+  </bean>
+
+  <bean id="buildQueueMonitor" class="com.atlassian.bamboo.build.monitoring.BuildQueueMonitor">
+    <property name="administrationConfigurationAccessor" ref="administrationConfigurationAccessor" />
+    <property name="cachedPlanManager"  ref="cachedPlanManager" />
+    <property name="buildExecutionManager" ref="buildExecutionManager"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+    <property name="buildQueueManager" ref="buildQueueManager"/>
+  </bean>
+
+  <bean id="orphanedBuildMonitorJobScheduler" class="com.atlassian.bamboo.build.monitoring.OrphanedBuildMonitorJobScheduler">
+    <constructor-arg ref="scheduler"/>
+    <constructor-arg value="${bamboo.agent.heartbeatTimeoutSeconds}"/>
+    <constructor-arg value="${bamboo.agent.heartbeatInterval}"/>
+  </bean>
+  
+  <bean id="elasticInstancesMonitor" class="com.atlassian.bamboo.agent.elastic.schedule.ElasticInstancesMonitor">
+    <constructor-arg ref="scheduler"/>
+  </bean>
+
+  <bean id="elasticRunningInstancesOptimizer" parent="txReadProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.agent.elastic.schedule.ElasticRunningInstancesOptimizerImpl">
+        <constructor-arg ref="buildQueueManager"/>
+        <constructor-arg ref="agentManager"/>
+        <constructor-arg ref="cachedPlanManager"/>
+        <constructor-arg ref="elasticInstanceManager"/>
+        <constructor-arg ref="elasticAccountBean"/>
+        <constructor-arg ref="buildExecutionManager"/>
+        <constructor-arg ref="bambooLicenseManager"/>
+        <constructor-arg ref="buildResultsSummaryManager"/>
+        <constructor-arg ref="administrationConfigurationManager"/>
+        <constructor-arg ref="textProvider"/>
+        <constructor-arg ref="awsAccountBean"/>
+        <constructor-arg ref="executableAgentsHelper"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="deletionScheduler" class="com.atlassian.bamboo.deletion.DeletionScheduler">
+    <constructor-arg ref="scheduler"/>
+  </bean>
+
+  <bean id="rememberMeTokenExpiryScheduler" class="com.atlassian.bamboo.security.RememberMeTokenExpiryScheduler">
+    <constructor-arg ref="scheduler"/>
+  </bean>
+
+  <bean id="planVcsRevisionHistoryCleanupScheduler" class="com.atlassian.bamboo.plan.vcsRevision.cleanup.PlanVcsRevisionHistoryCleanupScheduler">
+    <constructor-arg ref="scheduler"/>
+  </bean>
+
+  <bean id="branchExpiryScheduler" class="com.atlassian.bamboo.plan.branch.BranchExpiryScheduler">
+    <constructor-arg ref="scheduler"/>
+  </bean>
+  
+  <bean id="userRefreshJobScheduler"  class="com.atlassian.bamboo.user.BambooUserRefreshJobScheduler">
+    <constructor-arg ref="scheduler"/>
+    <constructor-arg value="60"/>
+  </bean>
+  
+</beans>

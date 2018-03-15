@@ -1,0 +1,60 @@
+.icon{background-position:50% 50%;background-repeat:no-repeat;display:inline-block;height:16px;margin:0;overflow:hidden;padding:0;vertical-align:text-bottom;width:16px;}
+.icon>span{height:0;left:-5000px;overflow:hidden;position:absolute;top:0;width:4000px;}
+.icon-project-fail,.icon-failed,.icon-FAILED,.icon-Failed{background-image:url(../../../images/iconsv4/icon-build-failed.png);}.icon-project-fail.icon-reversed,.icon-failed.icon-reversed,.icon-FAILED.icon-reversed,.icon-Failed.icon-reversed{background-image:url(../../../images/iconsv4/icon-build-failed-w.png);}
+.icon-project-success,.icon-Successful,.icon-SUCCESS,.icon-successful{background-image:url(../../../images/iconsv4/icon-build-successful.png);}.icon-project-success.icon-reversed,.icon-Successful.icon-reversed,.icon-SUCCESS.icon-reversed,.icon-successful.icon-reversed{background-image:url(../../../images/iconsv4/icon-build-successful-w.png);}
+.icon-NotBuilt,.icon-notbuilt,.icon-NOT_BUILT,.icon-Unknown,.icon-UNKNOWN,.icon-unknown{background-image:url(../../../images/iconsv4/icon-build-unknown.png);}.icon-NotBuilt.icon-reversed,.icon-notbuilt.icon-reversed,.icon-NOT_BUILT.icon-reversed,.icon-Unknown.icon-reversed,.icon-UNKNOWN.icon-reversed,.icon-unknown.icon-reversed{background-image:url(../../../images/iconsv4/icon-build-unknown-w.png);}
+.icon-NotRunYet,.icon-notrunyet{background-image:url(../../../images/iconsv4/icon-build-job.png);}
+.icon-project-none,.icon-NeverExecuted,.icon-Suspended,.icon-disabled{background-image:url(../../../images/iconsv4/icon-build-disabled.png);}.icon-project-none.icon-reversed,.icon-NeverExecuted.icon-reversed,.icon-Suspended.icon-reversed,.icon-disabled.icon-reversed{background-image:url(../../../images/iconsv4/icon-build-disabled-w.png);}
+.icon-project-current,.icon-InProgress,.icon-inprogress,.icon-IN_PROGRESS,.icon-building,.icon-stage-InProgress{background-image:url(../../../images/iconsv4/icon-building-06.gif);}.icon-project-current.icon-reversed,.icon-InProgress.icon-reversed,.icon-inprogress.icon-reversed,.icon-IN_PROGRESS.icon-reversed,.icon-building.icon-reversed,.icon-stage-InProgress.icon-reversed{background-image:url(../../../images/iconsv4/icon-building-06-blue.gif);}
+.icon-Pending,.icon-PENDING,.icon-pending,.icon-Queued,.icon-QUEUED,.icon-queued{background-image:url(../../../images/iconsv4/icon-build-queued.png);}.icon-Pending.icon-reversed,.icon-PENDING.icon-reversed,.icon-pending.icon-reversed,.icon-Queued.icon-reversed,.icon-QUEUED.icon-reversed,.icon-queued.icon-reversed{background-image:url(../../../images/iconsv4/icon-build-queued-w.png);}
+.icon-sync{background-image:url(../../../images/iconsv4/icon-checking-out.gif);}
+.icon-SuccessfulPartial,.icon-successfulPartial,.icon-successfulpartial{background-image:url(../../../images/iconsv4/icon-build-continue.png);}.icon-SuccessfulPartial.icon-reversed,.icon-successfulPartial.icon-reversed,.icon-successfulpartial.icon-reversed{background-image:url(../../../images/iconsv4/icon-build-continue-w.png);}
+.icon-deploy-success{background-image:url(../../../images/deployment/deployment-success-16px.png);background-size:16px 16px;}
+.icon-deploy-fail{background-image:url(../../../images/deployment/deployment-fail-16px.png);background-size:16px 16px;}
+.icon-deploy-unknown{background-image:url(../../../images/deployment/deployment-unknown-16px.png);background-size:16px 16px;}
+.icon-collapse{background-image:url(../../../images/icons/icon_blockexpanded.png);}
+.icon-expand{background-image:url(../../../images/icons/icon_blockcollapsed.png);}
+.icon-collapse-all{background-image:url(../../../images/iconsv4/icon-collapse-all.png);}
+.icon-expand-all{background-image:url(../../../images/iconsv4/icon-expand-all.png);}
+.icon-drop{background-image:url(../../../images/menu_indicator_for_light_backgrounds.gif);}.icon-drop:hover{background-color:#3b73af;background-image:url(../../../images/menu_indicator_for_dark_backgrounds.gif);}
+.icon-delete{background-image:url(../../../images/delete.gif);}
+.icon-loading{background-image:url(../../../images/icons/wait.gif);}
+.icon-filter{background-image:url(../../../images/iconsv4/icon-filter.png);}
+.icon-job,.icon-job-disabled{background-image:url(../../../images/iconsv4/icon-job.png);}
+.icon-favourite{background-image:url(../../../images/iconsv4/icon-favorite.png);}
+.icon-favourite-remove{background-image:url(../../../images/iconsv4/icon-favorited.png);}
+.icon-view{background-image:url(../../../images/view.gif);}
+.icon-view-plan{background-image:url(../../../images/icons/view_20.png);height:12px;width:20px;}
+.icon-wallboard{background-image:url(../../../images/iconsv4/icon-wallboard.png);}
+.icon-build-run,.icon-build-run-disabled,.icon-stage-runnable,.icon-stage-restart{background-image:url(../../../images/iconsv4/icon-plan-run.png);}
+.icon-build-stop,.icon-build-stop-disabled{background-image:url(../../../images/iconsv4/icon-plan-stop.png);}
+.icon-build-cancel{background-image:url(../../../images/jt/icn_cancelbuild.gif);}
+.icon-build-configure{background-image:url(../../../images/iconsv4/icon-edit.png);}
+.icon-build-enable{background-image:url(../../../images/iconsv4/icon-plan-enable.png);}
+.icon-build-disable{background-image:url(../../../images/iconsv4/icon-plan-disable.png);}
+.icon-comment{background-image:url(../../../images/iconsv4/icon-comment.png);}
+.icon-edit{background-image:url(../../../images/iconsv4/icon-edit.png);}
+.icon-shared{background-image:url(../../../images/icons/shared.png);}
+.icon-unshared{background-image:url(../../../images/icons/unshared.png);}
+.icon-rss{background-image:url(../../../images/iconsv4/icon-rss.png);}
+.icon-permalink{background-image:url(../../../images/iconsv4/icon-link.png);}
+.icon-artifact{background-image:url(../../../images/iconsv4/icon-artifact.png);}
+.icon-artifact-shared{background-image:url(../../../images/iconsv4/icon-artifact-shared.png);}
+.icon-wizard-arrow{background-image:url(../../../images/wizard_arrow.png);height:20px;width:20px;}
+.icon-stage-manual,.icon-stage-Successful,.icon-stage-Pending,.icon-stage-NotBuilt{background-image:url(../../../images/iconsv4/icon-manual-stage.png);}
+.icon-jira{background-image:url(../../../images/jt/16_jira.png);}
+.icon-tools{background-image:url(../../../images/icons/tools_20.png);}
+.icon-quarantine{background-image:url(../../../images/icons/quarantine.png);height:20px;width:20px;}
+.icon-plan-create{background-image:url(../../../images/icons/create_12.png);height:12px;width:12px;}
+.icon-branch{background-image:url(../../../images/iconsv4/icon-branch.png);}
+.icon-hint,.icon-hint-variables{-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);opacity:0.5;background-image:url(../../../images/icons/lightbulb.png);}
+.icon-tick,.icon-tick-agent{background-image:url(../../../images/iconsv4/icon-emoticon-tick.png);}
+.icon-cross,.icon-cross-agent{background-image:url(../../../images/iconsv4/icon-emoticon-error.png);}
+.icon-jiraissue-new{background-image:url(../../../images/icons/jira_newfeature.gif);}
+.icon-jiraissue-unknown{background-image:url(../../../images/icons/jira_type_unknown.gif);}
+.icon-commit-date{background-image:url(../../../images/icons/icons-repository.png);background-position:0 0;}
+.icon-elastic,.icon-elastic-disabled{background-image:url(../../../images/iconsv4/icon-elastic-agent.png);}
+.icon-move-up{background-image:url(../../../images/icons/icon-move-up.png);}
+.icon-move-down{background-image:url(../../../images/icons/icon-move-down.png);}
+.icon-deploy,.icon-deploy-disabled{background-image:url(../../../images/iconsv4/icon-deploy.png);}
+.icon-job-disabled,.icon-build-run-disabled,.icon-build-stop-disabled,.icon-elastic-disabled,.icon-deploy-disabled{-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);opacity:0.5;}

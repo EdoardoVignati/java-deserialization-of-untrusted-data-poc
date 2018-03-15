@@ -1,0 +1,37 @@
+{namespace bamboo.widget.nav}
+
+/**
+ * Horizontal Nav
+ * @param items - array of .tab
+ */
+{template .tabs}
+    <nav class="aui-tabs horizontal-tabs ">
+        <ul class="tabs-menu">
+            {foreach $item in $items}
+                {call .tab data="$item" /}
+            {/foreach}
+        </ul>
+    </nav>
+{/template}
+
+/**
+  * Single tab
+  * @param content
+  * @param? id
+  * @param? linkId
+  * @param? href
+  * @param? isSelected
+  */
+{template .tab private="true"}
+    <li {if $id} id="{$id}"{/if} class="menu-item
+            {if $isSelected}
+                {sp}active-tab{call aui.renderExtraClasses data="all"/}"
+            {else}
+                {sp}{call aui.renderExtraClasses data="all"}
+                    {param isFullAttr: true /}
+                {/call}"
+            {/if}
+            {call aui.renderExtraAttributes data="all" /}>
+            <a{if $href} href="{$href}"{/if}{if $linkId} id="{$linkId}"{/if}>{$content|noAutoescape}</a>
+    </li>
+{/template}

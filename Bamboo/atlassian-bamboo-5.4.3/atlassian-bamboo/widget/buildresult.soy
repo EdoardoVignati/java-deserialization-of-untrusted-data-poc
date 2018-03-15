@@ -1,0 +1,38 @@
+{namespace widget.buildresult}
+
+/**
+ * @param resultSummary
+ */
+{template .resultStatusAndLink}
+    {call widget.status.buildResultStatusIcon}
+        {param resultSummary: $resultSummary/}
+    {/call}
+    {let $resultClass}
+         {call widget.status.buildResultStatusClass}
+                {param resultSummary: $resultSummary/}
+         {/call}
+    {/let}
+    {sp}
+    <a href="{contextPath() + '/browse/' + $resultSummary.planResultKey.key}" class="{$resultClass}">
+        {'#' + $resultSummary.planResultKey.resultNumber}
+    </a>
+{/template}
+
+/**
+ * @param resultSummary
+ */
+{template .resultStatus}
+    {call widget.status.buildResultStatusIcon}
+        {param resultSummary: $resultSummary/}
+    {/call}
+    {let $resultClass}
+         {call widget.status.buildResultStatusClass}
+                {param resultSummary: $resultSummary/}
+         {/call}
+    {/let}
+    {sp}
+    <span class="{$resultClass}">
+        {'#' + $resultSummary.planResultKey.resultNumber}
+    </span>
+{/template}
+

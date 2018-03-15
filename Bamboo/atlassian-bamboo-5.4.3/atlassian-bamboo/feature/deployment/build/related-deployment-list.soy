@@ -1,0 +1,277 @@
+{namespace bamboo.feature.deployment.build}
+
+/**
+ * Related Project List Container
+ * @param id
+ * @param projectsWithEnvironmentStatuses - list of projects
+ * @param currentUrl
+ * @param relatedVersions
+ */
+{template .relatedDeployments}
+    <div id="{$id}" class="dashboard-project">
+        {if $projectsWithEnvironmentStatuses and length($projectsWithEnvironmentStatuses) > 0}
+            {foreach $projectWithEnvironmentStatuses in $projectsWithEnvironmentStatuses}
+                <table class="aui">
+                    <colgroup>
+                        <col width="18%"/>
+                        <col width="20%"/>
+                        <col width="15%"/>
+                        <col width="10%"/>
+                        <col width="15%"/>
+                        <col width="8%"/>
+                        <col width="15%"/>
+                        <col width="70px"/>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>{getText('deployment.version.details.project')}</th>
+                            <th>{getText('deployment.version.deploymentStatus.environment')}</th>
+                            <th>{getText('deployment.version.deploymentStatus.version')}</th>
+                            <th>{getText('deployment.version.deploymentStatus.version.branch')}</th>
+                            <th>{getText('deployment.version.deploymentStatus.buildresult')}</th>
+                            <th>{getText('deployment.version.deploymentStatus.result')}</th>
+                            <th>{getText('deployment.version.deploymentStatus.date')}</th>
+                            <th>{getText('global.heading.actions')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {if $projectWithEnvironmentStatuses.environmentStatuses and length($projectWithEnvironmentStatuses.environmentStatuses) > 0}
+                            {foreach $environmentStatus in $projectWithEnvironmentStatuses.environmentStatuses}
+                                <tr class="
+                                    {if isFirst($environmentStatus)}first{/if}{sp}
+                                    {if isLast($environmentStatus)}last{/if}{sp}
+                                    {if $environmentStatus.deploymentResult
+                                        and $environmentStatus.deploymentResult.lifeCycleState == 'FINISHED'
+                                        and $environmentStatus.deploymentResult.deploymentState == 'FAILED'}error{/if}
+                                ">
+                                    <td class="deployment">
+                                        {if isFirst($environmentStatus)}
+                                            <a class="deployment-project-name"
+                                                href="{contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $projectWithEnvironmentStatuses.deploymentProject.id}"
+                                                {if $projectWithEnvironmentStatuses.deploymentProject.description}title="{$projectWithEnvironmentStatuses.deploymentProject.description}"{/if}
+                                            >
+                                                {$projectWithEnvironmentStatuses.deploymentProject.name}
+                                            </a>
+                                        {/if}
+                                    </td>
+                                    {call .environment data="$environmentStatus"}
+                                        {param currentUrl: $currentUrl/}
+                                        {param relatedVersions: $relatedVersions/}
+                                    {/call}
+                                </tr>
+                            {/foreach}
+                        {else}
+                            <tr class="first">
+                                <td class="deployment">
+                                    <a class="deployment-project-name" href="{contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $projectWithEnvironmentStatuses.deploymentProject.id}">
+                                        {$projectWithEnvironmentStatuses.deploymentProject.name}
+                                    </a>
+                                </td>
+                                <td colspan="7" class="empty-text">
+                                    {getText('deployment.project.empty')}
+                                    {if $projectWithEnvironmentStatuses.deploymentProject.operations.canEdit}
+                                        {sp}{getText('deployment.project.empty.create', contextPath() + '/deploy/config/createEnvironment.action?deploymentProjectId=' + $projectWithEnvironmentStatuses.deploymentProject.id + '&returnUrl=' + $currentUrl)|noAutoescape}
+                                    {/if}
+                                </td>
+                            </tr>
+                        {/if}
+                    </tbody>
+                </table>
+            {/foreach}
+        {else}
+            <p>{getText('deployment.welcome.message')|noAutoescape}</p>
+        {/if}
+    </div>
+{/template}
+
+/**
+ * Icon symbol and version number for version deployment failure/success.
+ * @param relatedPlanResults
+ */
+{template .relatedBuilds private="true"}
+   {if length($relatedPlanResults)}
+      {call widget.buildresult.resultStatusAndLink}
+        {param resultSummary: $relatedPlanResults[0] /}
+      {/call}
+      {if length($relatedPlanResults) > 1}
+          {sp}{getText('plan.summary.related.deployments.using.build.more', length($relatedPlanResults) - 1)}
+      {/if}
+    {/if}
+{/template}
+
+/**
+ * Environment
+ * @param environment
+ * @param? deploymentResult
+ * @param currentUrl
+ * @param relatedVersions
+ */
+{template .environment  private="true"}
+    <td><a href="{contextPath() + '/deploy/viewEnvironment.action?id=' + $environment.id}">{$environment.name}</a></td>
+    {if $deploymentResult}
+    <td>
+        {call bamboo.feature.deployment.result.version}
+            {param deploymentVersion: $deploymentResult.deploymentVersion /}
+            {param deploymentVersionName: $deploymentResult.deploymentVersionName /}
+            {param subtle: true/}
+        {/call}
+    </td>
+    <td>
+        {if $deploymentResult.deploymentVersion}
+            {call widget.lozenges.branch data="$deploymentResult.deploymentVersion" /}
+        {/if}
+    </td>
+    <td>
+        {foreach $relatedVersion in $relatedVersions}
+            {if $relatedVersion.deploymentVersion.id == $deploymentResult.deploymentVersion.id}
+                {call .relatedBuilds data="$relatedVersion" /}
+            {/if}
+        {/foreach}
+    </td>
+    <td>
+        {call bamboo.feature.deployment.result.environmentState}
+            {param deploymentResult: $deploymentResult /}
+            {param showDetailsLinkAlways: true /}
+        {/call}
+    </td>
+    <td>
+        {call bamboo.feature.deployment.result.finishedTimeOrDuration data="$deploymentResult"}
+            {param hideLink: true /}
+        {/call}
+    </td>
+    {else}
+    <td colspan="3">&nbsp;</td>
+    <td colspan="2" class="empty-text">{getText('deployment.version.deploymentStatus.never')}</td>
+    {/if}
+    <td>
+        {if $environment.operations.allowedToExecute}
+            {if $environment.operations.canExecute}
+                <a href="{contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environment.id + '&returnUrl=' + $currentUrl}" title="{getText('deployment.execute.button')}">
+                    {call widget.icons.icon}
+                        {param type: 'deploy' /}
+                        {param text: getText('deployment.execute.button') /}
+                    {/call}
+                </a>
+            {else}
+                {call widget.icons.icon}
+                    {param type: 'deploy-disabled' /}
+                    {param text: $environment.operations.cantExecuteReason /}
+                    {param showTitle: true /}
+                {/call}
+            {/if}
+            {sp}
+        {/if}
+        {if $environment.operations.canEdit}
+            {call widget.icons.auiFontLink}
+                {param iconType: 'edit' /}
+                {param relativeUrl: '/deploy/config/configureDeploymentProject.action?id=' + $environment.deploymentProjectId + '&environmentId=' + $environment.id + '&returnUrl=' + $currentUrl /}
+                {param text: getText('deployment.environment.configure') /}
+            {/call}
+        {/if}
+    </td>
+{/template}
+
+/**
+ * List of relevant environments on which particular build result was deployed on
+ *
+ * @param relatedDeployments
+ * @param planResultKey plan result key object
+ * @param buildState
+ * Summary
+ */
+{template .relatedVersions}
+    {if $buildState == 'SUCCESS'}
+        <div class="related-versions">
+            <h2>{getText('plan.result.included.in.version')}</h2>
+            {let $returnUrl: '/browse/' + $planResultKey.key/}
+            {foreach $deploymentProjectWithEnvironmentStatuses in $relatedDeployments}
+                <div class="related-version">
+                    {let $deploymentProject: $deploymentProjectWithEnvironmentStatuses.deploymentProject /}
+                    {let $relatedVersion: $deploymentProjectWithEnvironmentStatuses.relatedVersion /}
+                    {let $futureVersion: $deploymentProjectWithEnvironmentStatuses.futureVersion /}
+                    {let $futureVersionResult: $deploymentProjectWithEnvironmentStatuses.futureVersionResult /}
+                    <span class="project-name"><a href="{contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $deploymentProject.id}">{$deploymentProject.name}</a>
+                    {if $relatedVersion}
+                        {sp}&rsaquo; {getText('deployment.version.label')} <a href="{contextPath() + '/deploy/viewDeploymentVersion.action?versionId=' + $relatedVersion.id}">{$relatedVersion.name}</a>
+                    {/if}
+                    </span>
+
+                    {if $relatedVersion}
+                        {if  $deploymentProjectWithEnvironmentStatuses.environmentStatuses and length($deploymentProjectWithEnvironmentStatuses.environmentStatuses) > 0}
+                            <table class="aui">
+                                <thead>
+                                    <tr>
+                                        <th>{getText('deployment.version.deploymentStatus.environment')}</th>
+                                        <th>{getText('deployment.version.deploymentStatus.status')}</th>
+                                        <th></th>
+                                        <th>{getText('global.heading.actions')}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {foreach $environmentStatus in $deploymentProjectWithEnvironmentStatuses.environmentStatuses}
+                                        {let $environment: $environmentStatus.environment /}
+                                        {let $deploymentResult: $environmentStatus.deploymentResult /}
+                                        <tr>
+                                            <td>
+                                                <a href="{contextPath() + '/deploy/viewEnvironment.action?id=' + $environment.id}">{$environment.name}</a>
+                                            </td>
+                                            <td>
+                                                {call bamboo.feature.deployment.result.versionStatusLozenge}
+                                                    {param environmentStatus: $environmentStatus/}
+                                                    {param deploymentVersion: $relatedVersion/}
+                                                    {param neverDeployedText: getText('deployment.version.status.notDeployedYet')/}
+                                                {/call}
+                                                {if $environmentStatus.deploymentResult and not $environmentStatus.latestResult}
+                                                    {call bamboo.feature.deployment.result.detailsLink}
+                                                        {param deploymentResult: $environmentStatus.deploymentResult/}
+                                                    {/call}
+                                                {/if}
+                                            </td>
+                                            <td>
+                                                {if $environmentStatus.latestResult}
+                                                    {call bamboo.feature.deployment.result.nowAt}
+                                                        {param deploymentResult: $environmentStatus.latestResult /}
+                                                    {/call}
+                                                {/if}
+                                            </td>
+                                            <td class="operations">
+                                                {if $environmentStatus.environment.operations.allowedToExecute and $environmentStatus.environment.operations.canExecute}
+                                                    {if (not $environmentStatus.deploymentResult and not $environmentStatus.latestResult)
+                                                        or ($environmentStatus.deploymentResult and not $environmentStatus.latestResult and $environmentStatus.deploymentResult.deploymentState == 'FAILED')
+                                                        or ($environmentStatus.latestResult and compare_date($environmentStatus.latestResult.deploymentVersion.creationDate, $relatedVersion.creationDate) < 0)}
+                                                        <a href="{contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environment.id}{if $environmentStatus.deploymentResult.deploymentState == 'FAILED'}{'&existingVersionOption=ROLLBACK&rollback=true'}{else}{'&versionId='+$relatedVersion.id}{/if}{'&returnUrl=' + $returnUrl}">
+                                                            {call widget.icons.icon}
+                                                               {param type: 'deploy' /}
+                                                               {param text: getText('deployment.version.status.deployNow') /}
+                                                            {/call}
+                                                        </a>
+                                                    {/if}
+                                                {/if}
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                </tbody>
+                            </table>
+                        {else}
+                            <p>{getText('deployment.project.empty')}</p>
+                        {/if}
+                    {elseif $futureVersion}
+                        <p>{getText('deployment.version.noExactVersion')}<br/>
+                        {getText('deployment.version.futureVersion')} <a href="{contextPath() + '/deploy/viewDeploymentVersion.action?versionId=' + $futureVersion.id}">{$futureVersion.name}</a>{if $futureVersionResult}{sp}{getText('deployment.version.futureVersion.build')}{sp}{call widget.buildresult.resultStatusAndLink}{param resultSummary: $futureVersionResult/}{/call}{/if}
+                    {else}
+                        <p>{getText('deployment.version.noVersion')}</p>
+                        {if $deploymentProject.operations.allowedToCreateVersion}
+                            {call aui.buttons.button}
+                                {param tagName: 'a' /}
+                                {param text: getText('deployment.project.create.version') /}
+                                {param id: 'create-new-version-' + $deploymentProject.id /}
+                                {param extraAttributes: ['href': contextPath() + '/deploy/createDeploymentVersion.action?deploymentProjectId=' + $deploymentProject.id + '&planKey=' + $planResultKey.planKey + '&buildNumber=' + $planResultKey.buildNumber + '&returnUrl=' + $returnUrl, 'title': getText('deployment.project.create.version.tooltip')] /}
+                                {param extraClasses: 'brs-create-version-button'/}
+                            {/call}
+                        {/if}
+                    {/if}
+                </div>
+            {/foreach}
+        </div>
+    {/if}
+{/template}

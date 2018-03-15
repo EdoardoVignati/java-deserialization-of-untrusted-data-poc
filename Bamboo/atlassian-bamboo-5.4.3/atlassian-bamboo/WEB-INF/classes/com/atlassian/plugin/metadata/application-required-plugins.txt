@@ -1,0 +1,12 @@
+# Any plugin specified in this file will not be able to be disabled (the disable button will be hidden).
+bamboo.sections.global.admin
+bamboo.web.resources
+bamboo.webrepositoryviewer.provided
+com.atlassian.bamboo.plugin.system.webpanel
+com.atlassian.bamboo.plugin.system.listeners
+com.atlassian.gadgets.publisher
+com.atlassian.oauth.admin
+com.atlassian.oauth.serviceprovider
+com.atlassian.sal.bamboo
+com.atlassian.bamboo.plugins.vcs
+com.atlassian.bamboo.plugin.system.triggerReason

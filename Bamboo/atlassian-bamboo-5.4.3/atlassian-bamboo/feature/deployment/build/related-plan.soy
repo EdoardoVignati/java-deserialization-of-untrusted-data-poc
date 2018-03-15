@@ -1,0 +1,39 @@
+{namespace bamboo.feature.deployment.build}
+
+/**
+ * Shows the plan details + artifact information
+
+ * @param relatedPlan
+ * @param deploymentProjectItems
+ */
+{template .showRelatedPlanDetails}
+    <dl class="details-list">
+        <dt>{getText('deployment.project.summary.plan')}</dt>
+        <dd>
+            {if $relatedPlan}
+                {call widget.plan.renderPlanNameLink}
+                    {param plan: $relatedPlan /}
+                {/call}
+            {else}
+                {getText('deployment.project.summary.plan.empty')}
+            {/if}
+        </dd>
+        {if $relatedPlan}
+            <dt class="artifacts">{getText('deployment.project.summary.artifacts')}</dt>
+            <dd class="artifacts">
+                {if $deploymentProjectItems and length($deploymentProjectItems)}
+                    {foreach $item in $deploymentProjectItems}
+                        {$item.name}{if not isLast($item) and length($deploymentProjectItems) > 1}, {/if}
+                    {/foreach}
+                {else}
+                    {let $emptyText}
+                        {getText('deployment.project.summary.artifacts.empty', contextPath() + '/browse/' + $relatedPlan.planKey + '/config')|noAutoescape}
+                    {/let}
+                    {call aui.message.warning}
+                        {param content: $emptyText /}
+                    {/call}
+                {/if}
+            </dd>
+        {/if}
+    </dl>
+{/template}

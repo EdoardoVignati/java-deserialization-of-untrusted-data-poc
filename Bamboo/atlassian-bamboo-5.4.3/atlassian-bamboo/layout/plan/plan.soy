@@ -1,0 +1,29 @@
+{namespace bamboo.layout}
+
+/**
+ * Plan Layout
+ * @param headerImageContent
+ * @param headerMainContent
+ * @param? headerActionsButtons
+ * @param? headerActionsContent
+ * @param? headerExtraContent
+ * @param? navItems
+ * @param? pageNavContent
+ * @param? pageNavClass
+ * @param? pageItemContent
+ * @param? pageItemClass
+ * @param content
+ * @param? planStatusHistory
+ */
+{template .plan}
+    {call .base data="all"}
+        {param headerActionsContent}
+            {if $planStatusHistory}
+                {call bamboo.widget.planStatusHistory.container data="$planStatusHistory" /}
+            {/if}
+            {if $headerActionsContent}
+                {$headerActionsContent|noAutoescape}
+            {/if}
+        {/param}
+    {/call}
+{/template}

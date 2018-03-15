@@ -1,0 +1,83 @@
+<johnson-config>
+
+  <!-- This class determines if Bamboo has been setup and what is determined to be a setup path (to ignore) -->
+  <setupconfig class="com.atlassian.bamboo.setup.johnson.BambooJohnsonSetupConfig"/>
+
+  <!-- Johnson will redirect to this page if Bamboo has not been setup-->
+  <setup>
+    <path>/bootstrap/selectSetupStep.action</path>
+  </setup>
+
+  <error>
+    <path>/error/errorEvents.action</path>
+  </error>
+
+  <ignore>
+    <path>/webwork*</path>
+    <path>/error/errorEvents.action</path>
+    <path>/styles/*</path>
+    <path>/layout/setup/*</path>
+    <path>/images/*</path>
+    <path>/scripts/*</path>
+    <path>/admin/license.action*</path>
+    <path>/admin/doupdatelicense.action*</path>
+    <path>/func*</path>
+    <path>/longrunningtask.action*</path>
+    <path>/api/rest/logToServer.action*</path>
+    <path>/login.action*</path>
+    <path>/setup/updateLicense*</path>
+    <path>/agentServer/GetResource*</path>
+    <path>/agentServer/GetPackage*</path>
+    <path>/agentServer/GetJar*</path>
+    <path>/agentServer/GetResources*</path>
+  </ignore>
+
+  <eventlevels>
+    <eventlevel key="fatal">
+      <description>Fatal</description>
+    </eventlevel>
+    <eventlevel key="error">
+      <description>Error</description>
+    </eventlevel>
+    <eventlevel key="warning">
+      <description>Warning</description>
+    </eventlevel>
+  </eventlevels>
+
+  <eventtypes>
+    <eventtype key="bootstrap">
+      <description>Bootstrap</description>
+    </eventtype>
+    <eventtype key="database">
+      <description>Database</description>
+    </eventtype>
+    <eventtype key="upgrade">
+      <description>Upgrade</description>
+    </eventtype>
+    <eventtype key="export">
+      <description>Data Export</description>
+    </eventtype>
+    <eventtype key="import">
+      <description>Data Import</description>
+    </eventtype>
+    <eventtype key="setup">
+      <description>Setup</description>
+    </eventtype>
+    <eventtype key="license-inconsistency">
+      <description>License Inconsistency</description>
+    </eventtype>
+    <eventtype key="license-too-old">
+      <description>License Too Old For Build</description>
+    </eventtype>
+    <eventtype key="restart">
+      <description>Restart Needed</description>
+    </eventtype>
+    <eventtype key="reindex">
+      <description>Reindex</description>
+    </eventtype>
+    <eventtype key="attachment-migration">
+      <description>Attachment Migration</description>
+    </eventtype>
+  </eventtypes>
+
+</johnson-config>

@@ -1,0 +1,8 @@
+.custom-build .variables-list{position:relative;top:-5px;}.custom-build .variables-list>thead{border:0 none;clip:rect(0pt, 0pt, 0pt, 0pt);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;}
+.custom-build .variables-list>tfoot>tr:first-child{border-bottom:0;}.custom-build .variables-list>tfoot>tr:first-child>td{border-top:0;padding:3px 0 0;}
+.custom-build .variables-list>tfoot .variables-override{border:0;font-size:inherit;line-height:1;}
+.custom-build .variables-list>tbody>tr:hover{background:transparent;}.custom-build .variables-list>tbody>tr:hover .inline-edit-view{background:transparent;border:0;padding:4px;}.custom-build .variables-list>tbody>tr:hover .inline-edit-view:after{content:normal;}
+.custom-build .variables-list>tbody>tr:first-child{background:transparent;}.custom-build .variables-list>tbody>tr:first-child>td{border-top:0;padding-top:5px;}
+.custom-build .variables-list>tbody>tr:first-child +tr{border-top:1px solid #cccccc;}
+.custom-build .variables-list>tbody>tr>td:first-child{padding-left:0;}
+.custom-build .variables-list .inline-edit-view{display:block;width:auto;}

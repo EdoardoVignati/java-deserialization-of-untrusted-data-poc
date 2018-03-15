@@ -1,0 +1,25 @@
+{namespace bamboo.widget.autocomplete.projectFilter}
+
+/**
+ * @param projects
+ * @param? extraClasses
+ */
+{template .list}
+    <ul class="{length($projects) == 0 ? 'empty' : ''}{call aui.renderExtraClasses data="all" /}">
+        {foreach $project in $projects}
+            <li data-id="{$project.id}">
+                {call .item data="$project" /}
+            </li>
+        {/foreach}
+    </ul>
+{/template}
+
+/**
+ * @param id
+ * @param projectName
+ */
+{template .item}
+    <a href="{contextPath() + '/browse/' + $id}">{$projectName}</a>
+    <a class="remove"></a>
+    <input type="hidden" name="selectedProjectKeys" value="{$id}" />
+{/template}

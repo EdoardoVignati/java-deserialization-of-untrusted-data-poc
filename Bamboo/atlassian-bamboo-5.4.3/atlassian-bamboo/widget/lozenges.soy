@@ -1,0 +1,71 @@
+{namespace widget.lozenges}
+
+/**
+ * @param? colour - a string containing the lozenge Colour Name, these are:
+ *      "default" <-- grayish
+ *      "success" <-- green
+ *      "error"   <-- red
+ *      "current" <-- yellow
+ *      "complete"<-- blue
+ *      "moved"   <-- brown
+ * @param text - a string to be inserted inside the lozenge span
+ * @param? showTitle - a boolean indicating whether the title attribute should be added to the lozenge
+ * @param? subtle - a boolean indicating whether to use the subtle styling or not
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .lozenge}
+    <span
+        {sp}class="lozenge lozenge-{$colour ? $colour : 'default'}{$subtle ? ' lozenge-subtle' : ''}{call aui.renderExtraClasses data="all" /}"
+        {if $showTitle} title="{$text}"{/if}
+        {call aui.renderExtraAttributes data="all" /}>
+        {$text}
+    </span>
+{/template}
+
+/**
+ * Should eventually replace above, but we have lots of custom styles which need fixing before blanket replacement.
+ * @param? colour - a string containing the lozenge Colour Name, these are:
+ *      "default" <-- grayish
+ *      "success" <-- green
+ *      "error"   <-- red
+ *      "current" <-- yellow
+ *      "complete"<-- blue
+ *      "moved"   <-- brown
+ * @param text - a string to be inserted inside the lozenge span
+ * @param? showTitle - a boolean indicating whether the title attribute should be added to the lozenge
+ * @param? subtle - a boolean indicating whether to use the subtle styling or not
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .auilozenge}
+    <span
+        {sp}class="aui-lozenge aui-lozenge-{$colour ? $colour : 'default'}{$subtle ? ' aui-lozenge-subtle' : ''}{call aui.renderExtraClasses data="all" /}"
+        {if $showTitle} title="{$text}"{/if}
+        {call aui.renderExtraAttributes data="all" /}>
+        {$text}
+    </span>
+{/template}
+
+/**
+ * Displays branch name lozenge
+ * @param planBranchName
+ * @param? label
+ * @param? cssClass
+ */
+{template .branch}
+    <span class="{if $cssClass}{$cssClass}{else}lozenge-newline{/if}">
+        {if $label}<span class="inline-label">{$label}</span> {/if}
+        <span class="lozenge branch-lozenge monospace" title="{$planBranchName}">
+            <span class="branch">
+                {call aui.icons.icon}
+                   {param icon: 'devtools-branch-small'/}
+                   {param useIconFont: true/}
+                {/call}
+                <span class="name">{$planBranchName}</span>
+            </span>
+        </span>
+    </span>
+{/template}
+
+

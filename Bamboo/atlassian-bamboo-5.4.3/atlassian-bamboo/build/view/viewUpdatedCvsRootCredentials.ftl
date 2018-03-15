@@ -1,0 +1,17 @@
+[#-- @ftlvariable name="action" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#if bulkAction.getNewCvsRoot(params)?has_content ]
+    [@ww.label labelKey='repository.cvs.root' name='bulkAction.getNewCvsRoot(params)' /]
+[#else]
+    [@ww.text name='bulkAction.cvs.noneSpecified' /]
+[/#if]
+[@ww.label labelKey='repository.cvs.authentication' name='bulkAction.getNewAuthType(params)' /]
+
+[@ui.bambooSection dependsOn='bulkAction.getNewAuthType(params)' showOn='password']
+    [@ww.hidden name="temporary.cvs.passwordChange" value="true" /]
+[/@ui.bambooSection]
+
+[@ui.bambooSection dependsOn='bulkAction.getNewAuthType(params)' showOn='ssh']
+    [@ww.label labelKey='repository.cvs.keyFile' name='bulkAction.getNewKeyFile(params)' hideOnNull='true' /]
+    [@ww.hidden name="temporary.cvs.passphraseChange" value="true" /]
+[/@ui.bambooSection]

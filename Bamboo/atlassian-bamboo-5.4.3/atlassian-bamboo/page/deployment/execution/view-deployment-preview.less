@@ -1,0 +1,128 @@
+@import "../../../global.less";
+
+
+.deployment-preview {
+    margin-bottom: @doubleSpacing;
+    margin-top: @baseSpacing;
+}
+
+.deployment-version-preview {
+
+    .border-radius();
+    border: 1px solid #ccc;
+    margin: @baseSpacing;
+    padding: @baseSpacing;
+
+    .aui-group-issues-commits {
+        padding-top: @baseSpacing;
+        .aui-item {
+            text-align: center;
+        }
+    }
+
+    .deployment-rollback {
+        color: @errorTextColor;
+    }
+
+    .deployment-preview-counts {
+        display: block;
+        font-size: 18px;
+    }
+
+    .difference-preview-none {
+        padding: @doubleSpacing 0;
+    }
+
+    .difference-preview {
+        color: @secondaryTextColor
+    }
+}
+
+#current-environment-status,
+#execution-details,
+#new-version {
+    margin-top: @baseSpacing;
+}
+
+#new-version-preview {
+    margin-top: @baseSpacing;
+    padding: @doubleSpacing;
+    dl {
+        padding-left: 0;
+        dt {
+            margin-left: 0;
+            margin-top: 0;
+            text-align: left;
+            width: 100%;
+        }
+        dd {
+            margin-top: 0;
+            margin-bottom: @baseSpacing;
+            .aui-avatar-badged {
+                margin-top: @halfSpacing;
+            }
+        }
+    }
+
+    #tasks-to-run {
+        dd {
+            margin-bottom: 0;
+        }
+    }
+}
+
+#current-environment-status {
+    border-left: 1px solid @dividerColor;
+    padding-left: @baseSpacing;
+}
+
+#execution-details {
+    ol {
+        padding-left: @doubleSpacing;
+    }
+}
+
+#new-version-details {
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+
+        .aui-lozenge {
+            margin-left: @baseSpacing;
+        }
+    }
+    .difference-not-calculable {
+        margin-bottom: @doubleSpacing;
+    }
+}
+
+#version-broken-warning > div {
+    margin-top: @baseSpacing;
+}
+
+div.deployment-preview-dialog {
+    margin: 0 !important;
+
+    .view-more {
+        margin-left: @baseSpacing;
+    }
+}
+
+.version-preview-details-list {
+    .details-dl(145px);
+}
+
+.current-status-details-list {
+    .details-dl(100px);
+}
+
+#fieldArea_existingVersionOption {
+    margin-top: @halfSpacing;
+}
+
+.aui-item-select-release {
+    // This fixes the width of the left-hand side of the deploy preview screen (where you select result/release)
+    // to the width that we desire.
+    width: 590px;
+}

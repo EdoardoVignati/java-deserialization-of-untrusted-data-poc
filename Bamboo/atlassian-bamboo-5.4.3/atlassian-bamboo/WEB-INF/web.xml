@@ -1,0 +1,1026 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--  ================================================================ -->
+<!--  The Bamboo web descriptor                                        -->
+<!--                                                                   -->
+<!--  ================================================================ -->
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+         version="2.4">
+
+  <description>The Bamboo Continuous Build Server</description>
+  <display-name>Bamboo</display-name>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+      classpath:/applicationContextShared.xml,
+      classpath:/applicationContext.xml,
+      classpath:/applicationContextJMSCommon.xml,
+      classpath:/applicationContextJMSServer.xml,
+      classpath:/applicationContextManagers.xml,
+      classpath:/applicationContextCaches.xml,
+      classpath:/applicationContextChainManagers.xml,
+      classpath:/applicationContextUser.xml,
+      classpath:/applicationContextPersistence.xml,
+      classpath:/applicationContextPluginCommon.xml,
+      classpath:/applicationContextPlugin.xml,
+      classpath:/applicationContextLegacy.xml,
+      classpath:/applicationContextScheduler.xml,
+      classpath:/applicationContextAcegiSecurity.xml,
+      classpath:/applicationContextAcegiAuthorization.xml,
+      classpath:/applicationContextPropertiesCommon.xml,
+      classpath:/applicationContextCommon.xml,
+      classpath:/applicationContextBandana.xml,
+      classpath:/applicationContextAgentServer.xml,
+      classpath:/applicationContextCaptcha.xml,
+      classpath:/applicationContextMigration.xml,
+      classpath:/applicationContextMigrationMappers.xml,
+      classpath:/applicationContextDeploymentsDao.xml,
+      classpath:/applicationContextDeploymentsMigration.xml,
+      classpath:/applicationContextDeploymentsServices.xml
+    </param-value>
+  </context-param>
+
+  <!-- Uncomment the below to activiate JNDI mail session -->
+  <!--
+  <resource-env-ref>
+    <description>Mail Service</description>
+    <resource-env-ref-name>mail/Session</resource-env-ref-name>
+    <resource-env-ref-type>javax.mail.Session</resource-env-ref-type>
+  </resource-env-ref>
+  -->
+
+  <!-- ========================================================================================== Filter Definitions -->
+
+  <filter>
+    <filter-name>headersanitising</filter-name>
+    <filter-class>com.atlassian.core.filters.HeaderSanitisingFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>urlRewrite</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.UrlRewriteFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>newRelicTransactionNamingFilter</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.NewRelicTransactionNamingFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>ignoreNewRelic</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.IgnoreNewRelicFilter</filter-class>
+  </filter>
+
+  <filter>
+       <filter-name>filter-plugin-dispatcher-before-decoration-request</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-decoration</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>REQUEST</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-decoration-forward</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-decoration</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>FORWARD</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-decoration-include</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-decoration</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>INCLUDE</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-decoration-error</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-decoration</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>ERROR</param-value>
+       </init-param>
+   </filter>
+
+    <filter>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-request</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-dispatch</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>REQUEST</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-forward</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-dispatch</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>FORWARD</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-include</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-dispatch</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>INCLUDE</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-error</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-dispatch</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>ERROR</param-value>
+       </init-param>
+   </filter>
+
+
+
+  <filter>
+    <filter-name>acegi</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.BambooAcegiProxyFilter</filter-class>
+    <init-param>
+      <param-name>targetClass</param-name>
+      <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+    </init-param>
+    <!--Setting lazy init to ensure this doesn't load before bamboo is setup -->
+    <init-param>
+      <param-name>init</param-name>
+      <param-value>lazy</param-value>
+    </init-param>
+  </filter>
+
+
+  <filter>
+    <filter-name>johnson</filter-name>
+    <filter-class>com.atlassian.johnson.filters.JohnsonFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>license</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.LicenseFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>sessioninview</filter-name>
+    <filter-class>com.atlassian.bamboo.persistence.BambooSessionInViewFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>login</filter-name>
+    <filter-class>com.atlassian.seraph.filter.BambooLoginFilter</filter-class>
+  </filter>
+
+  <filter>
+       <filter-name>filter-plugin-dispatcher-before-login-request</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-login</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>REQUEST</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-login-forward</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-login</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>FORWARD</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-login-include</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-login</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>INCLUDE</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-before-login-error</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>before-login</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>ERROR</param-value>
+       </init-param>
+   </filter>
+
+  <filter>
+    <filter-name>upm-decorator-override</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.DecoratorOverrideFilter</filter-class>
+    <init-param>
+      <param-name>decoratorName</param-name>
+      <param-value>upm</param-value>
+    </init-param>
+  </filter>
+
+  <filter>
+    <filter-name>sessionCreationForAnonymousUsers</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.SessionCreationForAnonymousUserFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>sitemesh</filter-name>
+    <filter-class>com.atlassian.bamboo.ww2.FreemarkerRequestDispatcherPageFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>struts-prepare</filter-name>
+    <filter-class>com.atlassian.bamboo.ww2.StrutsPrepareFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>struts-execute</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsExecuteFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>security</filter-name>
+    <filter-class>com.atlassian.seraph.filter.SecurityFilter</filter-class>
+  </filter>
+
+  <!--  Compress the data written to the HttpServletResponse         -->
+  <filter>
+    <filter-name>pageCompression</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.CompressingFilter</filter-class>
+    <!--<init-param>-->
+      <!--<param-name>debug</param-name>-->
+      <!--<param-value>true</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+      <!--<param-name>statsEnabled</param-name>-->
+      <!--<param-value>true</param-value>-->
+    <!--</init-param>-->
+  </filter>
+
+  <filter>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>nonCachingFilter</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.NonCachingHeaderFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>requestCache</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.RequestCacheThreadLocalFilter</filter-class>
+  </filter>
+
+   <filter>
+     <filter-name>profiler</filter-name>
+     <filter-class>com.atlassian.bamboo.filter.BambooProfilingFilter</filter-class>
+   </filter>
+
+  <filter>
+    <filter-name>accessLogFilter</filter-name>
+    <filter-class>com.atlassian.bamboo.filter.AccessLogFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>charsetFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+
+  <filter>
+       <filter-name>filter-plugin-dispatcher-after-encoding-request</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>after-encoding</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>REQUEST</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-after-encoding-forward</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>after-encoding</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>FORWARD</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-after-encoding-include</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>after-encoding</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>INCLUDE</param-value>
+       </init-param>
+   </filter>
+   <filter>
+       <filter-name>filter-plugin-dispatcher-after-encoding-error</filter-name>
+       <filter-class>com.atlassian.bamboo.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+       <init-param>
+           <param-name>location</param-name>
+           <param-value>after-encoding</param-value>
+       </init-param>
+       <init-param>
+           <param-name>dispatcher</param-name>
+           <param-value>ERROR</param-value>
+       </init-param>
+   </filter>
+
+  <!-- ============================================================================================= Filter Mappings -->
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/agentServer/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>charsetFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-after-encoding-request</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-after-encoding-forward</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>FORWARD</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-after-encoding-include</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>INCLUDE</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-after-encoding-error</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>ERROR</dispatcher>
+   </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>headersanitising</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>urlRewrite</filter-name>
+    <url-pattern>/browse/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+     <filter-name>requestCache</filter-name>
+     <url-pattern>/*</url-pattern>
+     <dispatcher>REQUEST</dispatcher>
+     <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/s/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/browse/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/download/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/deployment-download/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/artifact/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>cachingUrlRewriteFilter</filter-name>
+    <url-pattern>/global-artifact/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>nonCachingFilter</filter-name>
+    <url-pattern>/ajax/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>pageCompression</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>pageCompression</filter-name>
+    <url-pattern>*.css</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>pageCompression</filter-name>
+    <url-pattern>*.js</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>pageCompression</filter-name>
+    <url-pattern>*.html</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>pageCompression</filter-name>
+    <url-pattern>*.htm</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>pageCompression</filter-name>
+    <url-pattern>*.xml</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>/download/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>/deployment-download/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>/artifact/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>/global-artifact/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>/plugins/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessioninview</filter-name>
+    <url-pattern>/rest/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-login-request</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-login-forward</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>FORWARD</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-login-include</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>INCLUDE</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-login-error</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>ERROR</dispatcher>
+   </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>login</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>security</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>johnson</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>license</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>/download/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>/deployment-download/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>/global-artifact/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>/artifact/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>/plugins/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>acegi</filter-name>
+    <url-pattern>/rest/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+
+
+  <filter-mapping>
+    <filter-name>accessLogFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-decoration-request</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-decoration-forward</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>FORWARD</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-decoration-include</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>INCLUDE</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-decoration-error</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>ERROR</dispatcher>
+   </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>profiler</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>struts-prepare</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>newRelicTransactionNamingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>upm-decorator-override</filter-name>
+    <url-pattern>/plugins/servlet/upm</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sessionCreationForAnonymousUsers</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <url-pattern>/plugins/servlet/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-request</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>REQUEST</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-forward</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>FORWARD</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-include</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>INCLUDE</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+       <filter-name>filter-plugin-dispatcher-before-dispatch-error</filter-name>
+       <url-pattern>/*</url-pattern>
+       <dispatcher>ERROR</dispatcher>
+   </filter-mapping>
+
+
+  <filter-mapping>
+    <filter-name>struts-execute</filter-name>
+    <url-pattern>*.action</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>ignoreNewRelic</filter-name>
+    <url-pattern>/agentServer/classpath.zip</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+
+  <!-- =================================================================================================== Listeners -->
+
+  <!-- Loads the Bootstrap context for minimal app startup -->
+  <listener>
+    <listener-class>com.atlassian.bamboo.setup.BootstrapLoaderListener</listener-class>
+  </listener>
+
+  <!-- Loads the Spring servlet context if / when the app has been setup -->
+  <listener>
+    <listener-class>com.atlassian.bamboo.ww2.actions.setup.BambooContextLoaderListener</listener-class>
+  </listener>
+
+  <!-- Upgrades the data. -->
+  <listener>
+    <listener-class>com.atlassian.bamboo.upgrade.UpgradeLauncher</listener-class>
+  </listener>
+
+  <listener>
+    <listener-class>com.atlassian.bamboo.session.SeraphHttpSessionDestroyedListener</listener-class>
+  </listener>
+
+  <!-- ============================================================================================= Custom Servlets -->
+
+  <!--  Serve up web resources        -->
+  <servlet>
+    <servlet-name>file-server</servlet-name>
+    <servlet-class>com.atlassian.bamboo.plugin.servlet.FileServerServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>getResource</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.GetResourceServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>getPackage</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.GetPackageServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>getJar</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.GetJarServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>getResources</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.GetResourcesServlet</servlet-class>
+  </servlet>
+
+  <!-- Servlet that writes out the contents of a page as a series of escaped document.write commands -->
+  <servlet>
+    <servlet-name>jsWrite</servlet-name>
+    <servlet-class>com.atlassian.bamboo.js.JavascriptWriteServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>displayChart</servlet-name>
+    <servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>action</servlet-name>
+    <servlet-class>org.apache.struts2.dispatcher.ng.servlet.StrutsServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>deliverMessage</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.messaging.DeliverMessageServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>servlet-module-container-servlet</servlet-name>
+    <servlet-class>com.atlassian.plugin.servlet.ServletModuleContainerServlet</servlet-class>
+  </servlet>
+
+   <!-- JCAPTCHA -->
+  <servlet>
+    <servlet-name>jcaptcha</servlet-name>
+    <servlet-class>com.atlassian.bamboo.servlet.BambooCaptchaServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>classpath</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.ClasspathServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>pluginArtifacts</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.PluginArtifactServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>agentInstallerServlet</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.classserver.AgentInstallerServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>jmsServlet</servlet-name>
+    <servlet-class>com.atlassian.bamboo.agent.messaging.SpyHttpTunnelServlet</servlet-class>
+  </servlet>
+
+  <!-- ============================================================================================ Servlet Mappings -->
+
+  <servlet-mapping>
+    <servlet-name>file-server</servlet-name>
+    <url-pattern>/download/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>file-server</servlet-name>
+    <url-pattern>/deployment-download/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>file-server</servlet-name>
+    <url-pattern>/global-artifact/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>classpath</servlet-name>
+    <url-pattern>/agentServer/classpath.zip</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>pluginArtifacts</servlet-name>
+    <url-pattern>/agentServer/plugins.zip</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>pluginArtifacts</servlet-name>
+    <url-pattern>/agentServer/bundled-plugins.zip</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>agentInstallerServlet</servlet-name>
+    <url-pattern>/agentServer/agentInstaller/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>file-server</servlet-name>
+    <url-pattern>/artifact/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>getResource</servlet-name>
+    <url-pattern>/agentServer/GetResource</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>getPackage</servlet-name>
+    <url-pattern>/agentServer/GetPackage</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>getJar</servlet-name>
+    <url-pattern>/agentServer/GetJar</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>getResources</servlet-name>
+    <url-pattern>/agentServer/GetResources</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>jsWrite</servlet-name>
+    <url-pattern>/decorators/jsWrite</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>displayChart</servlet-name>
+    <url-pattern>/chart/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/403.action</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/404.action</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>/500.action</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>deliverMessage</servlet-name>
+    <url-pattern>/agentServer/message</url-pattern>
+  </servlet-mapping>
+
+
+  <servlet-mapping>
+    <servlet-name>servlet-module-container-servlet</servlet-name>
+    <url-pattern>/plugins/servlet/*</url-pattern>
+  </servlet-mapping>
+
+    <!-- JCAPTCHA -->
+  <servlet-mapping>
+    <servlet-name>jcaptcha</servlet-name>
+    <url-pattern>/captcha</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>jmsServlet</servlet-name>
+    <url-pattern>/jmsServlet</url-pattern>
+  </servlet-mapping>
+
+
+  <!-- ============================================================================================== General Config -->
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <welcome-file-list>
+    <welcome-file>start.action</welcome-file>
+  </welcome-file-list>
+
+  <!-- ================================================================================================= Error Pages -->
+  <error-page>
+    <error-code>403</error-code>
+    <location>/403.action</location>
+  </error-page>
+
+  <error-page>
+    <error-code>404</error-code>
+    <location>/404.action</location>
+  </error-page>
+
+  <error-page>
+    <error-code>500</error-code>
+    <location>/500.action</location>
+  </error-page>
+
+</web-app>

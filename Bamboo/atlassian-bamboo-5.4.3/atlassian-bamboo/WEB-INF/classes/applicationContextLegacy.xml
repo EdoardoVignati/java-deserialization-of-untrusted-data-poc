@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd"
+       default-lazy-init="true">
+  <!--
+  The administrationConfiguration is stateful so do not inject this into any long lived objects,
+  It should only be used for Actions. Instead inject administrationConfigurationAccessor or administrationConfigurationPersister.
+  -->
+    <bean id="administrationConfiguration" factory-bean="persister" factory-method="getAdministrationConfiguration" scope="prototype"/>
+
+    <bean id="persister" class="com.atlassian.bamboo.persister.file.FileBasedPersister">
+        <constructor-arg ref="bootstrapManager"/>
+        <constructor-arg ref="xStreamManager"/>
+    </bean>
+
+    <!-- @deprecated since 5.0 -->
+    <bean id="administrationConfigurationManager" class="com.atlassian.bamboo.configuration.DefaultAdministrationConfigurationManager" plugin:available="true">
+      <constructor-arg ref="persister"/>
+      <constructor-arg ref="administrationConfigurationAccessor"/>
+      <constructor-arg ref="administrationConfigurationPersister"/>
+    </bean>
+
+    <bean id="administrationConfigurationAccessor" class="com.atlassian.bamboo.configuration.AdministrationConfigurationAccessorImpl" plugin:available="true">
+      <constructor-arg ref="persister"/>
+      <constructor-arg ref="featureManager"/>
+    </bean>
+
+    <bean id="administrationConfigurationPersister" class="com.atlassian.bamboo.configuration.AdministrationConfigurationPersisterImpl" plugin:available="true">
+      <constructor-arg ref="persister"/>
+    </bean>
+
+</beans>

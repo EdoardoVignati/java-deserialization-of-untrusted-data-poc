@@ -1,0 +1,60 @@
+@import "../../global.less";
+
+.custom-build {
+    .variables-list {
+        position: relative;
+        top: -5px;
+
+        > thead {
+            .hide-accessibly();
+        }
+        > tfoot {
+            > tr:first-child {
+                border-bottom: 0;
+
+                > td {
+                    border-top: 0;
+                    padding: 3px 0 0;
+                }
+            }
+            .variables-override {
+                border: 0;
+                font-size: inherit;
+                line-height: 1;
+            }
+        }
+        > tbody > tr {
+            &:hover {
+                background: transparent;
+
+                .inline-edit-view {
+                    background: transparent;
+                    border: 0;
+                    padding: 4px;
+
+                    &:after {
+                        content: normal;
+                    }
+                }
+            }
+            &:first-child {
+                background: transparent;
+
+                > td {
+                    border-top: 0;
+                    padding-top: 5px;
+                }
+                & + tr {
+                    border-top: 1px solid @dividerColor;
+                }
+            }
+            > td:first-child {
+                padding-left: 0;
+            }
+        }
+        .inline-edit-view {
+            display: block;
+            width: auto;
+        }
+    }
+}

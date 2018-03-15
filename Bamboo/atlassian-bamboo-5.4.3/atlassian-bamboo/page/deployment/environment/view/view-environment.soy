@@ -1,0 +1,65 @@
+{namespace bamboo.page.deployment.environment.view}
+
+/**
+* @param environment
+* @param deploymentResults
+* @param deploymentResultsCount
+* @param latestDeploymentResult
+* @param? currentUrl
+*/
+{template .environmentHistory}
+    <div id="environment">
+        {if $latestDeploymentResult}
+            <div class="environment-status">
+                <h2>{getText('deployment.environment.current')}</h2>
+                <dl class="details-list">
+                     <dt>{getText('deployment.environment.result.version')}</dt>
+                     <dd>{call bamboo.feature.deployment.result.version}
+                             {param deploymentVersion: $latestDeploymentResult.deploymentVersion /}
+                             {param deploymentVersionName: $latestDeploymentResult.deploymentVersionName /}
+                             {param hideLozenge: true/}
+                             {param showBranch: true/}
+                             {param subtle: true/}
+                         {/call}
+                     </dd>
+                     <dt>{getText('deployment.environment.result')}</dt>
+                     <dd>
+                         {call bamboo.feature.deployment.result.environmentState}
+                             {param deploymentResult: $latestDeploymentResult /}
+                             {param showDetailsLinkAlways: true/}
+                         {/call}
+                     </dd>
+                     <dt>{getText('deployment.environment.result.date')}</dt>
+                     <dd>{call bamboo.feature.deployment.result.finishedTimeOrDuration data="$latestDeploymentResult" /}</dd>
+                     <dt>{getText('deployment.environment.result.trigger')}</dt>
+                     <dd>{$latestDeploymentResult.reasonSummary|noAutoescape}</dd>
+                </dl>
+            </div>
+        {/if}
+        {if $latestDeploymentResult.lifeCycleState =='FINISHED' and $latestDeploymentResult.deploymentState == 'FAILED'}
+            <div class="environment-warning">
+                <div class="image"></div>
+                <h4>{getText('deployment.environment.result.warning')}</h4>
+            </div>
+        {/if}
+        <div class="environment-history">
+            {if $deploymentResults and length($deploymentResults) > 0}
+                <h2>{getText('deployment.environment.history')}</h2>
+                <p>{getText('deployment.environment.history.description')}</p>
+                {call bamboo.feature.deployment.result.resultList.container}
+                    {param id: 'environment-history-table' /}
+                    {param environmentId: $environment.id /}
+                    {param results: $deploymentResults /}
+                    {param count: $deploymentResultsCount /}
+                    {param currentUrl: $currentUrl /}
+                {/call}
+            {elseif not $latestDeploymentResult}
+                <div class="environment-empty">
+                    <div class="image"></div>
+                    <h2>{getText('deployment.environment.history.none.title')}<h2>
+                    <p>{getText('deployment.environment.history.none.description')}</p>
+                </div>
+            {/if}
+        </div>
+    </div>
+{/template}

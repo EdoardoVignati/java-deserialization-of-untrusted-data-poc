@@ -1,0 +1,16 @@
+{namespace bamboo.widget.dialog}
+
+/**
+ * Displays loading mask
+ */
+{template .loading}
+    <span class="icon icon-loading aui-dialog-content-loading"></span>
+{/template}
+
+/**
+ * Displays dialog content
+ * @param content
+ */
+{template .content}
+    <div>{$content|noAutoescape}</div>
+{/template}

@@ -1,0 +1,6 @@
+[#-- @ftlvariable name="action" type="com.atlassian.bamboo.webwork.StarterAction" --]
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.webwork.StarterAction" --]
+[#import "/fragments/plan/displayWideBuildPlansList.ftl" as planList]
+[#compress] [#-- this cuts down template rendering by 30% (measured on localhost connection!) --]
+    [@planList.displayWideBuildPlansList builds=plansForDashboard.items /]
+[/#compress]

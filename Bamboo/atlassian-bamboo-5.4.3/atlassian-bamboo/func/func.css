@@ -1,0 +1,154 @@
+body
+{
+	font-family: 'Tahoma';
+	font-size: 14px;
+}
+
+a
+{
+	text-decoration: none;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}
+
+.hidden
+{
+	display: none;
+}
+
+.tools a
+{
+	text-decoration: none;
+}
+
+
+.tools a:hover
+{
+	text-decoration: underline;
+}
+
+.deleteLink
+{
+	float: right;
+	font-size: 10px;
+	padding: 3px;
+	border: 1px dashed #527BBD;
+	background-color: #F4F7FD;
+}
+
+
+#urlForm
+{
+	margin: 3px;
+	padding: 3px; 
+}
+
+#urlForm a
+{
+	font-size: 10px;
+}
+
+input:focus
+{
+    background-color: #ffffff;
+}
+
+input
+{
+    background-color: #efefef;
+	border: 1px solid #cccccc;
+}
+
+ul
+{
+	text-align: left;
+}
+#currentUrl
+{
+	width: 100%;
+}
+
+#frameHolder
+{
+    width: 65%;
+    height: 600px;
+	border: 1px solid #527BBD;
+	margin: 5px 5px 5px 5px;
+}
+
+.othercrap
+{    
+	width: 65%;
+	margin: 5px 5px 5px 5px;
+}
+
+#frameHolderHolder
+{
+}
+
+#commands
+{
+	float: right;
+	height: 95%;
+	width: 32%;
+	border: 1px solid #527BBD;
+	background-color: #DEE7F7;
+	color: #62326F !important;
+	font-family: "lucida console", sans-serif;
+}
+
+#commandsText
+{
+    width: 30%;
+    height: 20%;
+    position: fixed;
+    bottom: 25px;
+	right: 20px;
+	filter:alpha(opacity=50);
+	opacity: 0.5;
+	-moz-opacity:0.5;
+}
+
+.tools
+{
+	background-color: #F4F7FD;
+	border: 1px dashed #527BBD;
+}
+
+#commands h2, h2.floater
+{
+	background-color: #F4F7FD;
+	border: 1px dashed #527BBD;
+	font-size: 10px;
+	text-transform: lowercase;
+	letter-spacing: 3px;
+	float: left;
+	margin: -9px 0px 0px 10px;;
+	padding: 3px;
+	font-weight: normal;
+}
+
+
+#commandsList
+{
+	
+	list-style: cjk-ideographic;
+	font-family: "lucida console", sans-serif;
+}
+
+#commandsList li
+{
+	padding: 3px;
+	font-family: "Courier New", sans-serif;
+	border: 1px solid #D5DFF5;
+}
+
+#commandsList li:hover
+{
+}
+
+
+

@@ -1,0 +1,173 @@
+@import "../../global.less";
+
+.in-place-edit .in-place-edit-view .icon-edit {
+    display: none;
+}
+.in-place-edit .in-place-edit-view:hover .icon-edit {
+    display: inline-block;
+}
+
+// Variables config
+.inline-edit-view {
+    display: inline-block;
+    min-height: 1.4em;
+    padding: 4px;
+    width: 95%;
+}
+.inline-edit-field + .icon-loading {
+    margin-left: -24px;
+}
+
+.variables-list {
+    .error {
+        color: #D04437;
+        margin-top: 5px;
+    }
+    .operations {
+        text-align: left;
+        vertical-align: middle;
+        width: auto;
+    }
+    .delete-variable {
+        padding: @halfSpacing;
+    }
+    .inline-edit-field {
+        &.text,
+        &.select {
+            display: none;
+            margin: 0;
+            max-width: 300px;
+            margin-right: 4px;
+        }
+    }
+    .bamboo-single-select {
+        .bamboo-single-select-field {
+            &.text,
+            &.select {
+                max-width: 500px;
+            }
+        }
+    }
+    .input-password {
+        display: inline;
+        max-width: 500px;
+
+        input {
+            float: left;
+            margin-right: 4px;
+            max-width: 300px;
+        }
+        button {
+            float: left;
+        }
+    }
+    .add-variable {
+        &,
+        &:hover {
+            background: @primaryHighlightColor;
+        }
+        &.inactive {
+            background: transparent;
+        }
+        .inline-edit-field {
+            display: inline;
+        }
+        .bamboo-single-select.inline-edit-field {
+            display: inline-block;
+        }
+        .hidden {
+            display: none;
+        }
+    }
+
+    > tbody > tr {
+        .transition(background 0.3s ease);
+        vertical-align: top;
+
+        &:hover {
+            background: #f0f0f0;
+            .inline-edit-view {
+                background: @contentBackgroundColor;
+                border: 1px solid @dividerColor;
+                padding: 3px;
+                position: relative;
+                &:after {
+                    background: url(../../../images/edit_12.png) no-repeat;
+                    content: "";
+                    height: 12px;
+                    margin-top: -6px;
+                    position: absolute;
+                    right: 6px;
+                    top: 50%;
+                    width: 12px;
+                }
+            }
+        }
+
+        &.active {
+            background: @primaryHighlightColor;
+            .text,
+            .select {
+                display: block;
+            }
+            .createinput-password input {
+                max-width: 300px;
+            }
+            .clear-variable {
+                margin-left: 4px;
+            }
+            .operations {
+                a {
+                    display: none;
+                }
+                a.cancel-variable {
+                    padding-left: 6px;
+                }
+                a.cancel-variable,
+                button {
+                    display: inline;
+                }
+            }
+        }
+
+        small > div {
+            clear: both;
+        }
+    }
+
+    input::-ms-clear,
+    input::-ms-reveal {
+        display: none;
+    }
+}
+.variables-hint {
+    color: @secondaryTextColor;
+    margin-top: @baseSpacing;
+}
+
+// Results
+.variables {
+    .variables-container {
+        overflow: auto;
+    }
+    table {
+        margin-top: @baseSpacing;
+    }
+    td {
+        padding: 0;
+        vertical-align: top;
+    }
+    tr + tr > td {
+        padding-top: @baseSpacing;
+    }
+    td.name {
+        color: @secondaryTextColor;
+        padding-right: @baseSpacing;
+        white-space: nowrap;
+    }
+}
+
+.variable-override-text {
+    padding-top: 2px;
+    padding-left: 4px;
+}

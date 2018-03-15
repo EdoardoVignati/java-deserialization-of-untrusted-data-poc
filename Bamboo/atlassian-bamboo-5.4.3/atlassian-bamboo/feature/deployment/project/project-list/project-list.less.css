@@ -1,0 +1,7 @@
+.dashboard-project{padding-bottom:10px;}.dashboard-project table.aui>tbody tr.error td.deployment{border-right:5px #d04437 solid;}
+.dashboard-project table.aui>tbody tr.first{border:0px;border-top:1px solid #ccc;}.dashboard-project table.aui>tbody tr.first td{border-bottom:1px solid #ccc;border-top:1px solid #ccc;}
+.dashboard-project table.aui>tbody tr{border-bottom:0px;}.dashboard-project table.aui>tbody tr td{vertical-align:middle;border-bottom:1px solid #ccc;border-top:1px solid #ccc;height:28px;}.dashboard-project table.aui>tbody tr td .release-info{float:left;margin-right:10px;margin-top:4px;}
+.dashboard-project table.aui>tbody tr td .reviewed-user-avatar{margin-top:4px;}
+.dashboard-project table.aui>tbody tr td.deployment{border:0px;}
+.dashboard-project table.aui>tbody tr td.operations a{margin-right:2px;}
+.dashboard-project table.aui>tbody tr.last td{border-bottom:1px solid #ccc;}

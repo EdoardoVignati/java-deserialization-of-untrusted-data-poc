@@ -1,0 +1,132 @@
+<ehcache updateCheck="false">
+
+  <!--
+  Cache configuration. These will applied to caches programmatically created through
+          the CacheManager.
+
+          The following attributes are required:
+
+          maxElementsInMemory            - Sets the maximum number of objects that will be created in memory
+          eternal                        - Sets whether elements are eternal. If eternal,  timeouts are ignored and the
+                                           element is never expired.
+          overflowToDisk                 - Sets whether elements can overflow to disk when the in-memory cache
+                                           has reached the maxInMemory limit.
+
+          The following attributes are optional:
+          timeToIdleSeconds              - Sets the time to idle for an element before it expires.
+                                           i.e. The maximum amount of time between accesses before an element expires
+                                           Is only used if the element is not eternal.
+                                           Optional attribute. A value of 0 means that an Element can idle for infinity.
+                                           The default value is 0.
+          timeToLiveSeconds              - Sets the time to live for an element before it expires.
+                                           i.e. The maximum time between creation time and when an element expires.
+                                           Is only used if the element is not eternal.
+                                           Optional attribute. A value of 0 means that and Element can live for infinity.
+                                           The default value is 0.
+          diskPersistent                 - Whether the disk store persists between restarts of the Virtual Machine.
+                                           The default value is false.
+          diskExpiryThreadIntervalSeconds- The number of seconds between runs of the disk expiry thread. The default value
+                                           is 120 seconds.
+
+  -->
+
+  <defaultCache
+      maxElementsInMemory="500"
+      eternal="true"
+      timeToIdleSeconds="0"
+      timeToLiveSeconds="0"/>
+
+  <cache name="com.atlassian.bamboo.security.acegi.acls.HibernateAclImpl"
+         maxElementsInMemory="5000"
+         eternal="false"
+         timeToIdleSeconds="0"
+         timeToLiveSeconds="0"/>
+
+  <cache name="com.atlassian.bamboo.security.acegi.acls.HibernateAccessControlEntryImpl"
+         maxElementsInMemory="5000"
+         eternal="false"
+         timeToIdleSeconds="0"
+         timeToLiveSeconds="0"/>
+
+  <!--
+  Users
+
+  LDAPUserManagerReadOnly.*.users stores the individual users, if you have difficulties with
+      Bamboo picking up new user additions in the LDAP repository you will need to alter this configuration.
+
+  LDAPUserManagerReadOnly.*.users_ro stores whether or not the users are read only. This will
+      have no effect on the functionality of Bamboo but may be looked into for performance and
+      memory tuning purposes.
+
+  LDAPUserManagerReadOnly.*.repository stores which repository the user belongs to. As Bamboo
+      does not yet support multiple repositories this will also have no effect on functionality but may be
+      looked into for performance and memory tuning purposes.
+
+  Groups
+
+  LDAPGroupManagerReadOnly.*.groups stores the available groups in LDAP. If you wish Bamboo to
+      pick up changes made to groups then this will need to configured.
+
+  LDAPGroupManagerReadOnly.*.groups_hasMembership and LDAPGroupManagerReadOnly.*.groups_getGroupsForUser
+      stores the associations between users and groups. If you wish Bamboo to pick up changes made to
+      group memberships then this will need to configured.
+
+  LDAPGroupManagerReadOnly.*.repositories stores which repository the group belongs to. As Bamboo does
+      not yet support multiple repositories this also will have no effect on functionality but may also
+      be looked into for performance and memory tuning purposes.
+
+  ** In all of the examples below the timeout is set to 5 minutes.  Replace "myLdapRepository" with the key
+    of your LDAP repository as defined in .../webapp/WEB-INF/classes/atlassian-user.xml
+
+  -->
+
+  <!--
+  <cache name="com.atlassian.user.impl.ldap.LDAPUserManagerReadOnly.myLdapRepository.users"
+         maxElementsInMemory="500"
+         eternal="false"
+         timeToIdleSeconds="300"
+         timeToLiveSeconds="300"
+      />
+  <cache name="com.atlassian.user.impl.ldap.LDAPUserManagerReadOnly.myLdapRepository.users_ro"
+         maxElementsInMemory="500"
+         eternal="false"
+         timeToIdleSeconds="300"
+         timeToLiveSeconds="300"
+      />
+  <cache name="com.atlassian.user.impl.ldap.LDAPUserManagerReadOnly.myLdapRepository.repository"
+         maxElementsInMemory="500"
+         eternal="false"
+         timeToIdleSeconds="300"
+         timeToLiveSeconds="300"
+      />
+  <cache name="com.atlassian.user.impl.ldap.LDAPGroupManagerReadOnly.myLdapRepository.groups"
+         maxElementsInMemory="500"
+         eternal="false"
+         timeToIdleSeconds="300"
+         timeToLiveSeconds="300"
+      />
+  <cache name="com.atlassian.user.impl.ldap.LDAPGroupManagerReadOnly.myLdapRepository.groups_hasMembership"
+         maxElementsInMemory="500"
+         eternal="false"
+         timeToIdleSeconds="300"
+         timeToLiveSeconds="300"
+      />
+  <cache name="com.atlassian.user.impl.ldap.LDAPGroupManagerReadOnly.myLdapRepository.groups_getGroupsForUser"
+         maxElementsInMemory="500"
+         eternal="false"
+         timeToIdleSeconds="300"
+         timeToLiveSeconds="300"
+      />
+  <cache name="com.atlassian.user.impl.ldap.LDAPGroupManagerReadOnly.myLdapRepository.repositories" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="300" />
+  -->
+
+  <cache name="com.atlassian.user.impl.hibernate.HibernateGroupManager.hibernateRepository.groups" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateGroupManager.hibernateRepository.groups_getGroupsForUser" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateGroupManager.hibernateRepository.groups_hasMembership" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateGroupManager.hibernateRepository.repositories" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateUserManager.hibernateRepository.users" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateUserManager.hibernateRepository.groups_getGroupsForUser" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateUserManager.hibernateRepository.repository" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.HibernateUserManager.hibernateRepository.users_ro" maxElementsInMemory="5000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="0" overflowToDisk="false"/>
+  <cache name="com.atlassian.user.impl.hibernate.properties.HibernatePropertySetFactory.propertysets" maxElementsInMemory="1000" eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="0" overflowToDisk="false"/>
+</ehcache>

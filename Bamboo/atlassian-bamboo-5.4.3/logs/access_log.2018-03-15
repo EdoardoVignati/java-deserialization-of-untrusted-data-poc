@@ -1,0 +1,5 @@
+127.0.0.1 [15/Mar/2018:11:36:05 +0100] "GET / HTTP/1.1" 200 2541 1188 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
+127.0.0.1 [15/Mar/2018:11:36:05 +0100] "GET / HTTP/1.1" 200 2541 5014 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
+127.0.0.1 [15/Mar/2018:11:36:06 +0100] "GET /rest/api/latest/server?_=1521110166189 HTTP/1.1" 200 56 4 "http://localhost:8085/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
+127.0.0.1 [15/Mar/2018:11:36:06 +0100] "GET /rest/nav-links-analytics-data/1.0/ HTTP/1.1" 200 32 5 "http://localhost:8085/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"
+127.0.0.1 [15/Mar/2018:11:36:11 +0100] "GET /rest/api/latest/server?_=1521110171193 HTTP/1.1" 200 56 5 "http://localhost:8085/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0"

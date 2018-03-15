@@ -1,0 +1,212 @@
+html,body,p,div,h1,h2,h3,h4,h5,h6,img,ul,ol,li,dl,dt,dd,pre,form,fieldset,textarea,input,select,option {margin:0;padding:0;}
+button::-moz-focus-inner {border: 0;}
+body {color:#333;font:12px/1.4 arial,tahoma,verdana,sans-serif; background:#fff}
+table, caption {
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+}
+/* ie specific for ajs */
+html, body {*height:auto;*overflow:auto;}
+pre {font-family:monospace;font-size:1.2em;}
+p {margin-bottom:1em;}
+h1 {font-size:2.4em;}
+h2 {font-size:1.8em;}
+h3 {font-size:1.3em;}
+h4 {font-size:1.2em;}
+h5 {font-size:1em;}
+h6 {font-size:.9em;}
+img,a img,fieldset {border:0;}
+ul {margin:0 0 1em 2em;}
+ol {list-style-type:decimal;list-style-position:outside;padding-left:2.5em;}
+a {color:#036;cursor:pointer;outline:none;text-decoration:underline;}
+a:link,a:visited {color:#036;}
+a:hover,a:active {color:#369;}
+a:hover {text-decoration:none;}
+table {border-collapse:collapse;}
+
+.view .results-count a,
+.view .table-footer a {text-decoration:underline;}
+.view a, .view a:link, .view a:visited {color:#036;text-decoration:none}
+.view a:hover, .view a:active {color:#369;text-decoration:underline;}
+.view h3 {margin-bottom:.5em;}
+.view span.created {color:#c00;}
+.view span.resolved {color:#090;}
+.view {*zoom:1}
+.chart {text-align:center;}
+.chart p {margin-bottom:0.2em;}
+.chart img {margin:0 auto;}
+
+.canvas #chart {float:left;}
+.canvas table.aui {float:left;*font-size:12px;}
+.canvas table.aui td, .gadget.canvas table.aui th {padding:0.333em;}
+
+select {padding:1px;}
+option {padding: 0 .5em;}
+
+body .mmlib_table {font: 700 12px/1.4 arial,tahoma,verdana,sans-serif; padding:5px; background:#FFFFCE;}
+body .mmlib_table * {font: 700 12px/1.4 arial,tahoma,verdana,sans-serif;}
+body .mmlib_table .mmlib_xlink {background: transparent url('../../resources/com.atlassian.gadgets.dashboard%3Adashboard/css/images/icoblack_delete.png') no-repeat 0 0; display: block; float: left; height: 13px; margin: 0.2em 0 0 0; text-indent: -9999px; width: 13px;}
+body.login {padding:5px 10px; font-size:0.75em;}
+body.oauth-view-approval #config,
+body.oauth-view-approval .gadget,
+body.login .gadget {display:none;}
+body.has-footer-options.config-unavailable .view {padding:10px 10px 0 10px; overflow:hidden;}
+body.has-footer-options {padding-bottom:20px;} /* space for absolute positioned footer */
+
+.fullyCentered {vertical-align: middle;text-align: center;margin: auto;}
+.hidden {display:none;}
+.empty-results {padding:0.5em;text-align:left;}
+
+form.gdt {padding:.5em 1em 0;}
+form.gdt.top-label .text, form.gdt.top-label .textarea, form.gdt.top-label .select {width:225px;}
+form.gdt.top-label .multi-select {min-width:225px;}
+
+form.aui div div {padding-left:0;}
+form.aui.top-label div.error-message {margin-bottom:10px;padding:10px 10px 10px 30px;}
+form.aui.top-label p {margin-bottom:1em;}
+form.aui div.builder-container {clear:none; padding:0; margin:0; min-height:0;}
+form.aui .group div {margin-bottom:0;padding-bottom:0.25em;}
+form.aui div img {position: relative;top: 3px;}
+
+body.loading-small .gadget,
+body.config-active.loading-small .gadget,
+body.loading-small #config,
+body.config-active.loading-small #config {position:absolute;left:-9999px;width:100%;}
+
+body.loading .gadget,
+body.config-active.loading .gadget,
+body.loading #config,
+body.config-active.loading #config {position:absolute;left:-9999px;width:100%;}
+
+body.loading {background:url("../../../images/gadgets/loading.gif") center no-repeat; height:100%;}
+body.loading-small {background:url("../../../images/gadgets/loading_100.gif") center no-repeat; height:100%;}
+
+.gadget.needs-min {min-height: 5em}
+body.config-active .gadget.needs-min {min-height: 0}
+
+.gadget h1 {text-align:center;}
+.gadget .footer {position:absolute; left:0; bottom:0; text-align:right; width:100%;padding:0;border-top:none;}
+.gadget .footer .footer-content {padding:0 10px 10px;*display:inline-block;}
+.gadget .footer .footer-content:after {content: ".";display: block; height: 0; clear: both; visibility: hidden; }
+.gadget .footer button {position:static;margin:0 0 .083em .5em; border:none; background: url("../../../images/gadgets/configure.png") 0 0 no-repeat; float:right; text-indent:-9999px; width:16px; height:16px;}
+.gadget .footer button:focus{outline:none;}
+.gadget .footer button:hover {cursor:pointer; background-position:0 -16px;}
+.gadget .footer button.reload{width:16px; background-image:url("../../../images/gadgets/btn-reload.png");margin-right:0.5em;}
+button.oauth {position:absolute;left:50%;top:50%;margin:0 0 0 -60px;}
+button.oauth {float:none;}
+.info button.oauth {position:static;margin:0;}
+.gadget .footer button.oauth{background-image:url("../../../images/gadgets/btn-unlock.png");}
+.gadget .footer .oauth-approved {float:left; background-image:url("../../../images/gadgets/btn-locked.png"); margin-left:10px;}
+
+/* ie6 */
+.gadget .footer button,
+.gadget .footer span {_background-image:url("../../../images/gadgets/ie/configure.gif")}
+.gadget .footer button.reload {_background-image:url("../../../images/gadgets/ie/btn-reload.gif")}
+/* //ie6 */
+
+form.aui label.overlabel {color:#999;}
+form.aui label.overlabel-apply {color:#999;left:5px;line-height:1.4;position:absolute;text-align:left;top:0;z-index:1;}
+
+.oauth img {margin-right:0.25em; top:0.1em; position:relative; }
+.oauth span {position:relative; top: -0.25em; *top:-0.1em;}
+
+.config-active .gadget .footer .oauth-approved {position:absolute; bottom:0; left:0;}
+.config-active .gadget .view {display:none;}
+.gadget .view:after {content: ".";display: block; height: 0; clear: both; visibility: hidden; }
+.buttons {padding-top:5px;*display:inline-block;}
+.buttons:after { content: ".";display: block; height: 0; clear: both; visibility: hidden;}
+.buttons button {float:left; margin-right:5px;}
+
+table.aui {border:1px solid #ccc; border-width:1px 0 1px 1px; min-width:300px; border-collapse:separate;}
+table.aui thead th {background:url("../../../images/gadgets/fhbg.gif"); white-space:nowrap; font-weight:bold;}
+table.aui thead th div {padding-right:10px;}
+table.aui thead th.asc div {background:url("../../../images/gadgets/up.png") 100% center no-repeat;}
+table.aui thead th.desc div {background:url("../../../images/gadgets/dn.png") 100% center no-repeat;}
+table.aui thead th:hover {cursor:pointer;}
+table.aui tbody th {white-space:nowrap;}
+table.aui .even td, table .even th {background-color:#F7F7F7;}
+table.aui th, table.aui td {padding:5px 10px; text-align:left; font-weight:normal; border-left:1px solid #fff; border-right:1px solid #bbb; color:#444;}
+
+ /* form labels do not show without this in Internet Explorer */
+
+#message .close {position:absolute; display:block; text-indent:-9999px; top:-13px; right:-13px; width: 30px; height:30px; background: transparent url( "../../../images/button-close.png") 0 0 no-repeat; padding:0; border:none; cursor:pointer;}
+#message div {position:relative;}
+#message ul {margin-top:5px;}
+
+div.error-message, div.error-inner {padding:10px 10px 10px 30px;background: #fcc url(../../../images/icons/serious_warning_16.gif ) 10px 10px no-repeat; border: solid 1px #c00;}
+div.info-inner, div.info {text-align:left; padding:10px 10px 10px 30px;background: #D8E4F1 url(../../../images/icons/information.gif ) 10px 10px no-repeat; border: solid 1px #3c78b5;}
+div.info.footer-message {border-width:0 0 1px 0;overflow:hidden;}
+
+form.aui .field-value.success {color:#006400;}
+.filterpicker-value-name {margin-bottom:.25em;}
+a.advanced-search {font-size:.9em;}
+
+div#quickfind-container {clear:none;margin-bottom:0;padding:0;position:relative;width:248px;}
+div#quickfind-container input {width: 250px; }
+div#quickfind-container label {width: 250px; left: 5px; margin:0; float:none}
+div#quickfind-container div {padding:0; margin:0}
+div#quickfind-container div.suggestions {max-width: 248px; overflow-y: auto; max-height:10em;*height:10em!important }
+div#quickfind-container div.suggestions h3 {padding-left:0.2em}
+div#quickfind-container div.suggestions span {padding-left:0.5em}
+div#quickfind-container div.suggestions .filter-name {white-space:nowrap; display: inline}
+div#quickfind-container div.suggestions .filter-desc {white-space:nowrap; display: inline; color: #bbb;}
+div#quickfind-container div.suggestions li.active .filter-desc {white-space:nowrap; color: #fff;}
+div#quickfind-container span.inline-error {color:#CC0000; font-weight:bold;}
+
+
+form.gdt.top-label div#quickfind-container {width:223px;}
+form.gdt.top-label div#quickfind-container div.suggestions {max-width:223px;}
+form.gdt.top-label div#quickfind-container input,
+form.gdt.top-label div#quickfind-container label {width:225px;}
+
+form.gdt input.proj-cat-option {margin-left: 1em}
+
+/** global resets */
+.gadget .aui-dd-parent .aui-dropdown {border:1px solid #bbb;background-color:#fff;margin-top:0;}
+
+.gadget .aui-dd-parent .aui-dropdown {*clear:both;}
+.gadget .aui-dd-parent .aui-dropdown ul li {*height:1%;}
+.gadget .aui-dd-parent .aui-dropdown ul li a,
+.gadget .aui-dd-parent .aui-dropdown li a {background-color:#fff;color:#333;font-size:.9em;text-decoration:none;*width:85px}
+.gadget .aui-dd-parent .aui-dropdown li.active a,
+.gadget .aui-dd-parent .aui-dropdown li.active a:focus,
+.gadget .aui-dd-parent .aui-dropdown li.active a:hover {background-color:#e0e0e0;}
+.gadget .aui-dd-parent .aui-dropdown.loading {height:20px; width:20px; padding:0; overflow:hidden; text-indent:-9999px; background:#fff url("../../../images/icons/wait.gif") center no-repeat!important;}
+.gadget .aui-dd-parent .aui-dropdown.loading * {display:none;}
+
+
+/* tools dropdown. Appears in containers other then atlassian, in replacement for the chrome dropdown */
+.footer .aui-dd-parent {float:right;margin:0 2px 2px 0;*width:1%;}
+.footer .aui-dd-parent a.aui-dd-link {height:16px;display:block;padding:2px 4px 0 14px;background-position:3px 3px;}
+.footer .aui-dd-parent a.aui-dd-link {background:url('../../../images/icons/tools_12.png') no-repeat 4px 3px;padding-left:1.5em;display:block;*display:inline-block;}
+.footer .aui-dd-parent a.aui-dd-link:hover, .footer .aui-dd-parent.active a.aui-dd-link {background-color:#325C82;}
+.footer .aui-dd-parent a.aui-dd-link span {background: url("../../../images/menu_indicator_for_light_backgrounds.gif") 97% 5px no-repeat;display:block;padding-right:10px;height:1em;}
+.footer .aui-dd-parent a.aui-dd-link:hover span, .footer .aui-dd-parent.active a.aui-dd-link  span {background-image: url("../../../images/menu_indicator_for_dark_backgrounds.gif");}
+.footer .aui-dd-parent .aui-dropdown a {text-align:left;}
+
+/* override styling to cause dropdown to appear above trigger rather then default below */
+.footer .aui-dd-parent .aui-dropdown {top:auto!important;bottom:27px;margin:0;}
+.footer .aui-dd-parent .aui-shadow {top:auto!important;bottom:16px;}
+.footer .aui-dd-parent .dropdown-shim {display:none!important;}
+
+
+#issuetable {margin:0 0 0.25em;width:100%;}
+#issuetable .issuetype {width:1%;}
+.results-wrap {margin:0;overflow-x:auto;}
+.results-count {margin:0 0 0.25em 0.5em;}
+.paging-table {margin-bottom:1.4em;}
+.pagination {margin-right:0.25em;}
+.empty-results {margin-top:0.5em;}
+
+/* fixes for, well, you know who */
+span.error {*border:none;*background-color:transparent;*background-image:none;*padding:0;}
+form.aui label,
+div#quickfind-container {*height:1%;}
+div#quickfind-container div.suggestions {*width:248px !important;*height:1%;}
+form.gdt.top-label div#quickfind-container div.suggestions {*width:223px;}
+.recent-commits table {*font-size:12px;}
+#issuetable {*width:auto;}
+.results-wrap {*overflow-x:auto;}
+

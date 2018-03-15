@@ -1,0 +1,118 @@
+{namespace bamboo.page.deployment.project}
+
+/**
+ * @param deploymentResult
+ * @param environment
+ * @param initialLoad
+ * @param logLinesToShow
+*/
+{template .viewDeploymentResult}
+    <h2>Details</h2>
+
+    {call .details}
+        {param deploymentResult: $deploymentResult/}
+        {param showAgent: true/}
+    {/call}
+
+    <div id="deploymentLogs">
+        {if $deploymentResult.logEntries and $deploymentResult.logEntries.logEntry and length($deploymentResult.logEntries.logEntry) > 0}
+            {let $logLinks}
+                {sp}<a href="{contextPath() + '/deployment-download/' + $environment.id + '/build_logs/' + $deploymentResult.key.key + '.log?disposition=attachment'}">{getText('deployment.logs.download')}</a>
+                {sp}or{sp}
+                <a id="view-deployment-log" href="{contextPath() + '/deployment-download/' + $environment.id + '/build_logs/' + $deploymentResult.key.key + '.log'}">{getText('deployment.logs.view')}</a>
+                {sp}{getText('deployment.logs.fullBuildLog')}
+            {/let}
+
+            {if $deploymentResult.lifeCycleState != 'FINISHED' and $deploymentResult.lifeCycleState != 'NOT_BUILT'}
+                {let $selectLinesToDisplay}
+                    <select name="linesToDisplay" id="linesToDisplay">
+                        <option value="10"{if $logLinesToShow == 10} selected="selected"{/if}>10</option>
+                        <option value="25" {if $logLinesToShow == 25} selected="selected"{/if}>25</option>
+                        <option value="50"{if $logLinesToShow == 50  or not $logLinesToShow} selected="selected"{/if}>50</option>
+                        <option value="100"{if $logLinesToShow == 100} selected="selected"{/if}>100</option>
+                    </select>
+                {/let}
+
+                <p>{getText('build.logs.linesToDisplay', $selectLinesToDisplay) |noAutoescape}{sp}{$logLinks|noAutoescape}</p>
+            {else}
+                <p>
+                   {getText('deployment.logs.totalLines', $deploymentResult.logEntries.size)}{sp}{$logLinks|noAutoescape}
+                </p>
+            {/if}
+        {/if}
+
+        <div id="buildLog">
+            {if $deploymentResult.logEntries and $deploymentResult.logEntries.logEntry and length($deploymentResult.logEntries.logEntry) > 0}
+                {call .logEntries data="$deploymentResult.logEntries"/}
+            {elseif $initialLoad}
+                 <div class="loading"><span class="icon icon-loading"></span>{sp}{getText('build.logs.fetching') |noAutoescape}</div>
+            {else}
+                <div class="nologs">{getText('deployment.environment.result.nologs')}</div>
+            {/if}
+        </div>
+    </div>
+{/template}
+
+/**
+ * @param logEntry despite being crappily named this is actually a list of log entries
+*/
+{template .logEntries}
+    <table>
+    {foreach $singleLogEntry in $logEntry}
+        <tr>
+            <td class="time">
+                {$singleLogEntry.formattedDate}
+            </td>
+            <td class="buildOutputLog {if $singleLogEntry.cssStyle}{$singleLogEntry.cssStyle}{/if}">{$singleLogEntry.log|noAutoescape}</td>
+        </tr>
+    {/foreach}
+    </table>
+{/template}
+
+/**
+ * @param deploymentResult
+*/
+{template .details}
+    <dl class="details-list">
+        <dt>{getText('deployment.environment.result.version')}</dt>
+        <dd>
+            {call bamboo.feature.deployment.result.version}
+                {param deploymentVersion: $deploymentResult.deploymentVersion /}
+                {param deploymentVersionName: $deploymentResult.deploymentVersionName /}
+                {param showBranch: true/}
+            {/call}
+        </dd>
+        <dt>{getText('deployment.environment.result.trigger')}</dt>
+        <dd>{$deploymentResult.reasonSummary|noAutoescape}</dd>
+        <dt>
+            {if $deploymentResult.finishedDate}
+                {getText('deployment.environment.result.date')}
+            {else}
+                {getText('deployment.environment.result.duration')}
+            {/if}
+        </dt>
+        <dd>
+            {call bamboo.feature.deployment.result.finishedTimeOrDuration data="$deploymentResult" /}
+        </dd>
+        {if $deploymentResult.finishedDate}
+            <dt class="finished-date">{getText('deployment.environment.result.duration')}</dt>
+            <dd>
+                {if $deploymentResult.startedDate}
+                    {elapsed_time($deploymentResult.startedDate,$deploymentResult.finishedDate)}
+                {/if}
+            </dd>
+        {/if}
+        {if $deploymentResult.agent}
+            <dt>{getText('deployment.environment.result.agent')}</dt>
+            <dd>{call widget.agent.renderAgentNameLink data="$deploymentResult.agent"/}
+            </dd>
+        {elseif $deploymentResult.agentId}
+            <dt>{getText('deployment.environment.result.agent')}</dt>
+            <dd>({$deploymentResult.agentId})</dd>
+        {/if}
+        <dt>{getText('deployment.environment.result.status')}</dt>
+        <dd class="status">
+            {call widget.status.deploymentResultStatusLozenge data="$deploymentResult"/}
+        </dd>
+    </dl>
+{/template}

@@ -1,0 +1,1461 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Spring context for Managers and Data Access Objects -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+  <bean id="featureManager" class="com.atlassian.bamboo.DefaultFeatureManager" plugin:available="true"/>
+
+  <bean id="planExecutionManager" class="com.atlassian.bamboo.plan.PlanExecutionManagerImpl" plugin:available="true">
+    <constructor-arg ref="buildExecutionManager"/>
+    <constructor-arg ref="chainExecutionManager"/>
+    <constructor-arg ref="buildDetectionActionFactory"/>
+    <constructor-arg ref="executionLimitsService"/>
+    <constructor-arg ref="executionStatusProvider"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="stopBuildManager"/>
+    <constructor-arg ref="triggerManager"/>
+    <constructor-arg ref="planExecutionLockService"/>
+    <constructor-arg ref="deploymentExecutionService"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="errorHandler"/>
+  </bean>
+
+  <bean id="nonBlockingPlanExecutionService" class="com.atlassian.bamboo.plan.NonBlockingPlanExecutionServiceImpl" plugin:available="true">
+    <constructor-arg ref="planExecutionManager"/>
+  </bean>
+
+  <bean id="planExecutionLockService" class="com.atlassian.bamboo.plan.PlanExecutionLockServiceImpl"/>
+
+  <bean id="vcsBranchManager" class="com.atlassian.bamboo.plan.branch.VcsBranchManagerImpl">
+    <constructor-arg ref="vcsBranchDao"/>
+  </bean>
+
+  <bean id="branchCommitInformationManager" class="com.atlassian.bamboo.plan.branch.BranchCommitInformationManagerImpl">
+    <constructor-arg ref="branchCommitInformationDao"/>
+    <constructor-arg ref="extendedAuthorManager"/>
+    <constructor-arg ref="authorCreatorService"/>
+    <constructor-arg ref="jiraBranchLinkingService"/>
+  </bean>
+
+  <!-- The BuildExecutionManager maintains transient states. So it's not really required to be part of any transactions -->
+  <bean id="buildExecutionManager" class="com.atlassian.bamboo.build.DefaultBuildExecutionManager" plugin:available="true">
+    <constructor-arg ref="scheduler"/>
+
+    <property name="planManager" ref="planManager"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+    <property name="resultsSummaryManager" ref="resultsSummaryManager"/>
+    <property name="buildLoggerManager" ref="buildLoggerManager"/>
+    <property name="pendingBuildResultsCleanup" ref="pendingBuildResultsCleanup"/>
+    <property name="authorCreatorService" ref="authorCreatorService"/>
+    <property name="currentlyBuildingContainer" ref="currentlyBuildingContainer"/>
+    <property name="planStatePersisterService" ref="planStatePersisterService"/>
+  </bean>
+
+  <!-- @deprecated since 5.0 -->
+  <alias name="buildExecutionManager" alias="buildExecutionUpdateManager"/>
+
+  <bean id="buildDetectionActionFactory" class="com.atlassian.bamboo.build.BuildDetectionActionFactoryImpl">
+    <constructor-arg ref="buildNumberGeneratorService"/>
+    <constructor-arg ref="changeDetectionManager"/>
+    <constructor-arg ref="triggerManager"/>
+    <constructor-arg ref="errorUpdateHandler"/>
+    <constructor-arg ref="buildLoggerManager"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="planVcsRevisionHistoryService"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="branchIntegrationService"/>
+    <constructor-arg ref="buildContextBuilderFactory"/>
+  </bean>
+
+  <bean id="planExecutionConcurrencyService" class="com.atlassian.bamboo.plan.PlanExecutionConcurrencyServiceImpl">
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="executionStatusProvider"/>
+  </bean>
+
+  <bean id="executionLimitsService" class="com.atlassian.bamboo.plan.ExecutionLimitsServiceImpl">
+    <constructor-arg ref="bambooLicenseManager"/>
+    <constructor-arg ref="buildSuspensionCheckBean"/>
+    <constructor-arg ref="buildLoggerManager"/>
+    <constructor-arg ref="serverLifecycleProvider"/>
+    <property name="chainedExecutionPermitter" ref="planExecutionConcurrencyService"/>
+  </bean>
+
+  <bean id="executionStatusProvider" class="com.atlassian.bamboo.plan.ExecutionStatusProviderImpl">
+    <constructor-arg ref="currentlyBuildingContainer"/>
+    <constructor-arg ref="chainExecutionManager"/>
+  </bean>
+
+  <bean id="currentlyBuildingContainer" class="com.atlassian.bamboo.build.CurrentlyBuildingContainer">
+    <constructor-arg ref="eventPublisher"/>
+  </bean>
+
+  <!-- START Atlassian Event -->
+
+  <bean id="eventDispatcher" class="com.atlassian.bamboo.event.spi.BambooEventDispatcher">
+    <constructor-arg ref="eventStats"/>
+    <constructor-arg>
+      <bean class="com.atlassian.event.internal.AsynchronousAbleEventDispatcher">
+        <constructor-arg ref="eventExecutorFactory"/>
+        <constructor-arg>
+          <bean class="com.atlassian.bamboo.event.spi.BambooEventRunnableFactory"/>
+        </constructor-arg>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="eventStats" class="com.atlassian.bamboo.event.spi.EventStats">
+  </bean>
+
+  <bean id="eventExecutorFactory" class="com.atlassian.bamboo.event.spi.BambooSingletonUnboundedEventExecutorFactory">
+    <constructor-arg>
+      <bean id="eventThreadPoolConfiguration" class="com.atlassian.bamboo.event.spi.BambooEventThreadPoolConfiguration"/>
+    </constructor-arg>
+    <constructor-arg>
+      <bean class="com.atlassian.event.internal.EventThreadFactory">
+        <constructor-arg>
+          <bean class="com.atlassian.bamboo.build.pipeline.concurrent.SystemAuthorityThreadFactory">
+            <constructor-arg value="BAM::EVENTS"/>
+          </bean>
+        </constructor-arg>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="listenerHandlerConfiguration" class="com.atlassian.bamboo.event.spi.BambooListenerHandlersConfiguration"/>
+
+  <bean id="eventPublisher" class="com.atlassian.event.internal.LockFreeEventPublisher" plugin:available="true">
+    <constructor-arg ref="eventDispatcher"/>
+    <constructor-arg ref="listenerHandlerConfiguration"/>
+  </bean>
+
+  <!-- Deprecated - pending removal -->
+  <bean id="eventManager" class="com.atlassian.bamboo.event.spi.BambooEventManager" plugin:available="true">
+    <constructor-arg ref="eventPublisher"/>
+  </bean>
+
+  <bean id="remoteEventsJmsTemplate" class="com.atlassian.bamboo.v2.build.agent.BambooJmsTemplate">
+    <constructor-arg ref="connectionFactory"/>
+    <property name="defaultDestination" ref="remoteEventsTopic"/>
+    <property name="timeToLive" value="1800000"/>
+    <!-- 30 minutes -->
+    <property name="explicitQosEnabled" value="true"/>
+  </bean>
+
+  <!-- END Atlassian Event -->
+
+  <bean id="executableAgentsHelper" class="com.atlassian.bamboo.plan.ExecutableAgentsHelperImpl" plugin:available="true">
+    <constructor-arg ref="cachedPlanManager"/>
+    <constructor-arg ref="executionStatusProvider"/>
+    <constructor-arg ref="agentManager"/>
+    <constructor-arg ref="pluginAccessor"/>
+    <constructor-arg ref="agentAssignmentService"/>
+    <constructor-arg ref="capabilityRequirementsMatcher"/>
+    <constructor-arg ref="capabilitySetManager"/>
+    <constructor-arg ref="elasticInstanceManager"/>
+    <constructor-arg ref="elasticImageConfigurationAccessor"/>
+  </bean>
+
+  <!-- Loaded lazily by com.atlassian.bamboo.container.BambooContainer#registerCustomEventListeners -->
+  <bean id="defaultListeners" class="org.springframework.beans.factory.config.MapFactoryBean" lazy-init="true">
+    <property name="sourceMap">
+      <map>
+        <!--<entry key="chainExecutionManager" value-ref="chainExecutionManager"/>-->
+        <entry key="awsAccountBean" value-ref="awsAccountBean"/>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="buildQueueManager" class="com.atlassian.bamboo.v2.build.queue.BuildQueueManagerImpl" plugin:available="true">
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="buildExecutionManager"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg>
+      <bean id="jmsTemplate" class="com.atlassian.bamboo.v2.build.agent.BambooJmsTemplate">
+        <constructor-arg ref="connectionFactory"/>
+        <property name="defaultDestination" ref="buildQueueWithExclusiveAccess"/>
+        <property name="messageConverter" ref="jmsMessageConverter"/>
+      </bean>
+    </constructor-arg>
+    <constructor-arg ref="pluginAccessor"/>
+    <constructor-arg ref="errorUpdateHandler"/>
+    <constructor-arg ref="bootstrapManager"/>
+    <constructor-arg ref="transactionTemplate"/>
+    <constructor-arg ref="executableAgentsHelper"/>
+    <constructor-arg ref="customVariableContextRunner"/>
+    <constructor-arg ref="environmentService"/>
+    <constructor-arg ref="executionPhaseService"/>
+  </bean>
+
+  <bean id="stopBuildManager" class="com.atlassian.bamboo.build.DefaultStopBuildManager">
+    <property name="planExecutionManager" ref="planExecutionManager"/>
+    <property name="buildQueueManager" ref="buildQueueManager"/>
+    <property name="agentManager" ref="agentManager"/>
+    <property name="agentCommandSender" ref="agentCommandSender"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+    <property name="scheduler" ref="scheduler"/>
+    <property name="buildLoggerManager" ref="buildLoggerManager"/>
+    <property name="authenticationContext" ref="authenticationContext"/>
+  </bean>
+
+  <bean id="changeDetectionManager" class="com.atlassian.bamboo.v2.trigger.DefaultChangeDetectionManager" plugin:available="true">
+    <constructor-arg ref="buildContextFactory"/>
+    <constructor-arg ref="buildLoggerManager"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="customVariableContext"/>
+    <constructor-arg ref="planVcsRevisionHistoryService"/>
+    <constructor-arg ref="branchCommitInformationManager"/>
+    <constructor-arg ref="branchIntegrationService"/>
+  </bean>
+
+
+
+  <bean id="buildDefinitionManager" class="com.atlassian.bamboo.build.DefaultBuildDefinitionManager" plugin:available="true">
+    <constructor-arg>
+      <bean parent="txWriteProxy">
+        <property name="target">
+          <bean class="com.atlassian.bamboo.build.DefaultBuildDefinitionManagerTx">
+            <constructor-arg ref="buildDefinitionConverter"/>
+            <constructor-arg ref="planManager"/>
+            <constructor-arg ref="pluginAccessor"/>
+          </bean>
+        </property>
+      </bean>
+    </constructor-arg>
+    <constructor-arg ref="planScheduler"/>
+  </bean>
+
+  <bean id="buildDirectoryManager" class="com.atlassian.bamboo.build.fileserver.DefaultBuildDirectoryManager" plugin:available="true">
+    <property name="agentContext" ref="agentContext"/>
+    <property name="administrationConfigurationManager" ref="administrationConfigurationManager"/>
+  </bean>
+
+  <bean id="jdkManager" class="com.atlassian.bamboo.builder.DefaultJdkManager">
+    <property name="capabilitySetManager" ref="capabilitySetManager"/>
+    <property name="elasticFunctionalityFacade" ref="elasticFunctionalityFacade"/>
+  </bean>
+
+  <bean id="buildAgentController" class="com.atlassian.bamboo.v2.build.agent.BuildAgentControllerImpl">
+    <constructor-arg ref="agentContext"/>
+    <constructor-arg ref="agentQueueAccessor"/>
+    <constructor-arg ref="buildLoggerManager"/>
+    <constructor-arg ref="resultProcessor"/>
+    <constructor-arg ref="capabilityContext"/>
+    <constructor-arg ref="capabilitySetManager"/>
+    <constructor-arg ref="customVariableContext"/>
+    <constructor-arg ref="errorUpdateHandler"/>
+    <constructor-arg ref="executionPhaseService"/>
+  </bean>
+
+  <bean id="planStatePersisterService" class="com.atlassian.bamboo.plan.PlanStatePersisterServiceImpl">
+    <constructor-arg ref="planStatePersister"/>
+  </bean>
+
+  <bean id="planStatePersister" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.plan.PlanStatePersisterImpl">
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="buildResultsIndexer"/>
+        <constructor-arg ref="buildResultsSummaryManager"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+        <constructor-arg ref="errorUpdateHandler"/>
+        <constructor-arg ref="buildLoggerManager"/>
+        <constructor-arg ref="buildExecutionManager"/>
+        <constructor-arg ref="testsManager"/>
+        <constructor-arg ref="eventPublisher"/>
+      </bean>
+    </property>
+    <property name="preInterceptors">
+      <list>
+        <bean class="com.atlassian.bamboo.author.AuthorCreatorServiceInterceptor">
+          <constructor-arg ref="authorCreatorService"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="resultProcessor" class="com.atlassian.bamboo.v2.build.agent.LocalResultProcessor">
+    <constructor-arg>
+      <bean class="com.atlassian.bamboo.v2.build.agent.LocalBuildResultProcessor">
+        <constructor-arg ref="buildExecutionManager"/>
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+        <constructor-arg ref="eventPublisher"/>
+        <constructor-arg ref="buildLoggerManager"/>
+        <constructor-arg ref="pluginAccessor"/>
+        <constructor-arg ref="planStatePersisterService"/>
+        <constructor-arg ref="customVariableContextRunner"/>
+        <constructor-arg ref="executionPhaseService"/>
+      </bean>
+    </constructor-arg>
+    <constructor-arg ref="deploymentExecutionService"/>
+  </bean>
+
+  <bean id="capabilityRequirementsMatcher" class="com.atlassian.bamboo.v2.build.agent.capability.CapabilityRequirementsMatcherImpl"/>
+
+  <bean id="agentManager" parent="txWriteProxy" plugin:available="true">
+    <property name="target" ref="agentManagerTarget"/>
+  </bean>
+
+  <alias name="agentManager" alias="localAgentManager"/>
+
+  <bean id="agentManagerTarget" class="com.atlassian.bamboo.buildqueue.manager.AgentManagerImpl" depends-on="broker" destroy-method="stopLocalAgents">
+    <constructor-arg ref="agentDao"/>
+    <constructor-arg ref="buildAgentController"/>
+    <constructor-arg ref="capabilitySetManager"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="bambooLicenseManager"/>
+    <constructor-arg ref="elasticImageConfigurationManager"/>
+    <constructor-arg ref="elasticAgentManager"/>
+    <constructor-arg ref="buildExecutionManager"/>
+    <constructor-arg ref="errorUpdateHandler"/>
+    <constructor-arg ref="buildLoggerManager"/>
+    <constructor-arg ref="featureManager"/>
+    <constructor-arg ref="agentAssignmentService"/>
+  </bean>
+
+  <bean id="remoteAgentAuthenticationManager" class="com.atlassian.bamboo.buildqueue.manager.RemoteAgentAuthenticationManagerImpl">
+    <constructor-arg ref="administrationConfigurationManager"/>
+    <constructor-arg ref="remoteAgentAuthenticationDao"/>
+  </bean>
+
+  <bean id="elasticFunctionalityFacade" class="com.atlassian.bamboo.agent.elastic.server.ElasticFunctionalityFacadeImpl" autowire="byName"/>
+
+  <bean id="elasticAccountManagementService" class="com.atlassian.bamboo.agent.elastic.server.ElasticAccountManagementServiceImpl" plugin:available="true" >
+    <constructor-arg ref="awsAccountBean" />
+    <constructor-arg ref="agentManager" />
+    <constructor-arg ref="elasticInstanceManager" />
+  </bean>
+
+  <bean id="bambooSmackClient" class="com.atlassian.bamboo.xmpp.BambooSmackClient">
+    <constructor-arg ref="instantMessagingServerManager"/>
+    <property name="packetListener" ref="bambooSmackMessageListener"/>
+  </bean>
+
+  <bean id="bambooSmackMessageListenerTarget" class="com.atlassian.bamboo.xmpp.BambooSmackMessageListener">
+    <constructor-arg ref="bambooUserManager"/>
+    <property name="smackClient" ref="bambooSmackClient"/>
+  </bean>
+
+  <bean id="bambooSmackMessageListener" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="target" ref="bambooSmackMessageListenerTarget"/>
+    <property name="proxyInterfaces" value="org.jivesoftware.smack.PacketListener"/>
+    <property name="interceptorNames">
+      <list>
+        <value>hibernateInterceptor</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- A series on Hibernate advices @TODO These shouldn't ALL be needed-->
+  <aop:aspectj-autoproxy/>
+  <aop:config>
+    <aop:pointcut id="theExecutionOfHibernateEventListenerAspectAnnotatedMethod"
+                  expression="@annotation(com.atlassian.bamboo.event.HibernateEventListenerAspect)"/>
+
+    <aop:advisor advice-ref="hibernateInterceptor" pointcut-ref="theExecutionOfHibernateEventListenerAspectAnnotatedMethod"/>
+  </aop:config>
+
+  <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+
+  <bean id="customBuildCompleteActionAdvisor" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <property name="advice" ref="hibernateInterceptor"/>
+    <property name="expression" value="execution(* com.atlassian.bamboo.build.CustomBuildCompleteAction.run(..))"/>
+  </bean>
+
+  <bean id="hibernateBuildTaskAdvisor" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <property name="advice" ref="hibernateInterceptor"/>
+    <property name="expression" value="execution(* com.atlassian.bamboo.v2.build.task.HibernateBuildTask.call(..))"/>
+  </bean>
+
+  <bean id="upgradeTaskAdvisor" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <property name="advice" ref="hibernateInterceptor"/>
+    <property name="expression" value="execution(* com.atlassian.bamboo.upgrade.HibernateUpgradeTask.doUpgrade())"/>
+  </bean>
+
+  <bean id="hibernateEventListenerAdvisor" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+    <property name="advice" ref="hibernateInterceptor"/>
+    <property name="expression" value="execution(* com.atlassian.bamboo.event.HibernateEventListener.handleEvent(..))"/>
+  </bean>
+
+  <bean id="planConfigurationAspect" class="com.atlassian.bamboo.plan.PlanConfigurationAspect">
+    <constructor-arg ref="immutablePlanCacheService"/>
+  </bean>
+
+
+  <bean id="instantMessagingServerManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.instantmessagingserver.InstantMessagingServerManagerImpl">
+        <property name="instantMessagingServerDao">
+          <bean class="com.atlassian.bamboo.instantmessagingserver.InstantMessagingServerHibernateDao">
+            <property name="sessionFactory" ref="sessionFactory"/>
+          </bean>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="bambooPermissionManagerNoTx" class="com.atlassian.bamboo.security.BambooPermissionManagerImpl">
+    <property name="administrationConfigurationAccessor" ref="administrationConfigurationAccessor"/>
+    <property name="aclService" ref="aclService"/>
+    <property name="planManager" ref="planManager"/>
+    <property name="bambooUserManager" ref="bambooUserManager"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+    <property name="overrideAuthorities"> <!-- Below authorities will always have permission to everything -->
+      <list>
+        <bean class="org.acegisecurity.GrantedAuthorityImpl"> <!-- System can do ANYTHING -->
+          <constructor-arg value="ROLE_SYSTEM"/>
+        </bean>
+        <bean class="org.acegisecurity.GrantedAuthorityImpl"> <!-- Global admin can do ANYTHING. -->
+          <constructor-arg value="ROLE_ADMIN"/>
+        </bean>
+      </list>
+    </property>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+  </bean>
+
+  <bean id="bambooPermissionManager" parent="txUserReadWriteProxy" plugin:available="true">
+    <property name="target" ref="bambooPermissionManagerNoTx"/>
+  </bean>
+
+  <bean id="repositoryManager" class="com.atlassian.bamboo.repository.DefaultRepositoryManager" plugin:available="true">
+    <property name="textProvider" ref="textProvider"/>
+    <property name="pluginAccessor" ref="pluginAccessor"/>
+  </bean>
+
+  <bean id="webRepositoryViewerManager" class="com.atlassian.bamboo.webrepository.WebRepositoryViewerManagerImpl" plugin:available="true">
+    <property name="pluginAccessor" ref="pluginAccessor"/>
+  </bean>
+
+  <bean id="buildStrategyManager" class="com.atlassian.bamboo.build.strategy.DefaultBuildStrategyManager" plugin:available="true">
+    <constructor-arg ref="pluginAccessor"/>
+  </bean>
+
+  <alias name="buildStrategyManager" alias="triggerTypeManager"/>
+
+  <alias name="buildResultLuceneConnection" alias="luceneConnection"/>
+
+  <bean id="indexerService" class="com.atlassian.bamboo.index.IndexerServiceImpl">
+  </bean>
+
+  <bean id="indexerManager" class="com.atlassian.bamboo.index.IndexerManagerImpl" plugin:available="true">
+    <constructor-arg ref="applicationConfig"/>
+    <constructor-arg ref="hibernateConfig"/>
+    <constructor-arg>
+      <list>
+        <ref bean="buildResultsIndexer"/>
+        <ref bean="environmentIndexer"/>
+        <ref bean="versionIndexer"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="buildResultLuceneConnection" class="com.atlassian.bamboo.index.LuceneConnectionImpl">
+    <constructor-arg ref="bootstrapManager"/>
+    <constructor-arg value="results"/>
+  </bean>
+
+  <bean id="buildResultsIndexer" class="com.atlassian.bamboo.index.buildresult.DefaultBuildResultsIndexer">
+    <constructor-arg ref="buildResultLuceneConnection"/>
+    <constructor-arg ref="hibernateConfig"/>
+    <constructor-arg ref="indexerService"/>
+    <constructor-arg ref="buildResultsSummaryDao"/>
+    <constructor-arg ref="buildResultsSummaryDocumentFactory"/>
+    <constructor-arg ref="extendedAuthorManager"/>
+    <constructor-arg ref="labelDao"/>
+    <constructor-arg ref="planManager"/>
+  </bean>
+
+  <bean id="buildResultsSummaryDocumentFactory" class="com.atlassian.bamboo.index.buildresult.BuildResultsSummaryDocumentFactory">
+    <constructor-arg ref="pluginAccessor"/>
+    <constructor-arg ref="triggerManager"/>
+    <property name="resultsSummaryManager" ref="resultsSummaryManager"/>
+  </bean>
+
+  <bean id="indexedBuildResultsSearcher" class="com.atlassian.bamboo.resultsummary.search.IndexedBuildResultsSearcherImpl" plugin:available="true">
+    <property name="planManager" ref="planManager"/>
+    <property name="cachedPlanManager" ref="cachedPlanManager"/>
+    <property name="buildResultsSummaryDocumentFactory" ref="buildResultsSummaryDocumentFactory"/>
+    <property name="luceneConnection" ref="buildResultLuceneConnection"/>
+  </bean>
+
+  <bean id="buildResultsSearcher" class="com.atlassian.bamboo.build.LuceneBasedJiraIssueResultsManagerImpl" plugin:available="true">
+    <property name="indexedBuildResultsSearcher" ref="indexedBuildResultsSearcher"/>
+    <property name="buildResultsSummaryManager" ref="buildResultsSummaryManager"/>
+  </bean>
+
+  <alias name="resultsSummaryManager" alias="buildResultsSummaryManager"/>
+
+  <bean id="resultsSummaryManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces">
+      <list>
+        <value>com.atlassian.bamboo.resultsummary.ResultsSummaryManager</value>
+        <value>com.atlassian.bamboo.resultsummary.BuildResultsSummaryManager</value>
+      </list>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <idref local="transactionReadWriteInterceptor"/>
+        <idref bean="permissionsInterceptor"/>
+        <!--cannot use separate "target" property for this because bean could not be resolved while starting up bamboo-rest-->
+        <idref local="resultsSummaryManagerTarget"/>
+      </list>
+    </property>
+  </bean>
+
+  <!--This cannot be inline due to circular dependencies-->
+  <bean id="resultsSummaryManagerTarget" class="com.atlassian.bamboo.resultsummary.BuildResultsSummaryManagerImpl">
+    <property name="buildResultsSummaryDao" ref="buildResultsSummaryDao"/>
+    <property name="extendedAuthorManager" ref="extendedAuthorManager"/>
+    <property name="buildResultsIndexer" ref="buildResultsIndexer"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+    <property name="jiraIssueUtils" ref="jiraIssueUtils"/>
+    <property name="artifactLinkManager" ref="artifactLinkManager"/>
+    <property name="commitDao" ref="commitDao"/>
+    <property name="buildExecutionManager" ref="buildExecutionManager"/>
+    <property name="repositoryDefinitionManager" ref="repositoryDefinitionManager"/>
+    <property name="testsManager" ref="testsManager"/>
+    <property name="commentManager" ref="commentManager"/>
+    <property name="branchIntegrationService" ref="branchIntegrationService"/>
+    <property name="mergeResultSummaryDao" ref="mergeResultSummaryDao"/>
+    <property name="variableContextBaselineDao" ref="variableContextBaselineDao"/>
+    <property name="planManager" ref="planManager"/>
+  </bean>
+
+  <bean id="testsManager" parent="txReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.resultsummary.tests.TestsManagerImpl">
+        <constructor-arg ref="testCaseDao"/>
+        <constructor-arg ref="testCaseResultDao"/>
+        <constructor-arg ref="testResultsDao"/>
+        <constructor-arg ref="testsDao"/>
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="testQuarantineManager" class="com.atlassian.bamboo.resultsummary.tests.TestQuarantineManagerImpl" plugin:available="true">
+    <constructor-arg ref="testCaseDao"/>
+    <constructor-arg ref="testCaseResultDao"/>
+    <constructor-arg ref="testsManager"/>
+    <constructor-arg ref="cachedPlanManager"/>
+  </bean>
+
+  <bean id="loginInformationManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.user.LoginInformationManagerImpl">
+        <constructor-arg ref="loginInformationDao"/>
+        <constructor-arg ref="administrationConfigurationAccessor"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="freemarkerContext" class="com.atlassian.bamboo.ww2.FreemarkerContext">
+    <constructor-arg ref="bootstrapManager"/>
+    <constructor-arg ref="bambooLicenseManager"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+    <constructor-arg ref="bambooPermissionManager"/>
+    <constructor-arg ref="dashboardCachingManager"/>
+    <constructor-arg ref="webInterfaceManager"/>
+    <constructor-arg ref="bambooUserManager"/>
+    <constructor-arg ref="pluginAccessor"/>
+    <constructor-arg ref="planFavouriteService"/>
+    <constructor-arg ref="gravatarService"/>
+    <constructor-arg ref="serverStatusProvider"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="featureManager"/>
+  </bean>
+
+  <bean id="jiraApplinksService" class="com.atlassian.bamboo.applinks.JiraApplinksServiceImpl" plugin:available="true">
+    <constructor-arg ref="applinkApplicationLink"/>
+    <constructor-arg ref="applinkAuthenticationConfigurationManager"/>
+    <constructor-arg ref="applinkEntityLink"/>
+    <constructor-arg ref="applinkTypeAccessor"/>
+  </bean>
+
+  <bean id="jiraIssueUtils" class="com.atlassian.bamboo.jira.jiraissues.JiraIssueUtils" plugin:available="true">
+    <constructor-arg ref="jiraApplinksService"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+    <constructor-arg ref="deploymentVersionLinkedJiraIssuesService"/>
+  </bean>
+
+  <bean id="jiraRemoteIssueManager" class="com.atlassian.bamboo.jira.jiraissues.JiraRemoteIssueManagerImpl" plugin:available="true">
+    <constructor-arg ref="jiraApplinksService"/>
+    <constructor-arg ref="jiraIssueDetailsBuilderFactory"/>
+  </bean>
+
+  <bean id="executorService" class="java.util.concurrent.Executors" factory-method="newCachedThreadPool"/>
+
+  <bean id="jiraIssueManager" class="com.atlassian.bamboo.jira.jiraissues.JiraIssueManagerImpl" plugin:available="true">
+    <constructor-arg ref="jiraApplinksService"/>
+    <constructor-arg ref="jiraIssueDetailsBuilderFactory"/>
+    <constructor-arg ref="jiraRemoteIssueManager"/>
+  </bean>
+
+  <bean id="jiraRestService" class="com.atlassian.bamboo.jira.rest.JiraRestServiceImpl" plugin:available="true">
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+    <constructor-arg ref="applinkHostApplication"/>
+  </bean>
+
+  <bean id="jiraBranchLinkingService" class="com.atlassian.bamboo.jira.issuelink.JiraBranchLinkingServiceImpl">
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="jiraRemoteIssueManager"/>
+    <constructor-arg ref="jiraRestService"/>
+    <constructor-arg ref="jiraApplinksService"/>
+    <constructor-arg ref="jiraIssueUtils"/>
+    <constructor-arg ref="impersonationService"/>
+    <constructor-arg ref="immutablePlanCacheService"/>
+  </bean>
+
+  <bean id="jiraIssueDetailsBuilderFactory" class="com.atlassian.bamboo.jira.jiraissues.JiraIssueDetailsBuilderFactoryImpl"/>
+
+  <bean id="impersonationService" class="com.atlassian.bamboo.applinks.ImpersonationServiceImpl" plugin:available="true">
+    <constructor-arg ref="bambooUserManager"/>
+  </bean>
+
+  <bean id="triggerManager" class="com.atlassian.bamboo.plan.trigger.TriggerManagerImpl" plugin:available="true">
+    <constructor-arg ref="pluginAccessor"/>
+  </bean>
+
+  <alias name="triggerManager" alias="triggerReasonManager"/>
+
+  <bean id="notificationManager" parent="txReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.notification.NotificationManagerImpl">
+        <property name="notificationDao" ref="notificationDao"/>
+        <property name="pluginAccessor" ref="pluginAccessor"/>
+        <property name="bambooUserManager" ref="bambooUserManager"/>
+        <property name="labelManager" ref="labelManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="systemNotificationService" class="com.atlassian.bamboo.notification.SystemNotificationServiceImpl" plugin:available="true">
+    <constructor-arg ref="notificationManager"/>
+  </bean>
+
+  <bean id="notificationDispatcher" class="com.atlassian.bamboo.notification.NotificationDispatcherImpl" plugin:available="true"/>
+
+  <bean id="notificationFormatter" class="com.atlassian.bamboo.notification.NotificationFormatterImpl" plugin:available="true"/>
+
+  <bean id="notificationFactory" class="com.atlassian.bamboo.notification.NotificationFactoryImpl" plugin:available="true">
+    <property name="bambooSmackClient" ref="bambooSmackClient"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+    <property name="bambooUserManager" ref="bambooUserManager"/>
+    <property name="templateRenderer" ref="templateRenderer"/>
+    <property name="notificationFormatter" ref="notificationFormatter"/>
+    <property name="planManager" ref="planManager"/>
+    <property name="administrationConfigurationManager" ref="administrationConfigurationManager"/>
+  </bean>
+
+  <!--TODO: Remove using two versions of authorManager, one for indexing, one for hibernate-->
+  <bean id="extendedAuthorManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.author.ExtendedAuthorManager"/>
+    <property name="interceptorNames">
+      <list>
+        <idref local="transactionReadWriteInterceptor"/>
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.author.HibernateAuthorManagerImpl">
+        <constructor-arg ref="authorDao"/>
+        <constructor-arg ref="bambooUserManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="authorManager" class="com.atlassian.bamboo.author.LuceneAuthorManagerImpl">
+    <property name="buildResultsSummaryDocumentFactory" ref="buildResultsSummaryDocumentFactory"/>
+    <property name="indexedBuildResultsSearcher" ref="indexedBuildResultsSearcher"/>
+  </bean>
+
+  <bean id="immutablePlanManager" parent="txReadProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.plan.cache.ImmutablePlanManagerImpl">
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+        <constructor-arg ref="buildDefinitionManager"/>
+        <constructor-arg ref="buildLoggerManager"/>
+        <constructor-arg ref="labelManager"/>
+        <constructor-arg ref="repositoryDefinitionManager"/>
+        <constructor-arg ref="taskManager"/>
+        <constructor-arg ref="triggerManager"/>
+        <constructor-arg ref="variableDefinitionManager"/>
+        <constructor-arg ref="buildExecutionManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="immutableArtifactManager" parent="txReadProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.plan.artifact.ImmutableArtifactManagerImpl">
+        <constructor-arg ref="artifactDefinitionManager"/>
+        <constructor-arg ref="artifactSubscriptionManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="projectManager" parent="txUserReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.project.DefaultProjectManager">
+        <constructor-arg ref="projectDao"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="planAwareContext" class="com.atlassian.bamboo.plan.PlanAwareContextImpl" plugin:available="true">
+    <constructor-arg ref="planManager"/>
+  </bean>
+
+  <bean name="planManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="interceptorNames">
+      <list>
+        <idref local="transactionReadWriteInterceptor"/>
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.plan.PlanManagerImpl">
+        <constructor-arg ref="planDao"/>
+        <constructor-arg ref="bambooLicenseManager"/>
+        <constructor-arg ref="eventPublisher"/>
+        <constructor-arg ref="projectManager"/>
+        <constructor-arg ref="planScheduler"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean name="deletionService" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.deletion.DeletionService"/>
+    <property name="interceptorNames">
+      <list>
+        <!--<idref local="transactionReadWriteInterceptor"/>-->
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.deletion.DeletionServiceImpl">
+        <constructor-arg ref="errorHandler"/>
+        <constructor-arg ref="buildResultsIndexer"/>
+        <constructor-arg ref="planScheduler"/>
+        <constructor-arg ref="planDependencyManager"/>
+        <constructor-arg ref="planParticleManager"/>
+        <constructor-arg ref="eventPublisher"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+        <constructor-arg ref="buildSuspensionCheckBean"/>
+        <constructor-arg ref="adminErrorHandler"/>
+        <constructor-arg ref="aclService"/>
+        <constructor-arg ref="projectManager"/>
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="chainStageDao"/>
+        <constructor-arg ref="bandanaPersister"/>
+        <constructor-arg ref="pluginAccessor"/>
+        <constructor-arg ref="artifactDefinitionManager"/>
+        <constructor-arg ref="artifactSubscriptionManager"/>
+        <constructor-arg ref="artifactManager"/>
+        <constructor-arg ref="auditLogService"/>
+        <constructor-arg ref="variableDefinitionManager"/>
+        <constructor-arg ref="repositoryDefinitionManager"/>
+        <constructor-arg ref="planVcsRevisionHistoryService"/>
+        <constructor-arg ref="chainBranchManager"/>
+        <constructor-arg ref="vcsBranchManager"/>
+        <constructor-arg ref="stopBuildManager"/>
+        <constructor-arg ref="immutablePlanCacheService"/>
+        <constructor-arg ref="artifactDao"/>
+      </bean>
+    </property>
+  </bean>
+
+
+  <bean name="branchDetectionService" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.plan.branch.BranchDetectionService"/>
+    <property name="interceptorNames">
+      <list>
+        <idref bean="permissionsInterceptor"/>
+        <idref local="branchDetectionServiceTarget"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="branchDetectionServiceTarget" class="com.atlassian.bamboo.plan.branch.BranchDetectionServiceImpl">
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="chainBranchCreationService"/>
+    <constructor-arg ref="repositoryManager"/>
+    <constructor-arg ref="vcsBranchManager"/>
+    <constructor-arg ref="repositoryCachingFacade"/>
+    <constructor-arg ref="errorHandler"/>
+    <constructor-arg ref="scopedExclusionService"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="jiraBranchLinkingService"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="customVariableContext"/>
+    <constructor-arg ref="hibernateTemplate"/>
+    <constructor-arg ref="cachedPlanManager"/>
+  </bean>
+
+  <bean name="buildSuspensionCheckBean" class="com.atlassian.bamboo.build.BuildSuspensionCheckBean">
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+    <constructor-arg ref="adminErrorHandler"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="bambooLicenseManager"/>
+  </bean>
+
+  <bean id="buildNumberGeneratorService" class="com.atlassian.bamboo.build.BuildNumberGeneratorServiceImpl">
+    <constructor-arg>
+      <bean parent="txReadWriteProxy">
+        <property name="target">
+          <bean class="com.atlassian.bamboo.build.BuildNumberGeneratorDaoImpl">
+            <property name="hibernateTemplate" ref="hibernateTemplateWithANewSession"/>
+          </bean>
+        </property>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="planVcsRevisionHistoryService" class="com.atlassian.bamboo.plan.vcsRevision.PlanVcsRevisionHistoryServiceImpl">
+    <constructor-arg>
+      <bean parent="txReadWriteProxy">
+        <property name="target">
+          <bean class="com.atlassian.bamboo.plan.vcsRevision.PlanVcsRevisionHistoryManagerImpl">
+            <constructor-arg>
+              <bean class="com.atlassian.bamboo.plan.vcsRevision.PlanVcsRevisionHistoryHibernateDao">
+                <property name="hibernateTemplate" ref="hibernateTemplateWithANewSession"/>
+              </bean>
+            </constructor-arg>
+          </bean>
+        </property>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="repositoryDefinitionManagerTarget" class="com.atlassian.bamboo.repository.RepositoryDefinitionManagerImpl">
+    <constructor-arg ref="repositoryDefinitionDao"/>
+    <constructor-arg ref="planRepositoryLinkDao"/>
+  </bean>
+
+  <bean id="repositoryDefinitionManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.repository.RepositoryDefinitionManager"/>
+    <property name="interceptorNames">
+      <list>
+        <idref local="transactionReadWriteInterceptor"/>
+        <idref bean="permissionsInterceptor"/>
+        <idref bean="repositoryDefinitionManagerTarget"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="chainBranchManager" parent="txReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.plan.branch.ChainBranchManagerImpl">
+        <constructor-arg ref="planDao"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="authorCreatorService" class="com.atlassian.bamboo.author.AuthorCreatorServiceImpl">
+    <constructor-arg ref="extendedAuthorManager"/>
+  </bean>
+
+  <bean id="planDependencyManager" parent="txReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.build.PlanDependencyManagerImpl">
+        <constructor-arg ref="planDependencyDao"/>
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="chainBranchManager"/>
+        <constructor-arg ref="immutablePlanCacheService"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="planValidationService" class="com.atlassian.bamboo.build.creation.PlanValidationServiceImpl" plugin:available="true">
+    <constructor-arg ref="validationService"/>
+    <constructor-arg ref="projectManager"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="repositoryConfigHelper"/>
+    <constructor-arg ref="webRepositoryConfigHelper"/>
+    <constructor-arg ref="buildStrategyConfigHelper"/>
+    <constructor-arg ref="chainBranchManager"/>
+  </bean>
+
+  <bean id="validationService" class="com.atlassian.bamboo.validation.ValidationServiceImpl" plugin:available="true">
+    <constructor-arg ref="textProvider"/>
+  </bean>
+
+  <bean id="repositoryConfigHelper" class="com.atlassian.bamboo.build.creation.RepositoryConfigHelper">
+    <constructor-arg ref="repositoryManager"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="repositoryDefinitionManager"/>
+    <constructor-arg ref="bambooPermissionManager"/>
+  </bean>
+
+  <bean id="webRepositoryConfigHelper" class="com.atlassian.bamboo.build.creation.WebRepositoryConfigHelper">
+    <constructor-arg ref="webRepositoryViewerManager"/>
+    <constructor-arg ref="textProvider"/>
+  </bean>
+
+  <bean id="buildStrategyConfigHelper" class="com.atlassian.bamboo.build.creation.BuildStrategyConfigHelper">
+    <constructor-arg ref="buildStrategyManager"/>
+  </bean>
+
+  <bean id="planCreationTemplate" class="com.atlassian.bamboo.build.creation.PlanCreationTemplate" abstract="true">
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="projectManager"/>
+    <constructor-arg ref="aclUpdateHelper"/>
+    <constructor-arg ref="authenticationContext"/>
+    <constructor-arg ref="bambooLicenseManager"/>
+    <constructor-arg ref="aclService"/>
+    <constructor-arg ref="planScheduler"/>
+    <constructor-arg ref="repositoryConfigHelper"/>
+    <constructor-arg ref="buildStrategyConfigHelper"/>
+    <constructor-arg ref="webRepositoryConfigHelper"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="planValidationService"/>
+    <constructor-arg ref="auditLogService"/>
+    <constructor-arg ref="buildDefinitionConverter"/>
+    <constructor-arg ref="artifactDefinitionManager"/>
+    <constructor-arg ref="artifactSubscriptionManager"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="repositoryDefinitionManager"/>
+    <constructor-arg ref="taskConfigurationService"/>
+    <constructor-arg ref="notificationManager"/>
+    <constructor-arg ref="branchCommitInformationManager"/>
+    <constructor-arg ref="vcsBranchManager"/>
+    <constructor-arg ref="buildStrategyConfigurationService"/>
+  </bean>
+
+  <bean id="chainCreationService" class="com.atlassian.bamboo.build.creation.ChainCreationServiceImpl" parent="planCreationTemplate" plugin:available="true">
+    <constructor-arg ref="jobCreationService"/>
+    <constructor-arg ref="scopedExclusionService"/>
+    <constructor-arg ref="branchDetectionService"/>
+  </bean>
+
+  <bean id="chainBranchCreationService" class="com.atlassian.bamboo.build.creation.ChainBranchCreationServiceImpl" parent="planCreationTemplate" plugin:available="true">
+    <constructor-arg ref="jobCreationService"/>
+    <constructor-arg ref="scopedExclusionService"/>
+    <constructor-arg ref="chainBranchManager"/>
+    <constructor-arg ref="jiraBranchLinkingService"/>
+    <constructor-arg ref="testQuarantineManager"/>
+    <constructor-arg ref="testsManager"/>
+  </bean>
+
+  <bean id="jobCreationService" class="com.atlassian.bamboo.build.creation.JobCreationServiceImpl" parent="planCreationTemplate" plugin:available="true">
+    <constructor-arg ref="chainBranchManager"/>
+  </bean>
+
+  <alias name="uiConfigBean" alias="uiConfigBeanSupport"/>
+  <alias name="uiConfigBean" alias="uiConfigSupport"/>
+
+  <bean id="uiConfigBean" class="com.atlassian.bamboo.ww2.actions.build.admin.create.UIConfigBeanImpl" plugin:available="true">
+    <constructor-arg ref="webRepositoryViewerManager"/>
+    <constructor-arg ref="buildStrategyManager"/>
+    <constructor-arg ref="repositoryManager"/>
+    <constructor-arg ref="projectManager"/>
+    <constructor-arg ref="bambooLicenseManager"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="jdkManager"/>
+    <constructor-arg ref="taskManager"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="repositoryDefinitionManager"/>
+  </bean>
+
+  <bean id="taskUIConfigBean" class="com.atlassian.bamboo.ww2.actions.build.admin.config.task.TaskUIConfigBean">
+    <constructor-arg ref="taskManager"/>
+    <constructor-arg ref="templateRenderer"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="capabilityHelper"/>
+  </bean>
+
+  <bean id="taskOwnerFactory" class="com.atlassian.bamboo.ww2.actions.build.admin.config.task.TaskOwnerFactory">
+    <constructor-arg ref="deploymentProjectService"/>
+    <constructor-arg ref="cachedPlanManager"/>
+  </bean>
+
+  <bean id="capabilitySetManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.v2.build.agent.capability.CapabilitySetManager"/>
+    <property name="target">
+      <bean parent="txWriteProxy">
+        <property name="target" ref="capabilityManagerTargetNoTx"/>
+      </bean>
+    </property>
+    <property name="interceptorNames">
+      <list>
+        <idref local="transactionWriteInterceptor"/>
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="capabilitySetManagerNoTx" class="org.springframework.aop.framework.ProxyFactoryBean">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.v2.build.agent.capability.CapabilitySetManager"/>
+    <property name="interceptorNames">
+      <list>
+        <idref bean="permissionsInterceptor"/>
+        <idref local="capabilityManagerTargetNoTx"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="capabilityManagerTargetNoTx" class="com.atlassian.bamboo.v2.build.agent.capability.CapabilitySetManagerImpl">
+    <property name="localCapabilityDao" ref="localCapabilityDao"/>
+    <property name="remoteCapabilityDao" ref="remoteCapabilityDao"/>
+    <property name="imageCapabilityDao" ref="imageCapabilityDao"/>
+    <property name="eventPublisher" ref="eventPublisher"/>
+    <property name="agentDao" ref="agentDao"/>
+  </bean>
+
+  <bean id="agentAssignmentService" class="com.atlassian.bamboo.buildqueue.manager.AgentAssignmentServiceImpl" plugin:available="true">
+    <constructor-arg ref="agentAssignmentDao"/>
+    <constructor-arg ref="transactionTemplate"/>
+    <constructor-arg ref="hibernateTemplateWithANewSession"/>
+  </bean>
+
+  <bean id="transactionReadWriteInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="is*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="has*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="filter*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="*NewTx">PROPAGATION_REQUIRES_NEW,ISOLATION_READ_COMMITTED</prop>
+        <prop key="*">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionWriteInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="*">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionReadOnlyInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="*">PROPAGATION_REQUIRED,readOnly</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="labelManager" class="org.springframework.aop.framework.ProxyFactoryBean" plugin:available="true">
+    <property name="proxyInterfaces" value="com.atlassian.bamboo.labels.LabelManager"/>
+    <property name="interceptorNames">
+      <list>
+        <idref bean="permissionsInterceptor"/>
+      </list>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.labels.LabelManagerImpl">
+        <constructor-arg ref="labelDao"/>
+        <constructor-arg ref="buildResultsIndexer"/>
+        <constructor-arg ref="planManager"/>
+        <constructor-arg ref="resultsSummaryManager"/>
+        <constructor-arg ref="eventPublisher"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="elasticImageConfigurationManager" class="com.atlassian.bamboo.agent.elastic.server.ElasticImageConfigurationManagerImpl" plugin:available="true">
+    <constructor-arg ref="elasticImageConfigurationDao"/>
+    <constructor-arg ref="resourceResolver"/>
+    <constructor-arg ref="elasticImageConfigurationAccessor"/>
+    <constructor-arg ref="elasticInstanceScheduleManager"/>
+    <constructor-arg ref="agentAssignmentService"/>
+  </bean>
+
+  <bean id="elasticImageConfigurationAccessor" class="com.atlassian.bamboo.agent.elastic.server.ElasticImageConfigurationAccessorImpl">
+    <constructor-arg ref="elasticImageConfigurationDao"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+  </bean>
+
+  <bean id="elasticUIBean" class="com.atlassian.bamboo.ww2.actions.admin.elastic.ElasticUIBeanImpl" plugin:available="true">
+    <constructor-arg ref="agentManager"/>
+    <constructor-arg ref="administrationConfigurationManager"/>
+    <constructor-arg ref="elasticAgentManager"/>
+    <constructor-arg ref="awsAccountBean"/>
+  </bean>
+
+  <bean id="commentManager" parent="txReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.comment.CommentManagerImpl">
+        <constructor-arg ref="commentDao"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="commentService" class="com.atlassian.bamboo.comment.CommentServiceImpl" plugin:available="true">
+    <constructor-arg ref="commentManager"/>
+    <constructor-arg ref="jiraIssueUtils"/>
+    <constructor-arg ref="eventPublisher"/>
+  </bean>
+
+  <bean id="capabilityManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.capability.CapabilityManagerImpl">
+        <property name="capabilityDao" ref="capabilityDao"/>
+        <property name="capabilitySetManager" ref="capabilitySetManager"/>
+        <property name="agentManager" ref="agentManager"/>
+        <property name="planManager" ref="planManager"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="auditLogService" class="com.atlassian.bamboo.persister.DefaultAuditLogService" plugin:available="true">
+    <constructor-arg ref="auditLogDao"/>
+    <constructor-arg ref="authenticationContext"/>
+    <constructor-arg ref="administrationConfigurationManager"/>
+  </bean>
+
+  <bean id="buildDefinitionConverter" class="com.atlassian.bamboo.fieldvalue.BuildDefinitionConverter" plugin:available="true">
+    <constructor-arg ref="buildStrategyManager"/>
+    <constructor-arg ref="pluginAccessor"/>
+  </bean>
+
+
+  <bean id="dependencyBlockingManager" class="com.atlassian.bamboo.v2.build.trigger.DefaultDependencyBlockingManager">
+    <constructor-arg ref="dependencyTreeBuilder"/>
+    <constructor-arg ref="immutablePlanCacheService"/>
+    <constructor-arg ref="changeDetectionManager"/>
+    <constructor-arg ref="planExecutionManager"/>
+    <constructor-arg ref="triggerManager"/>
+    <constructor-arg ref="errorUpdateHandler"/>
+    <constructor-arg ref="buildNumberGeneratorService"/>
+    <constructor-arg ref="chainExecutionManager"/>
+    <constructor-arg ref="buildContextBuilderFactory"/>
+  </bean>
+
+  <bean id="dependencyTreeBuilder" class="com.atlassian.bamboo.v2.build.dependencies.DependencyTreeBuilderImpl">
+    <constructor-arg ref="immutablePlanCacheService"/>
+    <constructor-arg ref="planDependencyManager"/>
+  </bean>
+
+  <bean id="elasticInstanceScheduleManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.agent.elastic.schedule.ElasticInstanceScheduleManagerImpl">
+        <constructor-arg ref="elasticInstanceScheduleDao"/>
+        <constructor-arg ref="elasticInstanceScheduleScheduler"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="chartManager" class="com.atlassian.bamboo.charts.DefaultChartManager" plugin:available="true">
+    <constructor-arg ref="pluginAccessor"/>
+    <constructor-arg ref="indexedBuildResultsSearcher"/>
+    <constructor-arg ref="cachedPlanManager"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="planManager"/>
+  </bean>
+
+  <!--
+   On server side bean buildExecutionManager also implements BuildLoggerManager interface and will be autowired to plugins until Bamboo 5.2
+   Once 5.2 is released BuildExecutionManager will no longer extend BuildLoggerManager and this bean will have to be made
+   available to plugins.
+   This bean can still be injected by reference/name to Bamboo-defined beans.
+  -->
+  <bean id="buildLoggerManager" class="com.atlassian.bamboo.build.logger.DefaultBuildLoggerManager" plugin:available="false">
+    <constructor-arg ref="agentContext"/>
+    <constructor-arg ref="expiryTicker"/>
+  </bean>
+
+  <bean id="planParticleManager" class="com.atlassian.bamboo.plan.PlanParticleManagerImpl" plugin:available="true">
+    <constructor-arg ref="planManager"/>
+  </bean>
+
+  <bean id="planScheduler" class="com.atlassian.bamboo.schedule.DefaultPlanScheduler"/>
+
+  <bean id="latest25FiveBuildResultsFilter" class="com.atlassian.bamboo.builder.resultsfilter.Latest25FiveBuildResultsFilter">
+    <constructor-arg ref="buildResultsSummaryManager"/>
+    <constructor-arg ref="planManager"/>
+  </bean>
+
+  <bean id="buildResultsFilterFactory" class="com.atlassian.bamboo.builder.resultsfilter.BuildResultsFilterFactoryImpl">
+    <constructor-arg index="0">
+      <list>
+        <ref bean="latest25FiveBuildResultsFilter"/>
+        <bean class="com.atlassian.bamboo.builder.resultsfilter.AllBuildResultsFilter">
+          <constructor-arg ref="resultsSummaryManager"/>
+          <constructor-arg ref="planManager"/>
+        </bean>
+        <bean class="com.atlassian.bamboo.builder.resultsfilter.TimeAgoBuildResultsFilter">
+          <constructor-arg value="7"/>
+          <constructor-arg ref="resultsSummaryManager"/>
+          <constructor-arg ref="planManager"/>
+        </bean>
+        <bean class="com.atlassian.bamboo.builder.resultsfilter.TimeAgoBuildResultsFilter">
+          <constructor-arg value="30"/>
+          <constructor-arg ref="resultsSummaryManager"/>
+          <constructor-arg ref="planManager"/>
+        </bean>
+        <bean class="com.atlassian.bamboo.builder.resultsfilter.TimeAgoBuildResultsFilter">
+          <constructor-arg value="90"/>
+          <constructor-arg ref="resultsSummaryManager"/>
+          <constructor-arg ref="planManager"/>
+        </bean>
+      </list>
+    </constructor-arg>
+    <constructor-arg index="1" ref="latest25FiveBuildResultsFilter"/>
+  </bean>
+
+  <bean id="planFavouriteService" class="com.atlassian.bamboo.plan.PlanFavouriteServiceImpl" plugin:available="true">
+    <constructor-arg ref="labelManager"/>
+  </bean>
+
+  <bean id="rssFeedBuilder" class="com.atlassian.bamboo.rss.RssFeedBuilder">
+    <constructor-arg ref="templateRenderer"/>
+    <constructor-arg ref="triggerManager"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+  </bean>
+
+  <bean id="secureTokenService" class="com.atlassian.bamboo.security.SecureTokenServiceImpl"/>
+
+  <bean id="rememberMeService" class="com.atlassian.seraph.service.rememberme.DefaultRememberMeService">
+    <constructor-arg ref="rememberMeConfiguration"/>
+    <constructor-arg ref="bambooRememberMeTokenDao"/>
+    <constructor-arg>
+      <bean class="com.atlassian.seraph.service.rememberme.DefaultRememberMeTokenGenerator"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="artifactDefinitionManager" class="com.atlassian.bamboo.plan.artifact.ArtifactDefinitionManagerImpl" plugin:available="true">
+    <constructor-arg ref="artifactDefinitionDao"/>
+    <constructor-arg ref="eventPublisher"/>
+  </bean>
+
+  <bean id="artifactSubscriptionManager" class="com.atlassian.bamboo.plan.artifact.ArtifactSubscriptionManagerImpl" plugin:available="true">
+    <constructor-arg ref="artifactDefinitionManager"/>
+    <constructor-arg ref="artifactSubscriptionDao"/>
+    <constructor-arg ref="consumedSubscriptionDao"/>
+    <constructor-arg ref="artifactLinkDao"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="secureTokenService"/>
+  </bean>
+
+  <bean id="variableDefinitionFactory" class="com.atlassian.bamboo.variable.VariableDefinitionFactoryImpl" plugin:available="true">
+  </bean>
+
+  <bean id="variableDefinitionManager" class="com.atlassian.bamboo.variable.VariableDefinitionManagerImpl" plugin:available="true">
+    <constructor-arg ref="variableDefinitionDao"/>
+    <constructor-arg ref="auditLogService"/>
+  </bean>
+
+  <bean id="variableValidationService" class="com.atlassian.bamboo.variable.VariableValidationServiceImpl">
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+  </bean>
+
+  <bean id="variableConfigurationService" class="com.atlassian.bamboo.variable.VariableConfigurationServiceImpl" plugin:available="true">
+    <constructor-arg ref="scopedExclusionService"/>
+    <constructor-arg ref="variableDefinitionManager"/>
+    <constructor-arg ref="variableDefinitionFactory"/>
+  </bean>
+
+  <bean id="taskManager" class="com.atlassian.bamboo.task.TaskManagerImpl">
+    <constructor-arg ref="pluginAccessor"/>
+    <constructor-arg ref="capabilitySetManager"/>
+    <constructor-arg ref="elasticAccountBean"/>
+  </bean>
+
+  <bean id="taskConfigurationService" class="com.atlassian.bamboo.task.TaskConfigurationServiceImpl" plugin:available="true">
+    <constructor-arg ref="buildDefinitionManager"/>
+    <constructor-arg ref="taskManager"/>
+    <constructor-arg ref="buildDefinitionConverter"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="auditLogService"/>
+    <constructor-arg ref="scopedExclusionService"/>
+  </bean>
+
+  <bean id="buildStrategyConfigurationService" class="com.atlassian.bamboo.build.strategy.BuildStrategyConfigurationServiceImpl" plugin:available="true">
+    <constructor-arg ref="buildDefinitionManager"/>
+    <constructor-arg ref="buildStrategyManager"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="auditLogService"/>
+    <constructor-arg ref="scopedExclusionService"/>
+  </bean>
+
+  <bean id="environmentDependencyService" class="com.atlassian.bamboo.build.strategy.EnvironmentDependencyServiceImpl"/>
+
+  <bean id="gravatarService" class="com.atlassian.bamboo.user.gravatar.GravatarServiceImpl" plugin:available="true">
+    <constructor-arg ref="administrationConfigurationPersister"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+  </bean>
+
+  <bean id="commitManager" class="com.atlassian.bamboo.commit.CommitManagerImpl">
+    <constructor-arg ref="commitDao"/>
+  </bean>
+
+  <bean id="repositoryChangesetManager" class="com.atlassian.bamboo.resultsummary.vcs.RepositoryChangesetManagerImpl">
+    <constructor-arg ref="repositoryChangesetDao"/>
+  </bean>
+
+  <!-- Trusted Apps -->
+
+  <bean id="encryptionProvider" class="com.atlassian.security.auth.trustedapps.BouncyCastleEncryptionProvider" plugin:available="true"/>
+
+  <bean id="bambooTrustedApplicationsManager" class="com.atlassian.bamboo.security.trustedapplications.BambooTrustedApplicationsManager" plugin:available="true">
+    <constructor-arg ref="encryptionProvider"/>
+    <constructor-arg ref="administrationConfigurationAccessor"/>
+    <constructor-arg ref="bambooTrustedApplicationsHibernateDao"/>
+  </bean>
+
+  <bean id="authenticationListener" class="com.atlassian.bamboo.security.trustedapplications.BambooAuthenticationListener" plugin:available="true"/>
+  <bean id="authenticationController" class="com.atlassian.bamboo.security.trustedapplications.BambooAuthenticationController" plugin:available="true"/>
+  <bean id="bambooUserResolver" class="com.atlassian.bamboo.security.trustedapplications.BambooUserResolver" plugin:available="true">
+    <constructor-arg ref="bambooUserManager"/>
+  </bean>
+
+  <!-- End trusted apps -->
+
+  <bean id="pluginHibernateSessionFactory" parent="txReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.persistence3.SpringPluginHibernateSessionFactory">
+        <constructor-arg ref="sessionFactory"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="legacyBuilderToTaskConverterService" class="com.atlassian.bamboo.task.conversion.LegacyBuilderToTaskConverterServiceImpl">
+    <constructor-arg ref="pluginAccessor"/>
+  </bean>
+
+  <bean id="agentClassServer" class="com.atlassian.bamboo.agent.classserver.AgentClassServerImpl">
+    <constructor-arg ref="agentPluginResolver"/>
+    <constructor-arg>
+      <bean class="com.atlassian.bamboo.agent.classserver.ClasspathDiscovererImpl"/>
+    </constructor-arg>
+  </bean>
+
+  <bean id="serverLifecycleManager" class="com.atlassian.bamboo.ServerLifecycleManagerImpl" plugin:available="true">
+    <constructor-arg ref="planExecutionLockService"/>
+    <constructor-arg ref="chainExecutionManager"/>
+    <constructor-arg ref="deletionService"/>
+    <constructor-arg ref="authenticationContext"/>
+    <constructor-arg ref="auditLogService"/>
+  </bean>
+
+  <bean id="serverLifecycleProvider" class="com.atlassian.bamboo.ServerLifecycleProviderImpl" plugin:available="true">
+    <constructor-arg ref="serverLifecycleManager"/>
+  </bean>
+
+  <bean id="serverStatusProvider" class="com.atlassian.bamboo.server.ServerStatusProviderImpl" plugin:available="true">
+    <constructor-arg ref="indexerManager"/>
+    <constructor-arg ref="serverLifecycleProvider"/>
+  </bean>
+
+  <bean id="repositoryConfigurationService" class="com.atlassian.bamboo.repository.RepositoryConfigurationServiceImpl" plugin:available="true">
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="repositoryManager"/>
+    <constructor-arg ref="webRepositoryViewerManager"/>
+    <constructor-arg ref="repositoryDefinitionManager"/>
+    <constructor-arg ref="auditLogService"/>
+    <constructor-arg ref="taskConfigurationService"/>
+    <constructor-arg ref="buildDefinitionManager"/>
+    <constructor-arg ref="chainBranchManager"/>
+    <constructor-arg ref="branchDetectionService"/>
+    <constructor-arg ref="scopedExclusionService"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="aclService"/>
+    <constructor-arg ref="buildStrategyConfigurationService"/>
+    <constructor-arg ref="environmentService"/>
+    <constructor-arg ref="environmentTaskService"/>
+  </bean>
+
+  <bean id="taskConfiguratorHelper" class="com.atlassian.bamboo.task.TaskConfiguratorHelperImpl" plugin:available="true">
+    <constructor-arg ref="textProvider"/>
+  </bean>
+
+  <bean id="dbmsBeanFactory" class="com.atlassian.bamboo.utils.db.DbmsBeanFactoryImpl">
+    <constructor-arg ref="hibernateConfig"/>
+  </bean>
+
+  <!--
+  It is non-singleton (prototype) because factory method throws an exception when called and Hibernate is not yet configured.
+  This happens in DefaultHibernateConfigurator.refreshSpringContextAndCreateDatabase
+  -->
+  <bean id="dbmsBean" factory-bean="dbmsBeanFactory" factory-method="createDbmsBean" scope="prototype"/>
+
+
+  <bean id="decoratedNavObjectFactory" class="com.atlassian.bamboo.ww2.beans.DecoratedNavObjectFactoryImpl">
+    <constructor-arg ref="cachedPlanManager"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="customVariableContext"/>
+  </bean>
+
+  <bean id="movePlanService" class="com.atlassian.bamboo.plan.MovePlanServiceImpl">
+    <constructor-arg ref="auditLogService"/>
+    <constructor-arg ref="bambooPermissionManager"/>
+    <constructor-arg ref="buildResultsIndexer"/>
+    <constructor-arg ref="chainBranchManager"/>
+    <constructor-arg ref="chainExecutionManager"/>
+    <constructor-arg ref="eventPublisher"/>
+    <constructor-arg ref="immutablePlanCacheService"/>
+    <constructor-arg ref="planExecutionLockService"/>
+    <constructor-arg ref="planManager"/>
+    <constructor-arg ref="planValidationService"/>
+    <constructor-arg ref="resultsSummaryManager"/>
+    <constructor-arg ref="scopedExclusionService"/>
+    <constructor-arg ref="textProvider"/>
+    <constructor-arg ref="artifactDao"/>
+  </bean>
+
+  <!-- It is non-singleton (prototype) because factory can be reset and will generate new object afterwards -->
+  <bean id="mailServerManager"
+        class="com.atlassian.mail.MailFactory"
+        factory-method="getServerManager"
+        scope="prototype"/>
+
+  <bean id="branchIntegrationService" class="com.atlassian.bamboo.plan.branch.BranchIntegrationServiceImpl">
+    <constructor-arg ref="immutablePlanCacheService"/>
+  </bean>
+
+  <bean id="uploadedFileManager" class="com.atlassian.bamboo.web.utils.UploadedFileManagerImpl" plugin:available="true">
+    <constructor-arg ref="homeLocator"/>
+  </bean>
+
+  <bean id="jsonator" class="com.atlassian.bamboo.jsonator.DefaultJsonator" plugin:available="true"/>
+  
+  <bean id="artifactPermissionService" class="com.atlassian.bamboo.artifact.ArtifactPermissionServiceImpl">
+    <constructor-arg ref="cachedPlanManager"/>
+    <constructor-arg ref="deploymentProjectService"/>
+    <constructor-arg ref="bambooPermissionManager"/>
+  </bean>
+  
+  <bean id="credentialsAccessor" class="com.atlassian.bamboo.credentials.CredentialsManagerImpl" plugin:available="true">
+  	<constructor-arg ref="credentialsDao"/>
+  </bean>
+  <alias name="credentialsAccessor" alias="credentialsManager"/>
+
+  <bean id="selfRegisteredEventListenerService" class="com.atlassian.bamboo.event.service.SelfRegisteredEventListenerServiceImpl">
+    <constructor-arg ref="eventPublisher" />
+    <constructor-arg>
+      <list>
+        <ref bean="buildExecutionManager" />
+        <ref bean="currentlyBuildingContainer" />
+        <ref bean="chainExecutionManager" />
+        <ref bean="environmentIndexer" />
+        <ref bean="deploymentExecutionService" />
+        <ref bean="versionIndexer" />
+      </list>
+    </constructor-arg>
+  </bean>
+
+</beans>

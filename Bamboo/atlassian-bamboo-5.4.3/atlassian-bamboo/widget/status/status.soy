@@ -1,0 +1,166 @@
+{namespace widget.status}
+
+/**
+ * @param lifeCycleState
+ * @param deploymentState
+ * @param? subtle
+ */
+{template .deploymentResultStatusLozenge}
+    {let $colour}
+        {if $lifeCycleState == 'FINISHED'}
+            {switch $deploymentState}
+                {case 'UNKNOWN'}current
+                {case 'SUCCESS'}success
+                {case 'FAILED'}error
+            {/switch}
+        {else}
+            {switch $lifeCycleState}
+                {case 'PENDING'}complete
+                {case 'QUEUED'}complete
+                {case 'IN_PROGRESS'}complete
+                {case 'NOT_BUILT'}current
+            {/switch}
+        {/if}
+    {/let}
+    {let $text}
+        {if $lifeCycleState == 'FINISHED'}
+            {switch $deploymentState}
+                {case 'UNKNOWN'}Unknown
+                {case 'SUCCESS'}Success
+                {case 'FAILED'}Failed
+            {/switch}
+        {else}
+            {switch $lifeCycleState}
+                {case 'PENDING'}Queued
+                {case 'QUEUED'}Queued
+                {case 'IN_PROGRESS'}In Progress
+                {case 'NOT_BUILT'}Not Built
+            {/switch}
+        {/if}
+    {/let}
+    {call widget.lozenges.auilozenge}
+        {param colour: $colour /}
+        {param text: $text /}
+        {param subtle: $subtle /}
+    {/call}
+{/template}
+
+/**
+ * @param resultSummary
+ */
+{template .buildResultStatusIcon}
+    {let $class}
+        {call .buildResultStatusClass}
+            {param resultSummary: $resultSummary /}
+        {/call}
+    {/let}
+    {call widget.icons.icon}
+         {param type: $class/}
+    {/call}
+{/template}
+
+/**
+ * @param resultSummary
+ */
+{template .buildResultStatusClass}
+    {if $resultSummary.continuable and $resultSummary.successful}SuccessfulPartial
+     {elseif $resultSummary.notRunYet}NotRunYet
+     {elseif $resultSummary.finished}{$resultSummary.buildState}
+     {else}{$resultSummary.lifeCycleState}
+     {/if}
+{/template}
+
+/**
+ * Status Ribbon
+ * @param statuses - list of maps used to render .statusRibbonItem
+ * @param? progressbarContent
+ * @param? id
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .statusRibbon}
+    <div{if $id} id="{$id}"{/if} class="status-ribbon{call aui.renderExtraClasses data="all" /}"
+        {sp}data-statuses="{length($statuses)}"
+        {call aui.renderExtraAttributes data="all" /}>
+        <div class="status-ribbon-inner">
+            {foreach $status in $statuses}
+                {call .statusRibbonItem data="$status" /}
+            {/foreach}
+        </div>
+        {if $progressbarContent}<div class="status-ribbon-progress-bar">{$progressbarContent|noAutoescape}</div>{/if}
+    </div>
+{/template}
+
+/**
+ * Status for the ribbon
+ * @param state - 'Unknown', 'Successful', 'Failed', 'Pending', 'Queued', 'InProgress', 'NotBuilt'
+ * @param content
+ * @param? id
+ * @param? headingTagName
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .statusRibbonItem private="true"}
+    <div{if $id} id="{$id}"{/if} class="status-ribbon-status {$state}{call aui.renderExtraClasses data="all" /}"{call aui.renderExtraAttributes data="all" /}>
+        <{$headingTagName ? $headingTagName : 'h2'} class="status-ribbon-status-heading">
+            {call widget.icons.icon}
+                {param type: $state + ' icon-reversed' /}
+            {/call}{sp}
+            {$content|noAutoescape}
+        </{$headingTagName ? $headingTagName : 'h2'}>
+    </div>
+{/template}
+
+/**
+ * Displays various lozenges to depict the current status of an environment.  More than one lozenge may be used.
+ * @param? deploymentVersionState
+ * @param? subtle
+ */
+{template .deploymentVersionStatus}
+    {if $deploymentVersionState}
+        {if $deploymentVersionState =='BROKEN'}
+            {call widget.lozenges.auilozenge}
+                {param colour: 'error' /}
+                {param text: $deploymentVersionState /}
+                {param subtle : $subtle /}
+                {param extraClasses : 'version-lozenge' /}
+            {/call}
+        {elseif $deploymentVersionState =='APPROVED'}
+            {call widget.lozenges.auilozenge}
+                {param colour: 'success' /}
+                {param text: $deploymentVersionState /}
+                {param subtle : $subtle /}
+                {param extraClasses : 'version-lozenge' /}
+            {/call}
+        {/if}
+    {/if}
+{/template}
+
+/**
+ * @param userName
+ * @param? displayName
+ * @param? avatar
+ * @param deploymentVersionState
+ */
+{template .deploymentVersionStatusInfo}
+    {if $deploymentVersionState == 'APPROVED' or $deploymentVersionState == 'BROKEN'}
+        <div class="detailed-version-info-container reviewed-user-avatar">
+            {call aui.avatar.avatar}
+                {param size: 'small' /}
+                {param avatarImageUrl: $avatar ? $avatar : (contextPath() + '/images/icons/useravatar.png') /}
+                {param accessibilityText: $userName ? $userName : getText('buildResult.comment.anonymous.title') /}
+                {param title: $displayName ? $displayName : getText('buildResult.comment.anonymous.title') /}
+                {param badgeContent}
+                    {if $deploymentVersionState =='BROKEN'}
+                        <span class="badge reviewed broken"></span>
+                    {elseif $deploymentVersionState == 'APPROVED'}
+                        <span class="badge reviewed approved"></span>
+                    {/if}
+                {/param}
+            {/call}
+            <script>
+                AJS.$(".aui-avatar-inner > img").tooltip({lb}gravity: 'n'{rb});
+            </script>
+        </div>
+    {/if}
+{/template}

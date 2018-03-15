@@ -1,0 +1,42 @@
+{namespace bamboo.feature.release.input}
+
+/**
+ * Displays icon for inline dialog
+ */
+{template .icon}
+    <a id="helpDialog-releaseInput" href="#" rel="help">
+        <span class="aui-icon aui-icon-small aui-iconfont-info" data-unicode="UTF+E012" original-title="">Info</span>
+    </a>
+{/template}
+
+/**
+ * Displays content for inline dialog
+ * @param item
+ */
+{template .content}
+    <div class="release-input-info">
+        {if $item}
+            {if $item.isBranch}
+                <h3>{getText('deployment.execute.preview.version.info.branch.title')}</h3><br/>
+                {getText('deployment.execute.preview.version.info.branch.scheme')}<br><br>
+                <span>&lt;branchname&gt;-&lt;incremented number&gt;</span><br><br>
+                {getText('deployment.execute.preview.version.info.branch.release')}<br><br>
+                {getText('deployment.execute.preview.version.info.branch.link',
+                    contextPath() + '/deploy/config/configureDeploymentProjectVersioning.action?id=' + $item.deploymentProjectId
+                )|noAutoescape}
+            {else}
+                <h3>{getText('deployment.execute.preview.version.info.release.title')}</h3><br/>
+                {getText('deployment.execute.preview.version.info.release.current')}<br>
+                <span>{$item.versionNamingScheme}</span><br><br>
+                {getText('deployment.execute.preview.version.info.release.default')}<br><br>
+                {getText('deployment.execute.preview.version.info.release.link',
+                    contextPath() + '/deploy/config/configureDeploymentProjectVersioning.action?id=' + $item.deploymentProjectId
+                )|noAutoescape}
+            {/if}
+        {else}
+            <span>{getText('deployment.execute.preview.version.info.empty')}</span>
+        {/if}
+    </div>
+{/template}
+
+

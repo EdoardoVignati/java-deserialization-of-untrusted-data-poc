@@ -1,0 +1,159 @@
+{namespace bamboo.feature.deployment.result}
+
+/**
+ * @param id
+ * @param lifeCycleState
+ * @param? finishedDate
+ * @param? startedDate
+ * @param? queuedDate
+ * @param? executedDate
+ * @param? hideLink
+ */
+{template .finishedTimeOrDuration}
+    {let $resultUrl}{contextPath() + '/deploy/viewDeploymentResult.action?deploymentResultId=' + $id}{/let}
+    {if $finishedDate}
+        {call bamboo.widget.time.timestamp}
+            {param datetime: $finishedDate /}
+            {param format: 'full' /}
+        {/call}
+    {elseif $lifeCycleState =='PENDING' and $startedDate}
+        {if $hideLink}
+            {getText('deployment.environment.result.duration.queued.nolink', elapsed_time($startedDate))|noAutoescape}
+        {else}
+            {getText('deployment.environment.result.duration.queued', $resultUrl, elapsed_time($startedDate))|noAutoescape}
+        {/if}
+    {elseif $lifeCycleState == 'QUEUED' and $queuedDate}
+        {if $hideLink}
+            {getText('deployment.environment.result.duration.queued.nolink', elapsed_time($queuedDate))|noAutoescape}
+        {else}
+            {getText('deployment.environment.result.duration.queued', $resultUrl, elapsed_time($queuedDate))|noAutoescape}
+        {/if}
+    {elseif $lifeCycleState == 'IN_PROGRESS' and $executedDate}
+        {if $hideLink}
+            {getText('deployment.environment.result.duration.executing.nolink', elapsed_time($executedDate))|noAutoescape}
+        {else}
+            {getText('deployment.environment.result.duration.executing', $resultUrl, elapsed_time($executedDate))|noAutoescape}
+        {/if}
+    {else}
+        /* Case where not built or timestamps got out of sync, show nothing*/
+    {/if}
+{/template}
+
+/**
+ * Displays various lozenges to depict the current status of an environment.  More than one lozenge may be used.
+ * @param deploymentResult
+ * @param? showDetailsLinkAlways
+ */
+{template .environmentState}
+    {if $deploymentResult.lifeCycleState =='PENDING' or $deploymentResult.lifeCycleState =='QUEUED'}
+        {call widget.icons.icon}
+            {param type: 'pending'/}
+        {/call}
+    {elseif $deploymentResult.lifeCycleState =='IN_PROGRESS'}
+        {call widget.icons.icon}
+            {param type: 'building'/}
+        {/call}
+    {elseif $deploymentResult.lifeCycleState =='FINISHED'}
+        {if $deploymentResult.deploymentState == 'FAILED'}
+            {call widget.icons.icon}
+                {param type: 'deploy-fail'/}
+            {/call}
+        {elseif $deploymentResult.deploymentState == 'SUCCESS'}
+            {call widget.icons.icon}
+                {param type: 'deploy-success'/}
+            {/call}
+        {else}
+            /* We assume that it ran but something weird has happened.  Best to inform the user that something could be wrong with the environment but we don't know what */
+            {call widget.icons.icon}
+                {param type: 'deploy-unknown'/}
+            {/call}
+        {/if}
+    {else}
+        /* Is the only time we can get in this situation when it never actually started? These instances should be filtered out.*/
+        {call widget.icons.icon}
+            {param type: 'deploy-unknown'/}
+        {/call}
+    {/if}
+    {call .detailsLink data="all"/}
+{/template}
+
+/**
+ * @param deploymentResult
+ * @param showDetailsLinkAlways
+ */
+{template .detailsLink}
+    {if $showDetailsLinkAlways or $deploymentResult.lifeCycleState =='PENDING' or $deploymentResult.lifeCycleState =='QUEUED' or $deploymentResult.lifeCycleState =='IN_PROGRESS' or ($deploymentResult.lifeCycleState =='FINISHED' and $deploymentResult.deploymentState == 'FAILED')}
+        <a class="result-details-link" href="{contextPath()+ '/deploy/viewDeploymentResult.action?deploymentResultId=' + $deploymentResult.id}"
+            data-version-id="{$deploymentResult.id}" data-version-name="{$deploymentResult.deploymentVersionName}"
+        >{getText('deployment.environment.result.details')}</a>
+    {/if}
+{/template}
+
+/**
+ * @param deploymentResult
+ */
+{template .nowAt}
+    {let $versionLink}{call .version data="$deploymentResult"}{param hideLozenge: true/}{/call}{/let}
+    {let $timestamp}{if $deploymentResult.finishedDate}Deployed {/if}{call bamboo.feature.deployment.result.finishedTimeOrDuration data="$deploymentResult" /}{/let}
+    <span id="{'nowAtResult_' + $deploymentResult.id}" class="environment-now-at">{getText('deployment.version.status.nowAt', $versionLink)|noAutoescape}</span>
+    {call bamboo.widget.tooltip.tooltip}
+        {param trigger: '#nowAtResult_' + $deploymentResult.id /}
+        {param content : $timestamp /}
+        {param showDelay: 200 /}
+    {/call}
+{/template}
+
+/**
+ * Displays version link + any lozenges that should decorate the version.
+ * @param? deploymentVersion     deploymentVersion object (can be null if version was deleted)
+ * @param deploymentVersionName name of deploymentVersion (always set even if version was deleted)
+ * @param? showBranch
+ * @param? hideLozenge
+ */
+{template .version}
+    {if $deploymentVersion}
+        {call bamboo.widget.deployment.version.versionInfo}
+            {param version: $deploymentVersion /}
+            {param showBranch: $showBranch /}
+            {param showVersionStatus: not $hideLozenge /}
+        {/call}
+    {else}
+        <span title="{getText('deployment.version.deleted', $deploymentVersionName)}">{$deploymentVersionName}</span>
+    {/if}
+{/template}
+
+
+/**
+ * @param environmentStatus
+ * @param deploymentVersion
+ * @param? neverDeployedText
+ */
+{template .versionStatusLozenge}
+    {if $environmentStatus.deploymentResult}
+        {if $environmentStatus.latestResult}
+           {call widget.lozenges.auilozenge}
+               {param colour: 'default' /}
+               {param text: getText('deployment.version.status.replaced') /}
+           {/call}
+        {else}
+            {call widget.status.deploymentResultStatusLozenge}
+                 {param lifeCycleState: $environmentStatus.deploymentResult.lifeCycleState/}
+                 {param deploymentState: $environmentStatus.deploymentResult.deploymentState/}
+            {/call}
+        {/if}
+    {else}
+        {if $environmentStatus.latestResult and $environmentStatus.latestResult.deploymentVersion
+            and compare_date($environmentStatus.latestResult.deploymentVersion.creationDate, $deploymentVersion.creationDate) > 0}
+            {call widget.lozenges.auilozenge}
+                {param colour: 'default' /}
+                {param text: getText('deployment.version.status.skipped') /}
+            {/call}
+        {else}
+            {if $neverDeployedText}
+                {$neverDeployedText}
+            {else}
+                {getText('deployment.version.status.never')}
+            {/if}
+        {/if}
+    {/if}
+{/template}

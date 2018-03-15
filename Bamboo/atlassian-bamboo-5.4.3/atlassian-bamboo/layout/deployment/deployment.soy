@@ -1,0 +1,36 @@
+{namespace bamboo.layout}
+
+/**
+ * Base Deployment Layout
+ * @param? headerText
+ * @param? headerContent
+ * @param? parentCrumbs
+ * @param? headerActionsButtons
+ * @param? headerExtraContent
+ * @param? deploymentProject
+ * @param? navItems
+ * @param? pageHelpPanels
+ * @param content
+ */
+{template .deployment}
+    {call .base data="all"}
+        {param headerMainContent}
+            {if $parentCrumbs}
+                {call bamboo.widget.nav.breadcrumb.crumbContainer}
+                    {param parentCrumbs: $parentCrumbs /}
+                {/call}
+            {/if}
+            {if $headerText}
+                <h1>{$headerText}</h1>
+            {elseif $headerContent}
+                {$headerContent|noAutoescape}
+            {/if}
+        {/param}
+        {param headerExtraContent}
+            {if $deploymentProject and $deploymentProject.description}
+                <div class="deployment-project-description">{$deploymentProject.description}</div>
+            {/if}
+            {if $headerExtraContent}{$headerExtraContent|noAutoescape}{/if}
+        {/param}
+    {/call}
+{/template}

@@ -1,0 +1,343 @@
+@import "../global.less";
+
+/* Form related styles */
+
+/* Bamboo Form */
+.bambooAuiDialogForm {
+  border-top: 0;
+  border-bottom: 0;
+  background-color: #fff;
+}
+
+.bambooAuiDialogForm .build-description {
+  display: block;
+  margin: 0 26px 10px 0;
+  padding-left: 20px;
+  font-weight: normal;
+}
+
+.bambooAuiDialogForm .build-description > a {
+  font-weight: bold;
+}
+
+.hideHeadingSection {
+  border-top: none;
+  /*padding-top: 5px;*/
+}
+
+.form-actions-bar {
+  margin-left: @baseSpacing;
+}
+
+/* Sub area h1 */
+.fieldDescription {
+  margin: 3px 0 0 0;
+  padding: 0 0 5px 0;
+  font-size: 95%;
+  line-height: 100%;
+  color: #7F7F7F;
+}
+
+.radioOptionDescription {
+  margin-top: 0;
+  margin-left: 20px;
+}
+
+form.aui .buttons .icon {
+  margin-right: 5px;
+}
+
+form.aui .buttons a.cancel.disabled {
+  color: @secondaryTextColor;
+  cursor: default;
+  text-decoration: none;
+}
+
+form.aui h3 + .description {
+  margin-bottom: 5px;
+}
+
+/* Width Styles. Standard is a 13em column and the narrow one is a 6em column */
+
+.bulk-project-bar {
+    border-bottom: 1px solid @dividerColor;
+    margin-bottom: @halfSpacing;
+    margin-top: @baseSpacing;
+    overflow: hidden;
+
+    div.bulk-project-name + .bulk-project-links {
+        // same top/bottom margin/padding as .field-group
+        margin: 1px 0;
+        padding: 4px 0;
+    }
+}
+.bulk-project-name {
+    font-weight: bold;
+    float: left;
+
+    > .field-group {
+        padding-left: 0 !important;
+    }
+}
+.bulk-project-links {
+    color: @secondaryTextColor;
+    float: right;
+    font-weight: normal;
+}
+.bulk-plan {
+    overflow: hidden;
+
+    + .bulk-plan {
+        margin-top: @halfSpacing;
+    }
+}
+.bulk-plan-left {
+    float: left;
+}
+.bulk-plan-right {
+    float: right;
+    width: 79%;
+}
+.bulk-plan-name,
+.bulk-job {
+    padding-left: @doubleSpacing !important;
+
+    > .field-group {
+        padding-left: 0 !important;
+    }
+}
+.bulk-command {
+    color: @secondaryTextColor;
+}
+.bulk-job-links {
+    color: @secondaryTextColor;
+}
+
+.cron-builder .icon {
+  padding-left: 5px;
+}
+
+.cron-builder-form > .form-content-container {
+  > .group {
+    padding-left: 0;
+    text-align: center;
+
+    > .radio {
+      display: inline-block;
+      margin-top: 0;
+
+      + .radio {
+        margin-left: @baseSpacing;
+      }
+    }
+  }
+}
+
+.cronEditorForm {
+  border-top: 1px solid @dividerColor;
+  margin-top: @baseSpacing;
+  padding-top: @baseSpacing;
+
+  .monthForm {
+    legend > span {
+      top: 8px;
+    }
+    input.radio {
+      top: 4px;
+    }
+    .select {
+      margin-left: 4px;
+    }
+  }
+}
+
+form.aui .cronEditorForm div.matrix {
+  overflow: hidden;
+  padding-top: 0;
+  width: 250px;
+
+  div.checkbox {
+    .box-sizing();
+    float: left;
+    margin-top: @halfSpacing;
+    width: 50%;
+  }
+}
+
+form.aui div.matrix.tight-matrix .radio {
+  width: auto;
+}
+
+form.aui div.matrix.tight-matrix .radio + .radio {
+  margin-left: 1em;
+  padding-left: 0;
+}
+
+form.aui .form-indent {
+  padding: @baseSpacing;
+  padding-left: @doubleSpacing;
+  margin-left: 130px;
+
+  fieldset {
+    padding-left: @doubleSpacing;
+
+    .field-group {
+      padding-left: 0;
+    }
+
+    .long-field {
+        max-width: 475px;
+    }
+  }
+}
+
+.popupRemoveErrorLogForm {
+  display: none;
+}
+
+.form-view {
+  margin-top: @baseSpacing;
+  position: relative;
+}
+
+.form-view:first-child,
+meta:first-child + .form-view,
+meta:first-child + meta + .form-view {
+  margin-top: 0;
+}
+
+.form-view fieldset {
+  border: 0;
+  display: block;
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+  position: relative;
+}
+
+.form-view .field-group {
+  clear: both;
+  margin-top: 4px;
+  min-height: 1.6em;
+  overflow: hidden;
+  padding-left: 140px;
+}
+
+.form-view .field-group:first-child {
+  margin-top: 0;
+}
+
+.form-view .field-group label {
+  color: #505050;
+  float: left;
+  display: block;
+  left: -140px;
+  margin-right: -130px;
+  padding-top: 4px;
+  position: relative;
+  width: 130px;
+  text-align: right;
+}
+
+.field-group .lozenge-newline .lozenge {
+    margin-top: 0px
+}
+
+.form-view div.description {
+  font-size: 11px;
+}
+
+.form-view .field-value {
+  display: inline-block;
+  padding-top: 4px;
+}
+
+.form-view pre.field-value {
+  margin: 0;
+}
+
+.form-view .aui-message {
+  clear: both;
+}
+
+/* AUI toolbar customization */
+.toolbar-group .toolbar-item:first-of-type .toolbar-trigger {
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.form-view > h2 {
+  border-bottom: 1px solid #ddd;
+  color: #222;
+}
+
+.form-view > .floating-toolbar:first-child + h2 {
+  margin: 0;
+}
+
+.form-view h2 + .field-group {
+  margin-top: 16px;
+}
+
+.form-view h2.has-aui-toolbar {
+  line-height: 1.6em;
+}
+
+.form-view > .aui-toolbar {
+  float: right;
+  padding: 4px 5px 0 0;
+  vertical-align: middle;
+  text-align: right;
+}
+
+.aui-toolbar.inline {
+  clear: none;
+  padding: 0;
+  width: auto;
+}
+
+.aui-toolbar.inline .toolbar-group {
+  margin: 0;
+}
+
+.aui-toolbar > .toolbar-group > .toolbar-item .aui-dropdown > .dropdown-item > a {
+  display: block;
+  text-decoration: none;
+}
+
+.aui-toolbar > .toolbar-group > .toolbar-item > .toolbar-trigger .icon-drop:hover {
+  background: url(../../../images/menu_indicator_for_light_backgrounds.gif) no-repeat 50% 50%;
+}
+
+.aui-toolbar > .toolbar-group > .toolbar-item.aui-dd-parent > .toolbar-trigger {
+  padding-right: 4px;
+}
+
+/* "long-field" isn't long enough for our licenses */
+form.aui textarea.license-field {
+  width: 610px;
+}
+
+.bambooAceResizableContainer {
+  height: 75%;
+  min-height: 300px;
+  min-width: 500px;
+  padding-bottom: 9px;
+  padding-right: 9px;
+  width: 500px;
+}
+
+.bambooAceEditor {
+  font-size: 16px;
+  height: 100%;
+  min-height: 300px;
+  position: relative;
+  width: 100%;
+}
+
+.heading-description {
+    padding-bottom: @baseSpacing;
+}

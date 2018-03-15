@@ -1,0 +1,54 @@
+{namespace bamboo.widget.autocomplete}
+
+/**
+ * @param username
+ * @param? fullName
+ * @param? displayableEmail
+ * @param? avatarUrl
+ */
+{template .userItemResult}
+    <span>
+        {if $avatarUrl}<img src="{$avatarUrl}" alt="" class="avatar" />{/if}
+        {if $fullName}
+            {$fullName}
+            {if $displayableEmail} - {$displayableEmail}{/if}
+            {sp}({$username})
+        {else}
+            {if $displayableEmail}
+                {$displayableEmail} ({$username})
+            {else}
+                {$username}
+            {/if}
+        {/if}
+    </span>
+{/template}
+
+/**
+ * @param projectName
+ * @param? planName
+ */
+{template .planItemResult}
+    <span>{$projectName}{if $planName} &rsaquo; {$planName}{/if}</span>
+{/template}
+
+/**
+ * @param branchName
+ */
+{template .branchItemResult}
+    <span>{$branchName}</span>
+{/template}
+
+/**
+* @param projectName
+*/
+{template .projectItemResult}
+    <span>{$projectName}</span>
+{/template}
+
+
+/**
+ * @param key
+ */
+{template .variableItemResult}
+    <span>{$key}</span>
+{/template}

@@ -1,0 +1,102 @@
+{namespace bamboo.widget.planStatusHistory}
+
+/**
+ * Container with JS initialisation
+ * @param id
+ * @param builds - array of builds
+ * @param bootstrap - array of builds in JSON format
+ * @param? currentBuildNumber - number of the build that is currently selected (user is on that build result)
+ * @param? firstBuildNumber - number of the first build
+ * @param? lastBuildNumber - number of the last build
+ * @param planKey - plan key to fetch build results for
+ * @param keyToNavigate - job or plan key used in determining the navigation redirects
+ * @param returnUrl - string containing the current url (or whatever our redirect thing is able to parse and munge into a new url)
+ */
+{template .container}
+<div id="{$id}">
+    {call .navigator data="all" /}
+</div>
+<script>
+    (function ($) {lb}
+        new BAMBOO.PlanStatusHistory.Navigator({lb}
+            el: $('#{$id}'),
+            planKey: '{$planKey}',
+            buildNumber: {($currentBuildNumber ? $currentBuildNumber : 'null')},
+            bootstrap: {$bootstrap|noAutoescape},
+            returnUrl: '{$returnUrl|noAutoescape}',
+            keyToNavigate: '{$keyToNavigate}',
+            firstBuildNumber: {($firstBuildNumber ? $firstBuildNumber : 'null')},
+            lastBuildNumber: {($lastBuildNumber ? $lastBuildNumber : 'null')}
+        {rb});
+    {rb}(jQuery));
+</script>
+{/template}
+
+/**
+ * Navigator
+ * @param builds - array of builds
+ * @param? currentBuildNumber - number of the build that is currently selected (user is on that build result)
+ * @param? firstBuildNumber - number of the first build
+ * @param? lastBuildNumber - number of the last build
+ * @param keyToNavigate - job or plan key used in determining the navigation redirects
+ * @param returnUrl - string containing the current url (or whatever our redirect thing is able to parse and munge into a new url)
+*/
+{template .navigator}
+    {if length($builds) > 0}
+        {if $currentBuildNumber and $currentBuildNumber > $firstBuildNumber}
+            <a class="previous" href="{contextPath() + '/build/result/viewPreviousBuildResults.action?buildKey=' + $keyToNavigate + '&buildNumber=' + $currentBuildNumber + '&returnUrl=' + $returnUrl}" title="{getText('historynavigator.previous')}" accesskey="{getText('global.key.back')}"><span>{getText('global.pager.previous')}</span></a>
+        {else}
+            <span class="previous"><span></span></span>
+        {/if}
+        <ol>
+            {foreach $build in $builds}
+                {call .item data="$build"}
+                    {param href: contextPath() + ($currentBuildNumber ? '/build/result/gotoBuildResult.action?buildKey=' + $keyToNavigate + '&buildNumber=' + $build.buildNumber + '&returnUrl=' + $returnUrl : '/browse/' + $build.planKey + '-' + $build.buildNumber) /}
+                    {param isCurrent: ($currentBuildNumber and $currentBuildNumber == $build.buildNumber) /}
+                    {param isSequenceBreak: (not isFirst($build) and ($builds[index($build)-1].buildNumber+1) != $build.buildNumber and $builds[index($build)-1].active != $build.active) /}
+                {/call}
+            {/foreach}
+        </ol>
+        {if $currentBuildNumber and $currentBuildNumber < $lastBuildNumber}
+            <a class="next" href="{contextPath() + '/build/result/viewNextBuildResults.action?buildKey=' + $keyToNavigate + '&buildNumber=' + $currentBuildNumber + '&returnUrl=' + $returnUrl}" title="{getText('historynavigator.next')}" accesskey="{getText('global.key.next')}"><span>{getText('global.pager.next')}</span></a>
+        {else}
+            <span class="next"><span></span></span>
+        {/if}
+    {else}
+        <p>{getText('historynavigator.noData')}</p>
+    {/if}
+{/template}
+
+/**
+ * List item for the plan status history widget
+ * @param buildNumber
+ * @param buildStatus
+ * @param buildStatusDescription
+ * @param trigger
+ * @param failedTestCaseCount
+ * @param rebuild
+ * @param onceOff
+ * @param customBuild
+ * @param href
+ * @param? extraClasses
+ * @param? isCurrent
+ * @param? isSequenceBreak
+*/
+{template .item}
+    <li class="{$buildStatus}{if $isCurrent} current{/if}{if $isSequenceBreak} sequence-break{/if}{call aui.renderExtraClasses data="all" /}"
+        {sp}data-build-number="{$buildNumber}"
+        {sp}data-trigger="{$trigger}"
+        {sp}data-failed-test-case-count="{$failedTestCaseCount}"
+        {sp}data-rebuild="{$rebuild}"
+        {sp}data-once-off="{$onceOff}"
+        {sp}data-custom-build="{$customBuild}"
+    >
+        <a href="{$href}">
+            {call widget.icons.icon}
+                {param type: $buildStatus /}
+                {param text: '#' + $buildNumber + ' (' + $buildStatusDescription + ')' /}
+                {param showTitle: true /}
+            {/call}
+        </a>
+    </li>
+{/template}

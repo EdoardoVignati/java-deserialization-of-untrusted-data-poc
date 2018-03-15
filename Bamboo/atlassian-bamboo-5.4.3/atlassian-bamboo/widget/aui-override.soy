@@ -1,0 +1,86 @@
+{namespace widget.override.aui}
+
+/**
+ * !!! IT MUST BE REMOVED AND REPLACED WHEN AUI BADGE BUTTON IS READY !!!.
+ * Override for AUI button to allow badge appear on the right side.
+ * @param text Visible text of the button.
+ * @param? type Type of button. Null/empty for default; other options are primary, link, subtle.
+ * @param? tagName Defaults to BUTTON. A and INPUT can also be used. INPUT not recommended.
+ * @param? inputType Defaults to BUTTON. Only required where tagName is set to INPUT.
+ * @param? href URL to link to. Usually for link button types. Creates an A element.
+ * @param? id ID attribute of the button.
+ * @param? extraClasses
+ * @param? extraAttributes
+ * @param? isDisabled Boolean. Sets ARIA disabled attribute. Default: false.
+ * @param? isPressed Boolean. Sets ARIA pressed attribute. Default: false.
+ * @param? iconType Options: "aui" or "custom". Adds a SPAN (type:custom) or a SPAN.aui-icon (type:aui) to A and BUTTON elements. Not supported for INPUT.
+ * @param? iconText Required if icon is used. String for assistive/hidden/alternative text for icons.
+ * @param? iconClass String added to the class attribute of the icon span. Used to set extra icon class.
+ * @param? dropdown2Target ID of a Dropdown2 dropdown. By implication, sets all required attributes to make the button into a dropdown2 trigger.
+ * @param badgeText
+ **/
+{template .badgeButton}
+    {if $href}
+        <a href="{$href}"{call .badgeButtonAttributes data="all" /}>
+            {call .badgeButtonIcon data="all" /}{$text}
+        </a>
+    {elseif $tagName == 'input'}
+        <input
+            {sp}type="{$inputType ? $inputType : 'button'}" {call .badgeButtonAttributes data="all" /} value="{$text}" />
+    {else}
+        <{$tagName ? $tagName : 'button'}{call .badgeButtonAttributes data="all" /}>
+            {call .badgeButtonIcon data="all" /}{$text} <span class="aui-badge">{$badgeText}</span>
+        </{$tagName ? $tagName : 'button'}>
+    {/if}
+{/template}
+
+/**
+ * Private template for rendering the button attributes
+ * @param? type Passed in.
+ * @param? tagName Passed in.
+ * @param? id Passed in.
+ * @param? extraClasses Passed in.
+ * @param? extraAttributes Passed in.
+ * @param? isDisabled Passed in.
+ * @param? isPressed Passed in.
+ * @param? dropdown2Target Passed in.
+ */
+{template .badgeButtonAttributes private="true"}
+    {if $id} id="{$id}"{/if}
+    {sp}class="aui-button
+    {if $dropdown2Target} aui-dropdown2-trigger{/if}
+    {switch $type}
+        {case 'primary'}
+            {sp}aui-button-primary
+        {case 'link'}
+            {sp}aui-button-link
+        {case 'subtle'}
+            {sp}aui-button-subtle
+    {/switch}
+    {call aui.renderExtraClasses data="all" /}
+    "
+    {call aui.renderExtraAttributes data="all" /}
+    {if $isPressed} aria-pressed="{$isPressed}"{/if}
+    {if $isDisabled} aria-disabled="{$isDisabled}"
+        {if ($isDisabled == true)}
+            {if ($tagName == 'button') or ($tagName == 'input')} disabled="disabled" {/if}
+        {/if}
+    {/if}
+    {if $dropdown2Target} aria-owns="{$dropdown2Target}" aria-haspopup="true"{/if}
+    {if $tagName == 'a'} tabindex="0"{/if} // This is so that 'A' buttons with no 'href' can be tabbed to. Can be overridden with $extraAttributes as the first tabindex the browser sees has precedence
+{/template}
+
+/**
+ * Private template for rendering the button icon.
+ * @param? iconType Passed in.
+ * @param? iconText Passed in.
+ * @param? iconClass Passed in.
+ **/
+{template .badgeButtonIcon private="true"}
+{if $iconType}
+    <span class="
+        {if ($iconType == 'aui')}aui-icon{/if}
+        {if $iconClass}{sp}{$iconClass}{/if}
+    ">{if $iconText}{$iconText}{/if}</span>
+{/if}
+{/template}

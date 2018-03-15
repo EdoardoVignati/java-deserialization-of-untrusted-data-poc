@@ -1,0 +1,81 @@
+{namespace bamboo.layout}
+
+/**
+ * Deployment Environment Layout
+ * @param? navItems
+ * @param content
+ * @param environment
+ * @param deploymentProject
+ * @param currentUrl
+ * @param? latestDeploymentResult
+ */
+{template .deploymentEnvironment}
+    {call .deployment data="all"}
+        {param headerContent}
+            <h1{if $latestDeploymentResult} class="has-environment-status"{/if}>{getText('deployment.environment.header', $environment.name)}</h1>
+        {/param}
+        {param parentCrumbs: [
+            ['link': contextPath() + '/deploy/viewAllDeploymentProjects.action', 'text': getText('deployment.breadcrumb.allProjects')],
+            ['link': contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $deploymentProject.id, 'text': $deploymentProject.name]
+        ] /}
+        {param headerActionsButtons}
+            {call aui.buttons.buttons}
+                {param content}
+                    {call bamboo.layout.menus.deployDropdown}
+                        {param environments: $deploymentProject.environments /}
+                        {param currentUrl: $currentUrl /}
+                        {param highlightedEnvironment: $environment /}
+                    {/call}
+                {/param}
+            {/call}
+            {if $deploymentProject.operations.allowedToCreateVersion or $deploymentProject.operations.canEdit }
+                {call aui.buttons.buttons}
+                    {param content}
+                        {call aui.buttons.button}
+                            {param id: 'environment-configuration-actions'/}
+                            {param text: ' ' /}
+                            {param tagName: 'a' /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'aui-icon-small aui-iconfont-more' /}
+                            {param dropdown2Target: 'environment-actions' /}
+                        {/call}
+                    {/param}
+                {/call}
+                {call aui.dropdown2.contents}
+                    {param id: 'environment-actions' /}
+                    {param content}
+                        <div class="aui-dropdown2-section">
+                            <ul>
+                            {if $deploymentProject.operations.allowedToCreateVersion}
+                                {let $actionUrl: contextPath() + '/deploy/createDeploymentVersion.action?deploymentProjectId=' + $deploymentProject.id /}
+                                <li>
+                                    <a id='create-deployment-version'
+                                       href="{$actionUrl}&returnUrl={$currentUrl|escapeUri}"
+                                       title="{getText('deployment.project.create.version.tooltip')}"
+                                       class="aui-icon-container">
+                                        {call widget.icons.fontIcon}{param type: 'add'/}{/call}{sp}{getText('deployment.project.create.version')}
+                                    </a>
+                                </li>
+                            {/if}
+                            {if $environment.operations.canEdit}
+                                <li>
+                                    <a id='edit-environment'
+                                       class="aui-icon-container"
+                                       href="{contextPath() + '/deploy/config/configureDeploymentProject.action?id=' +  $deploymentProject.id + '&environmentId=' + $environment.id}">
+                                        {call widget.icons.fontIcon}{param type: 'edit'/}{/call}{sp}{getText('deployment.environment.configure')}
+                                    </a>
+                                </li>
+                            {/if}
+                            </ul>
+                        </div>
+                    {/param}
+                    {param extraClasses: 'aui-style-default' /}
+                {/call}
+           {/if}
+        {/param}
+    {/call}
+    <script>
+        AJS.whenIType('e').followLink('#edit-environment');
+    </script>
+{/template}
+

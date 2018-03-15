@@ -1,0 +1,25 @@
+#!/bin/sh
+
+cygwin=false;
+case "`uname`" in
+  CYGWIN*) cygwin=true ;;
+esac
+
+SVNKIT_HOME=`dirname $0`
+SVNKIT_HOME=`cd "$SVNKIT_HOME" ; pwd`
+SVNKIT_VER=1.7.6
+
+SVNKIT_CP="$(echo $SVNKIT_HOME/lib/*.jar | sed s/\ /:/g)"
+
+if $cygwin ; then
+  SVNKIT_CP=`cygpath --windows --path "$SVNKIT_CP"`
+fi
+
+SVNKIT_VM_OPTIONS="-Dsun.io.useCanonCaches=false -Djava.util.logging.config.file=$SVNKIT_HOME/lib/logging.properties.disabled"
+
+SVNKIT_MAINCLASS=org.tmatesoft.svn.cli.SVN
+
+#export SSH="-Dsvnkit.ssh2.key=/home/bamboo/.ssh/id_rsa -Dsvnkit.ssh2.username=bamboo"
+#export YOURKIT=-agentpath:/opt/java/yourkit/current/bin/linux-x86-32/libyjpagent.so
+
+java $YOURKIT $SVNKIT_VM_OPTIONS $SSH -Dsvnkit.useJNA=true -Dsvnkit.symlinks=false -Djava.util.logging.config.file=logging.properties -cp $SVNKIT_CP $SVNKIT_MAINCLASS "$@"

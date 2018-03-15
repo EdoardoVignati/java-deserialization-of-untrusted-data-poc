@@ -1,0 +1,129 @@
+<!--  ================================================================ -->
+<!--  The Bamboo Sitemesh page layout decorator mappings          -->
+<!--                                                                   -->
+<!--  ================================================================ -->
+
+<decorators defaultdir="/decorators">
+
+
+    <!--Setup-->
+    <decorator name="install" page="setup.ftl"/>
+
+    <decorator name="setup" page="setup.ftl">
+      <url-pattern>/setup/*</url-pattern>
+      <url-pattern>/bootstrap/*</url-pattern>
+    </decorator>
+
+    <!--General-->
+    <decorator name="errorDecorator" page="errorDecorator.ftl">
+      <url-pattern>/error/*</url-pattern>
+    </decorator>
+
+    <decorator name="main" page="main.ftl">
+        <pattern>*.action</pattern>
+        <pattern>*.ftl</pattern>
+        <pattern>*.vm</pattern>
+    </decorator>
+
+    <decorator name="login" page="login.ftl"/>
+
+    <decorator name="atl.general" page="main.ftl"/>
+
+    <decorator name="plan" page="planDecorator.ftl">
+      <pattern>/build/*.action</pattern>
+      <pattern>/chain/*.action</pattern>
+    </decorator>
+
+    <decorator name="createWizard" page="createWizardDecorator.ftl">
+    </decorator>
+
+    <decorator name="result" page="resultDecorator.ftl">
+      <pattern>/chain/result/*.action</pattern>
+      <pattern>/build/result/*.action</pattern>
+    </decorator>
+
+    <decorator name="build" page="buildDecorator.ftl"> <!-- essentially just breadcrumbed -->
+      <pattern>/chain/admin/*.action</pattern>
+      <pattern>/build/admin/*.action</pattern>
+      <pattern>/build/label/*.action</pattern>
+      <pattern>/project/*.action</pattern>
+    </decorator>
+
+    <decorator name="planConfig" page="configDecorator.ftl">
+      <pattern>/chain/admin/config/*.action</pattern>
+      <pattern>/branch/admin/config/*.action</pattern>
+      <pattern>/build/admin/edit/*.action</pattern>
+    </decorator>
+
+    <!--No Decoration-->
+    <decorator name="jsWrite" page="jsWrite">  <!--No idea what this one does...-->
+        <pattern>*/js/*.action</pattern>
+    </decorator>
+
+    <decorator name="rest" page="rest.ftl">
+      <pattern>*/api/rest/*.action</pattern>
+      <pattern>*/ajax/*.action</pattern>
+      <pattern>/build/label/ajax/*.action</pattern>
+      <pattern>/build/ajax/*.action</pattern>
+      <pattern>/chain/admin/ajax/*.action</pattern>
+      <pattern>*/charts/*.action</pattern>
+      <pattern>*/textdownloads/*.action</pattern>
+      <pattern>*/agentServer/*.action</pattern>
+      <pattern>*/gadgets/*</pattern>
+    </decorator>
+
+    <decorator name="nothing">
+      <url-pattern>/rest/*</url-pattern>
+    </decorator>
+
+    <!--Html Page No decoration-->
+    <decorator name="none" page="none.ftl">
+      <pattern>index.html</pattern>
+    </decorator>
+
+    <!--Admin Pages-->
+
+    <decorator name="upm" page="upm.ftl" />
+
+    <decorator name="export" page="export.ftl" />
+
+    <decorator name="adminpage" page="admin.ftl">
+      <url-pattern>/admin/*.action</url-pattern>
+    </decorator>
+
+    <decorator name="atl.admin" page="admin.ftl"/>
+
+    <!--User profile - includes tabs-->
+    <decorator name="atl.userprofile" page="userProfileDecorator.ftl"/>
+
+    <!--Minimal Decoration (looks like bamboo but limited functionality)-->
+    <decorator name="atl.popup" page="popup.ftl" />
+
+    <decorator name="pickers" page="popup.ftl"/>
+
+    <decorator name="atl.dashboard" page="dashboardDecorator.ftl"/>
+
+    <!-- A decorator that just displays the Bamboo instance name on the gray background -->
+    <decorator name="instanceName" page="instanceNameDecorator.ftl"/>
+
+    <decorator name="bamboo.authors" page="authorsDecorator.ftl"/>
+
+    <decorator name="bamboo.agent" page="agentDecorator.ftl"/>
+
+    <!--Html wrapped textarea - see JSONAsHTMLResult -->
+    <decorator name="bamboo.htmlwrapper" page="htmlwrapper.ftl" />
+
+    <!--Deployments-->
+    <decorator name="deployment" page="/layout/deployment/deploymentDecorator.ftl">
+      <url-pattern>/deploy/*.action</url-pattern>
+    </decorator>
+
+    <decorator name="deploymentMinimal" page="/layout/deployment/deploymentMinimalDecorator.ftl"/>
+
+    <decorator name="deploymentConfigDecorator" page="/layout/deployment/config/deploymentConfigDecorator.ftl"/>
+    <decorator name="deploymentVersionDecorator" page="/layout/deployment/deploymentVersionDecorator.ftl"/>
+    <decorator name="deploymentEnvironmentDecorator" page="/layout/deployment/environment/deploymentEnvironmentDecorator.ftl"/>
+    <decorator name="deploymentProjectDecorator" page="/layout/deployment/deploymentProjectDecorator.ftl"/>
+    <decorator name="deploymentResultDecorator" page="/layout/deployment/result/deploymentResultDecorator.ftl"/>
+
+</decorators>

@@ -1,0 +1,191 @@
+@import "../../global.less";
+
+@statusRibbonWithJobWidth: 217px;
+@iconSize: 16px;
+@ribbonSeparatorSize: 1px;
+.status-ribbon {
+  clear: both;
+  overflow: hidden;
+  position: relative;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+
+  // IE8 uses spans with classes "before" and "after" that have a white background and 20% opacity. See: status-ie.less
+  &:before,
+  &:after,
+  > .before,
+  > .after {
+    background: rgba(255, 255, 255, 0.2);
+    content: "";
+    height: 8px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+  &:after,
+  > .after {
+    bottom: 0;
+    top: auto;
+  }
+  .icon {
+    vertical-align: -2px;
+  }
+  &[data-statuses="1"] {
+    .status-ribbon-status:first-child {
+      width: auto;
+    }
+    > .status-ribbon-progress-bar {
+      padding-left: 0;
+    }
+  }
+}
+
+.status-ribbon-inner {
+  border-spacing: 0;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.status-ribbon-status {
+  display: table-cell;
+  overflow: hidden;
+  padding: 8px 0;
+  position: relative;
+
+  &:first-child {
+    width: @statusRibbonWithJobWidth;
+  }
+  &.InProgress,
+  &.Pending,
+  &.Queued {
+    background: #3c78b5;
+  }
+  &.Failed {
+    background: #a00;
+  }
+  &.Successful {
+    background: #393;
+  }
+  &.NotBuilt,
+  &.NotRunYet,
+  &.Unknown {
+    background: #666;
+  }
+  + .status-ribbon-status {
+    border-left: @ribbonSeparatorSize solid #fff;
+  }
+}
+
+.status-ribbon-status-heading {
+  background: transparent;
+  border: 1px solid transparent;
+  border-color: rgba(0, 0, 0, 0.05);
+  border-left: 0;
+  border-right: 0;
+  color: #fff;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 2;
+  margin: 0;
+  padding: 0 0 0 8px;
+  position: relative;
+  white-space: nowrap;
+  z-index: 1;
+
+  > a {
+    color: #fff;
+  }
+  .trigger-reason {
+    &:before {
+      content: "\2013";
+    }
+    a {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+}
+
+h3.status-ribbon-status-heading {
+  padding-left: 16px;
+}
+
+.status-ribbon-progress-bar {
+  font-size: 16px;
+  left: 0;
+  line-height: 1.875;
+  padding: 0 0 0 (@statusRibbonWithJobWidth + @ribbonSeparatorSize);
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  .progress {
+    border: 0;
+    color: #fff;
+    margin: 9px 0;
+
+    > .progress-bar {
+      .transition(width 5.3s linear);
+      background: #6393c3;
+      background: rgba(255, 255, 255, 0.1);
+      -webkit-box-shadow: inset 15px 0 10px -10px rgba(0, 0, 0, 0.3);
+      -moz-box-shadow: inset 15px 0 10px -10px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 15px 0 10px -10px rgba(0, 0, 0, 0.3);
+      left: auto;
+      right: 0;
+    }
+    > .progress-text {
+      visibility: hidden;
+    }
+  }
+}
+
+.detailed-version-info-container {
+  margin-top: @baseSpacing;
+
+  time {
+    border: 0 none;
+    color: @secondaryTextColor;
+    font-size: 12px;
+  }
+}
+
+.version-lozenge-container {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.aui-avatar-badged {
+    position: relative;
+    vertical-align: middle;
+
+    .reviewed {
+        .opacity(1);
+        .transition(all 0.3s ease-in-out);
+        .scale(1);
+        .square(12px);
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        right: -6px;
+        top: -6px;
+        padding-top: @baseSpacing;
+        text-align: center;
+        display: block;
+        font-size: 9px;
+        line-height: 16px;
+        text-indent: -999em;
+    }
+
+    .approved {
+        background: transparent url(../../../images/deployment/review-approved-badge.svg) no-repeat 0 0;
+        background-size: 12px;
+    }
+
+    .broken {
+        background: transparent url(../../../images/deployment/review-broken-badge.svg) no-repeat 0 0;
+        background-size: 12px;
+    }
+}

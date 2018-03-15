@@ -1,0 +1,13 @@
+@import "../../global.less";
+
+.status-ribbon {
+    &:before,
+    &:after {
+        display: none;
+    }
+    > .before,
+    > .after {
+        .opacity(0.2);
+        background: #fff;
+    }
+}

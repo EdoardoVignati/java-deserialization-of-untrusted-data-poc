@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+  <!-- ~~~~~~~~~~~~~~~~~~ "BEFORE INVOCATION" AUTHORIZATION DEFINITIONS ~~~~~~~~~~~~~~~~ -->
+
+  <!--Bamboo Plan level permissions-->
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.ADMINISTRATION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.ADMINISTRATION"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.BUILD" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.BUILD"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CLONE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CLONE"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CREATE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CREATE"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.SIGN_UP" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.SIGN_UP"/>
+  </bean>
+  <bean id="com.atlassian.bamboo.security.acegi.acls.BambooPermission.RESTRICTEDADMINISTRATION" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField" value="com.atlassian.bamboo.security.acegi.acls.BambooPermission.RESTRICTEDADMINISTRATION"/>
+  </bean>
+
+  <!-- An access decision voter that reads ROLE_* configuration settings -->
+  <bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter"/>
+
+  <!--Plan ACL permission voters-->
+  <bean id="aclBuildReadVoter" parent="aclAdminAwareBuildVoter">
+    <constructor-arg value="ACL_BUILD_READ"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="aclBuildExecuteVoter" parent="aclAdminAwareBuildVoter">
+    <constructor-arg value="ACL_BUILD_EXECUTE"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.BUILD"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="aclBuildCloneVoter" parent="aclAdminAwareBuildVoter">
+    <constructor-arg value="ACL_BUILD_CLONE"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CLONE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="aclBuildEditVoter" parent="aclAdminAwareBuildVoter">
+    <constructor-arg value="ACL_BUILD_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+  <bean id="aclBuildAdminVoter" parent="aclAdminAwareBuildVoter">
+    <constructor-arg value="ACL_BUILD_ADMIN"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.ADMINISTRATION"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="aclStageAdminVoter" parent="aclAdminAwareStageVoter">
+    <constructor-arg value="ACL_STAGE_ADMIN"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.ADMINISTRATION"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <!-- Deployments ACL permission voters-->
+
+  <!-- abstract base voter for different Deployments-related methods that accept single long argument representing entity id -->
+  <bean id="aclAdminAwareIdentifierVoter" class="com.atlassian.bamboo.security.acegi.vote.RestrictedAdminAwareVoter" abstract="true">
+    <constructor-arg ref="aclService"/>
+    <property name="processDomainObjectClass" value="long"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclAdminAwareDeploymentProjectVoter" parent="aclAdminAwareIdentifierVoter" abstract="true">
+    <property name="objectIdentityRetrievalStrategy" ref="deploymentProjectObjectIdentityRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclAdminAwareDeploymentProjectFromEnvironmentVoter" parent="aclAdminAwareIdentifierVoter" abstract="true">
+    <property name="objectIdentityRetrievalStrategy" ref="deploymentProjectFromEnvironmentObjectIdentityRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclAdminAwareDeploymentVersionVoter" parent="aclAdminAwareIdentifierVoter" abstract="true">
+    <property name="objectIdentityRetrievalStrategy" ref="deploymentVersionObjectIdentityRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclAdminAwareEnvironmentVoter" parent="aclAdminAwareIdentifierVoter" abstract="true">
+    <property name="objectIdentityRetrievalStrategy" ref="environmentObjectIdentityRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclAdminAwareDeploymentResultVoter" parent="aclAdminAwareIdentifierVoter" abstract="true">
+    <property name="objectIdentityRetrievalStrategy" ref="deploymentResultObjectIdentityRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclDeploymentProjectEditVoter" parent="aclAdminAwareDeploymentProjectVoter">
+    <constructor-arg value="ACL_DEPLOYMENT_PROJECT_ID_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="aclDeploymentProjectFromEnvironmentEditVoter" parent="aclAdminAwareDeploymentProjectFromEnvironmentVoter">
+    <constructor-arg value="ACL_DEPLOYMENT_PROJECT_FROM_ENVIRONMENT_ID_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="aclDeploymentVersionEditVoter" parent="aclAdminAwareDeploymentVersionVoter">
+    <constructor-arg value="ACL_DEPLOYMENT_VERSION_ID_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="aclEnvironmentEditVoter" parent="aclAdminAwareEnvironmentVoter">
+    <constructor-arg value="ACL_ENVIRONMENT_ID_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="aclDeploymentResultEditVoter" parent="aclAdminAwareDeploymentResultVoter">
+    <constructor-arg value="ACL_DEPLOYMENT_RESULT_ID_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+
+  <!--Abstract ACL Build Voter-->
+  <!--<bean id="aclBuildVoter" class="org.acegisecurity.vote.AclEntryVoter" abstract="true">-->
+  <!--<constructor-arg ref="aclService"/>-->
+  <!--<property name="processDomainObjectClass" value="com.atlassian.bamboo.plan.Plan"/>-->
+  <!--<property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>-->
+  <!--<property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>-->
+  <!--</bean>-->
+
+  <!--Abstract ACL Build Voter, allowing restricted admin to do anything -->
+  <bean id="aclAdminAwareBuildVoter" class="com.atlassian.bamboo.security.acegi.vote.RestrictedAdminAwareVoter" abstract="true">
+    <constructor-arg ref="aclService"/>
+    <property name="processDomainObjectClass" value="com.atlassian.bamboo.plan.PlanIdentifier"/>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <bean id="aclAdminAwareStageVoter" class="com.atlassian.bamboo.security.acegi.vote.RestrictedAdminAwareVoter" abstract="true">
+    <constructor-arg ref="aclService"/>
+    <property name="processDomainObjectClass" value="com.atlassian.bamboo.chains.ChainStage"/>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <bean id="globalCreateVoter" class="com.atlassian.bamboo.security.acegi.vote.GlobalCreateVoter">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="GLOBAL_CREATE"/>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- An access decision manager used by the business objects -->
+  <bean id="businessAccessDecisionManager" class="org.acegisecurity.vote.AffirmativeBased">
+    <property name="allowIfAllAbstainDecisions" value="false"/>
+    <property name="decisionVoters">
+      <list>
+        <ref local="roleVoter"/>
+        <ref local="aclBuildReadVoter"/>
+        <ref local="aclBuildExecuteVoter"/>
+        <ref local="aclBuildAdminVoter"/>
+        <ref local="aclBuildEditVoter"/>
+        <ref local="aclBuildCloneVoter"/>
+        <ref local="aclStageAdminVoter"/>
+        <ref local="globalCreateVoter"/>
+        <ref local="aclDeploymentProjectEditVoter"/>
+        <ref local="aclDeploymentProjectFromEnvironmentEditVoter"/>
+        <ref local="aclDeploymentResultEditVoter"/>
+        <ref local="aclDeploymentVersionEditVoter"/>
+        <ref local="aclEnvironmentEditVoter"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- ========= ACCESS CONTROL LIST LOOKUP MANAGER DEFINITIONS ========= -->
+  <bean id="aclAuthorizationStrategy" class="com.atlassian.bamboo.security.acegi.acls.AlwaysGrantAclAuthorizationStrategy"/>
+
+  <bean id="aclService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" plugin:available="true">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="find*">PROPAGATION_REQUIRED,readOnly,+org.acegisecurity.acls.NotFoundException</prop>
+        <prop key="read*">PROPAGATION_REQUIRED,readOnly,+org.acegisecurity.acls.NotFoundException</prop>
+        <prop key="*">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+    <property name="target">
+      <bean class="com.atlassian.bamboo.security.acegi.acls.HibernateMutableAclServiceImpl">
+        <property name="aclDao" ref="aclDao"/>
+        <property name="aclUpdateHelper" ref="aclUpdateHelper"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="aclUpdateHelper" class="com.atlassian.bamboo.security.acegi.acls.BambooAclUpdateHelper"/>
+
+  <bean id="objectIdentityRetrievalStrategy" class="com.atlassian.bamboo.security.acegi.acls.HibernateObjectIdentityRetrievalStrategyImpl">
+  </bean>
+
+  <bean id="identifierObjectIdentityRetrievalStrategy"
+        class="com.atlassian.bamboo.security.acegi.acls.objectidentity.IdentifierObjectIdentityRetrievalStrategyImpl"
+        abstract="true">
+  </bean>
+
+  <bean id="deploymentProjectObjectIdentityRetrievalStrategy" parent="identifierObjectIdentityRetrievalStrategy">
+    <constructor-arg type="java.lang.Class" value="com.atlassian.bamboo.deployments.projects.InternalDeploymentProject"/>
+  </bean>
+
+  <bean id="deploymentProjectFromEnvironmentObjectIdentityRetrievalStrategy"
+        class="com.atlassian.bamboo.deployments.projects.security.acegi.acls.objectidentity.DeploymentProjectFromEnvironmentObjectIdentityRetrievalStrategyImpl">
+    <constructor-arg ref="deploymentProjectDao"/>
+  </bean>
+
+  <bean id="deploymentVersionObjectIdentityRetrievalStrategy"
+        class="com.atlassian.bamboo.deployments.versions.security.acegi.acls.objectidentity.DeploymentVersionObjectIdentityRetrievalStrategyImpl">
+    <constructor-arg ref="deploymentProjectDao"/>
+  </bean>
+
+  <bean id="environmentObjectIdentityRetrievalStrategy" parent="identifierObjectIdentityRetrievalStrategy">
+    <constructor-arg type="java.lang.Class" value="com.atlassian.bamboo.deployments.environments.InternalEnvironment"/>
+  </bean>
+
+  <bean id="deploymentResultObjectIdentityRetrievalStrategy"
+        class="com.atlassian.bamboo.deployments.results.security.acegi.acls.objectidentity.DeploymentResultObjectIdentityRetrievalStrategyImpl">
+    <constructor-arg ref="deploymentResultDao"/>
+  </bean>
+
+  <bean id="sidRetrievalStrategy" class="com.atlassian.bamboo.security.acegi.acls.GroupAwareSidRetrievalStrategyImpl">
+    <property name="bambooUserManager" ref="bambooUserManager"/>
+  </bean>
+
+  <!-- ============== "AFTER INTERCEPTION" AUTHORIZATION DEFINITIONS =========== -->
+
+  <bean id="afterInvocationManager" class="org.acegisecurity.afterinvocation.AfterInvocationProviderManager">
+    <property name="providers">
+      <list>
+        <ref local="afterAclRead"/>
+        <ref local="afterAclEdit"/>
+        <ref local="afterAclClone"/>
+        <ref local="afterAclCollectionBuild"/>
+        <ref local="afterAclCollectionRead"/>
+        <ref local="afterAclCollectionEdit"/>
+        <ref local="afterAclCollectionClone"/>
+        <ref local="resultsAfterAclCollectionRead"/>
+        <ref local="repositoriesAfterAclCollectionRead"/>
+      </list>
+    </property>
+  </bean>
+
+  <!-- Processes AFTER_ACL_COLLECTION_READ configuration settings -->
+  <bean id="afterAclCollectionRead" class="org.acegisecurity.afterinvocation.AclEntryAfterInvocationCollectionFilteringProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_COLLECTION_CLONE configuration settings -->
+  <bean id="afterAclCollectionBuild" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationCollectionFilteringProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="AFTER_ACL_COLLECTION_BUILD"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.BUILD"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_COLLECTION_CLONE configuration settings -->
+  <bean id="afterAclCollectionClone" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationCollectionFilteringProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="AFTER_ACL_COLLECTION_CLONE"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CLONE"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_COLLECTION_EDIT configuration settings -->
+  <bean id="afterAclCollectionEdit" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationCollectionFilteringProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="AFTER_ACL_COLLECTION_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_COLLECTION_READ configuration settings -->
+  <bean id="resultsAfterAclCollectionRead" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationCollectionFilteringProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="BUILD_RESULTS_AFTER_ACL_COLLECTION_READ"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_READ configuration settings -->
+  <bean id="afterAclRead" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="AFTER_ACL_READ"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_EDIT configuration settings -->
+  <bean id="afterAclEdit" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="AFTER_ACL_EDIT"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.WRITE"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_EDIT configuration settings -->
+  <bean id="afterAclClone" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="AFTER_ACL_CLONE"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.CLONE"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- Processes AFTER_ACL_COLLECTION_READ sharedRepositories -->
+  <bean id="repositoriesAfterAclCollectionRead" class="com.atlassian.bamboo.security.acegi.afterinvocation.GenericAclEntryAfterInvocationCollectionFilteringProvider">
+    <constructor-arg ref="aclService"/>
+    <constructor-arg value="REPOSITORIES_AFTER_ACL_COLLECTION_READ"/>
+    <constructor-arg>
+      <list>
+        <ref local="com.atlassian.bamboo.security.acegi.acls.BambooPermission.READ"/>
+      </list>
+    </constructor-arg>
+    <property name="objectIdentityRetrievalStrategy" ref="objectIdentityRetrievalStrategy"/>
+    <property name="sidRetrievalStrategy" ref="sidRetrievalStrategy"/>
+  </bean>
+
+  <!-- ================= METHOD INVOCATION AUTHORIZATION ==================== -->
+
+  <bean id="permissionsInterceptor" class="com.atlassian.bamboo.security.acegi.intercept.aopalliance.AuthorityOverrideMethodSecurityInterceptor">
+    <property name="authenticationManager" ref="authenticationManager"/>
+    <property name="accessDecisionManager">
+      <ref local="businessAccessDecisionManager"/>
+    </property>
+    <property name="afterInvocationManager">
+      <ref local="afterInvocationManager"/>
+    </property>
+    <property name="objectDefinitionSource">
+      <value>
+        <!-- ================================================================================ BuildDefinitionManager -->
+        <!--Getter methods - protected with AFTER invocation providers for filtering -->
+
+        <!--Mutator methods - protected with PRE invocation providers-->
+        com.atlassian.bamboo.build.BuildDefinitionManager.savePlanAndDefinition=ACL_BUILD_EDIT
+
+        <!-- ========================================================================================== PlanManager -->
+        <!--Post method check-->
+        com.atlassian.bamboo.plan.FilteringPlanManager.getPlansForClone=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_CLONE
+        com.atlassian.bamboo.plan.FilteringPlanManager.getAllPlansForClone=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_CLONE
+        com.atlassian.bamboo.plan.FilteringPlanManager.getRunnablePlans=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_BUILD
+        com.atlassian.bamboo.plan.FilteringPlanManager.getRunnablePlansByProject=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_BUILD
+
+        com.atlassian.bamboo.plan.PlanManager.getAllPlans=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.plan.PlanManager.getPlansByProject=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.plan.PlanManager.getAllPlansByProject=ROLE_SYSTEM
+        com.atlassian.bamboo.plan.PlanManager.getFavouritePlans=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+
+        <!--Pre method check-->
+        com.atlassian.bamboo.plan.PlanManager.createPlan=GLOBAL_CREATE, ACL_BUILD_ADMIN
+        com.atlassian.bamboo.plan.PlanManager.deletePlan=ACL_BUILD_ADMIN
+        <!--com.atlassian.bamboo.plan.PlanManager.setPlanSuspendedState=ACL_BUILD_EXECUTE-->
+        com.atlassian.bamboo.plan.PlanManager.assertPlanPermission=ACL_BUILD_READ
+
+        <!-- ================================================================================= ExtendedAuthorManager -->
+        com.atlassian.bamboo.author.ExtendedAuthorManager.findBuildResultsBrokenByAuthor=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.author.ExtendedAuthorManager.findBuildResultsFailedByAuthor=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.author.ExtendedAuthorManager.findBuildResultsFixedByAuthor=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.author.ExtendedAuthorManager.findBuildResultsSuccessfulByAuthor=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.author.ExtendedAuthorManager.findBuildResultsTriggeredByAuthor=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+
+        <!-- ============================================================================ BuildResultsSummaryManager -->
+        <!--summaries returned all from one build, checks build argument (first only) of method calls-->
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getAllResultSummariesForPlan=ACL_BUILD_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getResultSummariesForPlan=ACL_BUILD_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getLastNResultsSummaries=ACL_BUILD_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getLastNBuildResultsSummaries=ACL_BUILD_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getLastNFailedResultsSummaries=ACL_BUILD_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.moveResultSummaries=ACL_BUILD_ADMIN
+
+        <!--may contain summaries from multiple builds, so uses post-invocation filter-->
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getResultSummariesByChangeSetId=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.findResultsSummariesByJiraIssues=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.findResultsSummariesByProjectKey=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getResultSummaries=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getLatestResultSummaries=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getLatestFailedResultSummaries=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getAllBuildResultsSummariesForAgent=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.resultsummary.ResultsSummaryManager.getLatestSummariesForAgent=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+
+        <!-- ========================================================================================== ChainBranchManager -->
+        com.atlassian.bamboo.plan.branch.ChainBranchManager.getBranchesForChain=ACL_BUILD_READ
+        com.atlassian.bamboo.plan.branch.ChainBranchManager.getBranchIdentifiersForChain=ACL_BUILD_READ
+        com.atlassian.bamboo.plan.branch.ChainBranchManager.hasBranches=ACL_BUILD_READ
+
+        <!-- ========================================================================================== LabelManager -->
+        com.atlassian.bamboo.labels.LabelManager.findBuildResultsSummaryByLabel=ROLE_USER,ROLE_ANONYMOUS,BUILD_RESULTS_AFTER_ACL_COLLECTION_READ
+        <!-- ========================================================================================== DashboardCachingManager -->
+        com.atlassian.bamboo.caching.DashboardCachingManager.getAllTopLevelPlansUpdatedSince=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.caching.DashboardCachingManager.getAllTopLevelPlans=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+
+        com.atlassian.bamboo.v2.build.agent.capability.CapabilitySetManager.getExecutableBuildables=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+
+        <!-- ===================================================================================== CachedPlanManager -->
+        com.atlassian.bamboo.plan.cache.CachedPlanManager.assertPlanPermission=ACL_BUILD_READ
+        com.atlassian.bamboo.plan.cache.CachedPlanManager.getPlans=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.plan.cache.CachedPlanManager.getPlansByProject=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.plan.cache.CachedPlanManager.getBranchesForChain=ACL_BUILD_READ
+        <!--How do we control access to methods returning a single plan-->
+        <!--com.atlassian.bamboo.plan.cache.CachedPlanManager.getPlanByKey=-->
+        <!--com.atlassian.bamboo.plan.cache.CachedPlanManager.getPlanByKeyIfOfType=-->
+
+        <!-- ======================================================================================= DeletionService -->
+        com.atlassian.bamboo.deletion.DeletionService.deletePlan=ACL_BUILD_ADMIN
+        com.atlassian.bamboo.deletion.DeletionService.deleteStage=ACL_STAGE_ADMIN
+
+        <!-- ======================================================================= DeploymentResultDeletionService -->
+        com.atlassian.bamboo.deployments.results.service.DeploymentResultDeletionService.delete=ACL_DEPLOYMENT_RESULT_ID_EDIT
+        com.atlassian.bamboo.deployments.results.service.DeploymentResultDeletionService.deleteForEnvironment=ACL_DEPLOYMENT_PROJECT_FROM_ENVIRONMENT_ID_EDIT,ACL_ENVIRONMENT_ID_EDIT
+        com.atlassian.bamboo.deployments.results.service.DeploymentResultDeletionService.unlinkFromVersion=ACL_DEPLOYMENT_VERSION_ID_EDIT
+        com.atlassian.bamboo.deployments.results.service.DeploymentResultDeletionService.unlinkFromVersionForProject=ACL_DEPLOYMENT_PROJECT_ID_EDIT
+
+        <!-- ====================================================================== DeploymentVersionDeletionService -->
+        com.atlassian.bamboo.deployments.versions.service.DeploymentVersionDeletionService.delete=ACL_DEPLOYMENT_VERSION_ID_EDIT
+        com.atlassian.bamboo.deployments.versions.service.DeploymentVersionDeletionService.deleteForDeploymentProject=ACL_DEPLOYMENT_PROJECT_ID_EDIT
+
+        <!-- ============================================================================ EnvironmentDeletionService -->
+        com.atlassian.bamboo.deployments.environments.service.EnvironmentDeletionService.delete=ACL_DEPLOYMENT_PROJECT_FROM_ENVIRONMENT_ID_EDIT,ACL_ENVIRONMENT_ID_EDIT
+        com.atlassian.bamboo.deployments.environments.service.EnvironmentDeletionService.deleteForDeploymentProject=ACL_DEPLOYMENT_PROJECT_ID_EDIT
+
+        <!-- =========================================================================== RepositoryDefinitionManager -->
+        com.atlassian.bamboo.repository.RepositoryDefinitionManager.getGlobalRepositoryDefinitions=ROLE_USER,ROLE_ANONYMOUS,REPOSITORIES_AFTER_ACL_COLLECTION_READ
+
+        <!-- ============================================================================== DeploymentProjectService -->
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getAllDeploymentProjects=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProjectsRelatedToPlan=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProjectsRelatedToPlanOrBranches=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProjectsRelatedToArtifact=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProjectsReferencingArtifact=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProject=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProjectForEnvironment=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.getDeploymentProjectForVersion=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_READ
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.addDeploymentProject=GLOBAL_CREATE,ROLE_USER,ACL_BUILD_EDIT
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.editDeploymentProject=ROLE_USER,ACL_BUILD_EDIT
+
+        <!-- ============================================================================== DeploymentProjectDeletionService -->
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectService.deleteDeploymentProject=ACL_DEPLOYMENT_PROJECT_ID_EDIT
+        com.atlassian.bamboo.deployments.projects.service.DeploymentProjectDeletionService.deleteDeploymentProject=ACL_DEPLOYMENT_PROJECT_ID_EDIT
+
+        <!-- ============================================================================== LinkedDeploymentProjectCacheService -->
+        com.atlassian.bamboo.deployments.cache.LinkedDeploymentProjectCacheService.getRelatedDeployments=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.cache.LinkedDeploymentProjectCacheService.getPlanAndBranchesRelatedDeployments=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+
+        <!-- ==================================================================================== EnvironmentService -->
+        com.atlassian.bamboo.deployments.environments.service.EnvironmentService.getEnvironmentsForDeploymentProject=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.environments.service.EnvironmentService.getAllEnvironments=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_COLLECTION_READ
+        com.atlassian.bamboo.deployments.environments.service.EnvironmentService.getEnvironment=ROLE_USER,ROLE_ANONYMOUS,AFTER_ACL_READ
+
+      </value>
+    </property>
+    <property name="overrideAuthorities"> <!-- Below authorities will bypass buildManagerSecurity -->
+      <list>
+        <bean class="org.acegisecurity.GrantedAuthorityImpl"> <!-- System can do ANYTHING -->
+          <constructor-arg value="ROLE_SYSTEM"/>
+        </bean>
+        <bean class="org.acegisecurity.GrantedAuthorityImpl"> <!-- Global admin can do ANYTHING. -->
+          <constructor-arg value="ROLE_ADMIN"/>
+        </bean>
+      </list>
+    </property>
+  </bean>
+</beans>

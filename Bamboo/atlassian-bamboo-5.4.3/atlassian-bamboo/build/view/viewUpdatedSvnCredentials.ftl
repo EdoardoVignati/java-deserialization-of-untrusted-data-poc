@@ -1,0 +1,22 @@
+[#-- @ftlvariable name="action" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#if bulkAction.getNewUsername(params)?has_content]
+    [@ww.label labelKey='repository.svn.username' name='bulkAction.getNewUsername(params)' /]
+[#else]
+    [@ww.label labelKey='repository.svn.username' value='<i>[none specified]</i>' escape='false' /]
+[/#if]
+[@ww.label labelKey='repository.svn.authentication' name='bulkAction.getNewAuthType(params)' /]
+
+[@ui.bambooSection dependsOn='bulkAction.getNewAuthType(params)' showOn='password']
+    [@ww.hidden name="temporary.svn.passwordChange" value="true" /]
+[/@ui.bambooSection]
+
+[@ui.bambooSection dependsOn='bulkAction.getNewAuthType(params)' showOn='ssh']
+    [@ww.label labelKey='repository.svn.keyFile' name='bulkAction.getNewSshKeyFile(params)' hideOnNull='true' /]
+    [@ww.hidden name="temporary.svn.passphraseChange" value="true" /]
+[/@ui.bambooSection]
+
+[@ui.bambooSection dependsOn='bulkAction.getNewAuthType(params)' showOn='ssl-client-certificate']
+    [@ww.label labelKey='repository.svn.keyFile' name='bulkAction.getNewSslKeyFile(params)' hideOnNull='true' /]
+    [@ww.hidden name="temporary.svn.sslPassphraseChange" value="true" /]
+[/@ui.bambooSection]

@@ -1,0 +1,28 @@
+.deployment-preview{margin-bottom:20px;margin-top:10px;}
+.deployment-version-preview{-webkit-border-radius:3.01px;-moz-border-radius:3.01px;border-radius:3.01px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;border:1px solid #ccc;margin:10px;padding:10px;}.deployment-version-preview .aui-group-issues-commits{padding-top:10px;}.deployment-version-preview .aui-group-issues-commits .aui-item{text-align:center;}
+.deployment-version-preview .deployment-rollback{color:#d04437;}
+.deployment-version-preview .deployment-preview-counts{display:block;font-size:18px;}
+.deployment-version-preview .difference-preview-none{padding:20px 0;}
+.deployment-version-preview .difference-preview{color:#707070;}
+#current-environment-status,#execution-details,#new-version{margin-top:10px;}
+#new-version-preview{margin-top:10px;padding:20px;}#new-version-preview dl{padding-left:0;}#new-version-preview dl dt{margin-left:0;margin-top:0;text-align:left;width:100%;}
+#new-version-preview dl dd{margin-top:0;margin-bottom:10px;}#new-version-preview dl dd .aui-avatar-badged{margin-top:5px;}
+#new-version-preview #tasks-to-run dd{margin-bottom:0;}
+#current-environment-status{border-left:1px solid #cccccc;padding-left:10px;}
+#execution-details ol{padding-left:20px;}
+#new-version-details ul{list-style:none;padding-left:0;}#new-version-details ul .aui-lozenge{margin-left:10px;}
+#new-version-details .difference-not-calculable{margin-bottom:20px;}
+#version-broken-warning>div{margin-top:10px;}
+div.deployment-preview-dialog{margin:0 !important;}div.deployment-preview-dialog .view-more{margin-left:10px;}
+.version-preview-details-list,.version-preview-details-list dl{overflow:hidden;padding-left:145px;}
+.version-preview-details-list dt{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;color:#707070;clear:left;float:left;margin-left:-145px;margin-top:10px;padding-right:10px;text-align:right;width:145px;}.version-preview-details-list dt:first-child,.version-preview-details-list dt:first-child +dd{margin-top:0 !important;}
+.version-preview-details-list dd{float:left;margin-top:10px;width:100%;}.version-preview-details-list dd+dd{margin-top:5px;}
+.version-preview-details-list dl dt{margin-top:5px;text-align:left;}
+.version-preview-details-list dl dd{margin-top:5px;}
+.current-status-details-list,.current-status-details-list dl{overflow:hidden;padding-left:100px;}
+.current-status-details-list dt{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;color:#707070;clear:left;float:left;margin-left:-100px;margin-top:10px;padding-right:10px;text-align:right;width:100px;}.current-status-details-list dt:first-child,.current-status-details-list dt:first-child +dd{margin-top:0 !important;}
+.current-status-details-list dd{float:left;margin-top:10px;width:100%;}.current-status-details-list dd+dd{margin-top:5px;}
+.current-status-details-list dl dt{margin-top:5px;text-align:left;}
+.current-status-details-list dl dd{margin-top:5px;}
+#fieldArea_existingVersionOption{margin-top:5px;}
+.aui-item-select-release{width:590px;}

@@ -1,0 +1,14 @@
+.bamboo-selected-set-table.empty{display:none;}
+.bamboo-selected-set-table .remove{-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;-webkit-transition:all 0.1s ease;-moz-transition:all 0.1s ease;-ms-transition:all 0.1s ease;-o-transition:all 0.1s ease;transition:all 0.1s ease;background:#bbb;color:#fff;font:bold 14px/16px Arial,Helvetica,sans-serif;height:16px;text-align:center;text-decoration:none;width:16px;display:inline-block;}.bamboo-selected-set-table .remove:hover{background:#707070;text-decoration:none;}
+.bamboo-selected-set-table .remove:active{background:#333333;text-decoration:none;}
+.bamboo-selected-set-table .remove:before{content:"\00D7";}
+.bamboo-selected-set-table .actions{text-align:right;}
+.bamboo-selected-set-table .multi-select-added{background-color:#ebf2f9;}
+.bamboo-selected-set-list{display:inline-block;list-style:none;line-height:1;min-width:258px;padding:0;}.bamboo-selected-set-list.empty{display:none;}
+.bamboo-selected-set-list.disabled .remove{display:none;}
+.bamboo-selected-set-list>li{min-height:16px;padding:1px 20px 0 0;position:relative;}.bamboo-selected-set-list>li+li{margin-top:10px;}
+.bamboo-selected-set-list .remove{-webkit-border-radius:8px;-moz-border-radius:8px;border-radius:8px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;-webkit-transition:all 0.1s ease;-moz-transition:all 0.1s ease;-ms-transition:all 0.1s ease;-o-transition:all 0.1s ease;transition:all 0.1s ease;background:#bbb;color:#fff;font:bold 14px/16px Arial,Helvetica,sans-serif;height:16px;text-align:center;text-decoration:none;width:16px;position:absolute;right:0;}.bamboo-selected-set-list .remove:hover{background:#707070;text-decoration:none;}
+.bamboo-selected-set-list .remove:active{background:#333333;text-decoration:none;}
+.bamboo-selected-set-list .remove:before{content:"\00D7";}
+.bamboo-selected-set-list+.description{margin-top:10px;}
+.bamboo-selected-set-list .multi-select-added{background-color:#ebf2f9;}

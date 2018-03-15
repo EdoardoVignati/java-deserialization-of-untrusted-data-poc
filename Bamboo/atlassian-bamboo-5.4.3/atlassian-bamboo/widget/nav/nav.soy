@@ -1,0 +1,42 @@
+{namespace bamboo.widget.nav}
+
+/**
+ * Horizontal Nav
+ * @param items - array of .navItem
+ */
+{template .horizontal}
+    <nav class="aui-navgroup aui-navgroup-horizontal">
+        <div class="aui-navgroup-inner">
+            <div class="aui-navgroup-primary">
+                <ul class="aui-nav">
+                    {foreach $item in $items}
+                        {call .navItem data="$item" /}
+                    {/foreach}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{/template}
+
+/**
+ * Nav Item
+ * @param content
+ * @param? id
+ * @param? linkId
+ * @param? href
+ * @param? isSelected
+ * @param? badge
+ */
+{template .navItem private="true"}
+    <li{if $id} id="{$id}"{/if}
+        {if $isSelected}
+            {sp}class="aui-nav-selected{call aui.renderExtraClasses data="all"/}"
+        {else}
+            {call aui.renderExtraClasses data="all"}
+                {param isFullAttr: true /}
+            {/call}
+        {/if}
+        {call aui.renderExtraAttributes data="all" /}>
+        <a{if $href} href="{$href}"{/if}{if $linkId} id="{$linkId}"{/if}>{$content|noAutoescape}{if $badge and $badge.text}{sp}{call aui.badges.badge data="$badge"/}{/if}</a>
+    </li>
+{/template}

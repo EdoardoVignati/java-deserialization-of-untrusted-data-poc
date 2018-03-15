@@ -1,0 +1,21 @@
+{namespace bamboo.widget.help}
+
+/**
+ * Help Panel
+ * @param title
+ * @param content
+ * @param? type
+ * @param? link
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .panel}
+    <{$link ? 'a' : 'div'} class="help-panel{if $type} help-panel-{$type}{/if}{call aui.renderExtraClasses data="all" /}"
+        {if $link} href="{$link}"{/if}
+        {call aui.renderExtraAttributes data="all" /}>
+        <strong class="help-panel-title">{$title}</strong>
+        <div class="help-panel-content">
+            {$content|noAutoescape}
+        </div>
+    </{$link ? 'a' : 'div'}>
+{/template}

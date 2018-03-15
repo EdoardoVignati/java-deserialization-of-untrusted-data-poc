@@ -1,0 +1,5 @@
+.aui-page-header-main .aui-nav-breadcrumbs>li>.icon{margin-left:5px;}
+.aui-page-header-main h1>.icon{margin-left:10px;vertical-align:baseline;}
+h1.has-branch-selector{display:inline-block;margin-right:10px !important;vertical-align:middle;}
+#branch-selector{-webkit-border-radius:3.01px;-moz-border-radius:3.01px;border-radius:3.01px;-moz-background-clip:padding;-webkit-background-clip:padding-box;background-clip:padding-box;border-width:1px;color:#333333;vertical-align:middle;}#branch-selector.no-branch-selected{color:#707070;}
+.aui-nav-breadcrumbs #branch-selector{height:20px;}.aui-nav-breadcrumbs #branch-selector>span{margin:-5px 0 0 -10px;}

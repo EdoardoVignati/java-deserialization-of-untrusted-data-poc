@@ -1,0 +1,296 @@
+{namespace bamboo.page.deployment.execution}
+
+
+/**
+ * @param decoratedTaskDefinitions
+ * @param canEdit
+ * @param envId
+ */
+{template .tasks}
+
+    <dl class="version-preview-details-list">
+        <dt>{getText('deployment.execute.preview.execution.details')}</dt>
+        <dd>
+            <a id="view-tasks" title="Tasks">{getText('deployment.execute.preview.execution.tasks.number', length($decoratedTaskDefinitions))}</a>
+        </dd>
+    </dl>
+
+    <div id="task-dialog-content" class="hidden">
+        {if length($decoratedTaskDefinitions) != 0}
+            <ol>
+                {foreach $task in $decoratedTaskDefinitions}
+                    <li>
+                        {$task.name}{if $task.userDescription} - {$task.userDescription}{sp}{/if}
+                    </li>
+                {/foreach}
+            </ol>
+        {else}
+            {getText('deployment.execute.preview.execution.tasks.empty')}
+        {/if}
+    </div>
+    <script>
+        new Bamboo.Feature.Deployment.TasksDialog({lb}
+            content: AJS.$("#task-dialog-content")
+            {if $canEdit},editTasksRedirect: '{contextPath()}/deploy/config/configureEnvironmentTasks.action?environmentId={$envId}'{/if}
+        {rb});
+    </script>
+{/template}
+
+/**
+ *  @param id
+ *  @param name
+ *  @param issueCount
+ *  @param issueUrl
+ *  @param commitCount
+ *  @param commitUrl
+ *  @param differentBranchAsPreviousRelease
+ *  @param? numEnvironments
+ *  @param? numEnvironmentsDeployedSuccessful
+ *  @param? numEnvironmentsDeployedFailed
+ *  @param? versionStatus
+ * @param? rollback
+ */
+{template .versionDetails}
+    {if $versionStatus and $versionStatus.versionState == 'BROKEN'}
+        {call aui.message.warning}
+            {param content: getText('deployment.execute.preview.version.broken.message', $versionStatus.displayName) /}
+            {param titleContent: getText('deployment.execute.preview.version.broken.title', $name)/}
+        {/call}
+    {/if}
+    <dl class="version-preview-details-list">
+        {if $id != -1}
+            <dt>{getText('deployment.execute.preview.version.existing.name')}</dt>
+            <dd>
+                {call bamboo.widget.deployment.version.name data="all" /}{sp}
+                {call bamboo.widget.deployment.version.branch data="all" /}
+            </dd>
+        {/if}
+        <dt class="version-status-details">{getText('deployment.version.details.status.username')}</dt>
+        <dd class="detailed-version-info-container version-status-details">
+            {if $versionStatus and $versionStatus.versionState != 'UNKNOWN'}
+                {call widget.status.deploymentVersionStatusInfo}
+                    {param avatar : $versionStatus.gravatarUrl /}
+                    {param userName : $versionStatus.userName /}
+                    {param displayName : $versionStatus.displayName /}
+                    {param deploymentVersionState: $versionStatus.versionState /}
+                {/call}
+            {else}
+                {getText('deployment.execute.preview.version.existing.notreviewed')}
+            {/if}
+        </dd>
+
+        <dt>{if $rollback}{getText('deployment.execute.preview.version.difference.rollback')}{else}{getText('deployment.execute.preview.version.difference')}{/if}</dt>
+        <dd class="version-difference">
+            {if $differentBranchAsPreviousRelease}
+                {getText('deployment.execute.preview.version.differentBranch')}
+            {elseif $issueCount == 0 and $commitCount == 0}
+                {getText('deployment.execute.preview.version.noissuesorcommits')}
+            {else}
+                {if $issueCount > 0}<a class="issue_url"  title="Issues" href="{contextPath() + $issueUrl}">{getText('deployment.execute.preview.version.issues', $issueCount)}</a>{else}{getText('deployment.execute.preview.version.issues.none')}{/if}
+                <br>{if $commitCount > 0}<a class="commit_url" title="Commits" href="{contextPath() + $commitUrl}">{getText('deployment.execute.preview.version.commits', $commitCount)}</a>{else}{getText('deployment.execute.preview.version.commits.none')}{/if}
+            {/if}
+        </dd>
+        {call .deploymentHistory}
+            {param id: $id /}
+            {param numEnvironments: $numEnvironments /}
+            {param numEnvironmentsDeployedSuccessful: $numEnvironmentsDeployedSuccessful /}
+            {param numEnvironmentsDeployedFailed: $numEnvironmentsDeployedFailed /}
+        {/call}
+    </dl>
+{/template}
+
+/**
+ *  @param id
+ *  @param? numEnvironments
+ *  @param? numEnvironmentsDeployedSuccessful
+ *  @param? numEnvironmentsDeployedFailed
+ */
+{template .deploymentHistory}
+    <dt>{getText('deployment.execute.preview.version.deployedOn')}</dt><dd>
+         <a id="view-deployment-history" title="Deployment history" href="{contextPath()}/deploy/viewDeploymentVersionHistory.action?versionId={$id}">
+             {if $numEnvironmentsDeployedFailed}
+                {call widget.icons.icon}
+                    {param type: 'deploy-fail'/}
+                {/call}{sp}
+                {if $numEnvironments == 1}
+                    {getText('deployment.execute.preview.version.deployedOn.environments.one')}
+                {elseif $numEnvironmentsDeployedFailed == $numEnvironments}
+                    {getText('deployment.execute.preview.version.deployedOn.environments.all', $numEnvironments)}
+                {else}
+                    {getText('deployment.execute.preview.version.deployedOn.environments', $numEnvironmentsDeployedFailed, $numEnvironments)}
+                {/if}
+             {elseif $numEnvironmentsDeployedSuccessful}
+                {call widget.icons.icon}
+                    {param type: 'deploy-success'/}
+                {/call}{sp}
+                {if $numEnvironments == 1}
+                    {getText('deployment.execute.preview.version.deployedOn.environments.one')}
+                {elseif $numEnvironmentsDeployedSuccessful == $numEnvironments}
+                    {getText('deployment.execute.preview.version.deployedOn.environments.all', $numEnvironments)}
+                {else}
+                    {getText('deployment.execute.preview.version.deployedOn.environments', $numEnvironmentsDeployedSuccessful, $numEnvironments)}
+                {/if}
+             {else}
+                {getText('deployment.execute.preview.version.deployedOn.nowhere')}
+             {/if}
+         </a>
+         <script>
+            new Bamboo.Widget.Dialog({lb}
+                $triggerEl: AJS.$('#view-deployment-history'),
+                width: 1000
+            {rb});
+         </script>
+    </dd>
+{/template}
+
+/**
+ *  @param name of the chosen release
+ *  @param id of the chosen release (-1 if build result is chosen instead of release)
+ *  @param issueCount
+ *  @param issueUrl
+ *  @param commitCount
+ *  @param commitUrl
+ *  @param differentBranchAsPreviousRelease
+ *  @param differentBuildPlan
+ *  @param? previousVersionName the 'previous version' is what is currently deployed on the environment
+ *  @param? previousVersionId
+ *  @param? lastCreatedVersionName the last created version is passed in if nothing is deployed on the environment
+ *  @param? lastCreatedVersionId
+ *  @param? numEnvironments
+ *  @param? numEnvironmentsDeployedSuccessful
+ *  @param? numEnvironmentsDeployedFailed
+ *  @param? versionStatus
+ *  @param? rollback
+ *  @param? resultsSummary
+ */
+{template .releasePreviewWidget}
+    <dl class="version-preview-details-list">
+        {if $id == -1 and $resultsSummary}  // New release. Show 'artifacts provided by: [build result/plan]'
+            <dt>{getText('deployment.version.details.artifactsProvidedBy')}</dt>
+            <dd>
+                <span class="artifacts-from-result">
+                    {call widget.buildresult.resultStatusAndLink}
+                        {param resultSummary: $resultsSummary/}
+                    {/call}
+                </span>
+            </dd>
+        {else}  // Existing release. Show 'release: [release name]'
+            <dt>{getText('deployment.execute.preview.version.existing')}</dt>
+            <dd><a href="{contextPath()}/deploy/viewDeploymentVersion.action?versionId={$id}">{$name}</a>
+        {/if}
+        // Jira issues/commits
+        <dt>
+            {if $previousVersionId and $previousVersionName}
+                {getText('deployment.execute.preview.version.difference.to')} <a href="{contextPath()}/deploy/viewDeploymentVersion.action?versionId={$previousVersionId}">{$previousVersionName}</a>
+                {sp}
+                {call widget.lozenges.auilozenge}
+                    {param colour: 'complete'/}
+                    {param text: getText('deployment.execute.preview.current.lozenge') /}
+                    {param subtle: true /}
+                    {param extraClasses: 'lozenge-current' /}
+                    {param extraAttributes: 'title="' + getText('deployment.execute.preview.current.tooltip', $previousVersionName) + '"' /}
+                {/call}
+            {elseif $lastCreatedVersionId and $lastCreatedVersionName}
+                {getText('deployment.execute.preview.version.difference.to')} <a href="{contextPath()}/deploy/viewDeploymentVersion.action?versionId={$lastCreatedVersionId}">{$lastCreatedVersionName}</a>
+                {sp}
+                {call widget.lozenges.auilozenge}
+                    {param colour: 'complete'/}
+                    {param text: getText('deployment.execute.preview.lastcreated.lozenge') /}
+                    {param subtle: true /}
+                    {param extraClasses: 'lozenge-last-created' /}
+                    {param extraAttributes: 'title="' + getText('deployment.execute.preview.lastcreated.tooltip', $lastCreatedVersionName) + '"' /}
+                {/call}
+            {elseif $id != -1} // else if there is a release chosen, we want to show 'This is your first release to this environment'
+                <div class="difference-not-calculable">
+                    <p>{getText('deployment.execute.preview.version.none.created.firstdeployment')}</p>
+                </div>
+            {else}
+                <div class="difference-not-calculable">
+                    <p>{getText('deployment.execute.preview.version.none.created.firstrelease')}</p>
+                    <p>{getText('deployment.execute.preview.version.none.created.uncalculable')}</p>
+                </div>
+            {/if}
+        </dt>
+        {if $previousVersionId or $lastCreatedVersionId}
+        <dd class="version-difference">
+            {if $differentBuildPlan}
+                <div class="difference-preview-none">{getText('deployment.execute.preview.version.differentPlan')}</div>
+            {elseif $differentBranchAsPreviousRelease}
+                <div class="difference-preview-none">{getText('deployment.execute.preview.version.differentBranch.long')}</div>
+            {elseif $previousVersionId == $id}
+                <div class="difference-preview-none">{getText('deployment.execute.preview.version.samerelease')}</div>
+            {else}
+                <div class="aui-group aui-group-issues-commits">
+                    {call .bigLinkedIcon}
+                        {param rollback: $rollback /}
+                        {param count: $issueCount /}
+                        {param url: $issueUrl /}
+                        {param title: 'Issues' /}
+                        {param iconFont: 'aui-iconfont-jira' /}
+                        {param text: getText('deployment.execute.preview.version.issues.suffix') /}
+                        {param linkClass: 'issue_url' /}
+                    {/call}
+                    {call .bigLinkedIcon}
+                        {param rollback: $rollback /}
+                        {param count: $commitCount /}
+                        {param url: $commitUrl /}
+                        {param title: 'Commits' /}
+                        {param iconFont: 'aui-iconfont-devtools-commit' /}
+                        {param text: getText('deployment.execute.preview.version.commits.suffix') /}
+                        {param linkClass: 'commit_url' /}
+                    {/call}
+                </div>
+            {/if}
+        </dd>
+        {/if}
+        {if $id != -1} // Don't show this stuff for new releases
+            // Deploment history widget
+            {call .deploymentHistory}
+                {param id: $id /}
+                {param numEnvironments: $numEnvironments /}
+                {param numEnvironmentsDeployedSuccessful: $numEnvironmentsDeployedSuccessful /}
+                {param numEnvironmentsDeployedFailed: $numEnvironmentsDeployedFailed /}
+            {/call}
+            //Reviewers widget
+            <dt class="version-status-details">{getText('deployment.version.details.status.username')}</dt>
+            <dd class="detailed-version-info-container version-status-details">
+                {if $versionStatus and $versionStatus.versionState != 'UNKNOWN'}
+                    {call widget.status.deploymentVersionStatusInfo}
+                        {param avatar : $versionStatus.gravatarUrl /}
+                        {param userName : $versionStatus.userName /}
+                        {param displayName : $versionStatus.displayName /}
+                        {param deploymentVersionState: $versionStatus.versionState /}
+                    {/call}
+                {else}
+                    {getText('deployment.execute.preview.version.existing.notreviewed')}
+                {/if}
+            </dd>
+        {/if}
+    </dl>
+{/template}
+
+/**
+ * @param rollback
+ * @param count
+ * @param url
+ * @param title
+ * @param iconFont
+ * @param text
+ * @param linkClass
+ */
+{template .bigLinkedIcon private="true"}
+    <div class="aui-item difference-preview">
+        {let $content}
+            <span class="aui-icon aui-icon-large {$iconFont}"></span>
+            <span class="deployment-preview-counts">{if $rollback and $count != 0}-{/if}{$count}</span>
+            {$text}
+        {/let}
+        {if $count > 0}
+            <a class="{$linkClass}{if $rollback} deployment-rollback{/if}"  title="{$title}" href="{contextPath() + $url}">
+                {$content|noAutoescape}
+            </a>
+        {else}
+            {$content|noAutoescape}
+        {/if}
+    </div>
+{/template}

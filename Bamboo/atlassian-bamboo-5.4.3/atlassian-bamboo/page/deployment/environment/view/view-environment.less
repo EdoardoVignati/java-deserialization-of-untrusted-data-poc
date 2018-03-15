@@ -1,0 +1,68 @@
+@import "../../../../global.less";
+
+#environment {
+    .environment-status {
+        float: left;
+        margin-bottom: 40px;
+    }
+
+    .environment-warning {
+        float: right;
+
+        .border-radius(@baseBorderRadius);
+        .box-sizing();
+
+        border: 1px solid @dividerColor;
+        margin-top: @baseSpacing;
+        margin-right: @doubleSpacing;
+        padding: 40px;
+
+        .image {
+            margin: 0 auto;
+            width: 96px;
+            height: 96px;
+
+            background-image: url(../../../images/deployment/deployment-fail-large.png);
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+
+    .environment-empty {
+        margin-top: @doubleSpacing;
+        margin-bottom: @doubleSpacing;
+        text-align: center;
+        color: #999;
+
+        h2 {
+            font-size: 24px;
+            margin: 0px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+
+        .image {
+            background-image: url(../../../images/environment/no-deployments.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: @baseSpacing;
+            height: 60px;
+        }
+    }
+
+    .environment-history:before,
+    .environment-history:after {
+        content: "";
+        display: table;
+    }
+
+    .environment-history:before {
+        clear: both;
+    }
+
+    .environment-history {
+        *zoom: 1;
+    }
+}

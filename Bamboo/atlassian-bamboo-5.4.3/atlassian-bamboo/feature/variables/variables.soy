@@ -1,0 +1,271 @@
+{namespace bamboo.feature.variables}
+
+/**
+ * Variables Table
+ * @param? showOverrideFooter if true, shows the table footer with the "Override a variable" message
+ * @param? hideAddHeader if true, hides the "Add variable" table row
+ * @param? variables a list of variables to be rendered
+ * @param? inlineEdit
+ * @param? availableVariables
+ * @param? firstAvailableVariable
+ * @param? deleteVariableUrl
+ */
+{template .variablesTable}
+    {call aui.table}
+        {param extraClasses: 'variables-list' /}
+        {param columnsContent}
+            <colgroup>
+                <col width="30%" />
+                <col width="*" />
+                <col width="60" />
+            </colgroup>
+        {/param}
+        {param theadContent}
+            <tr>
+                <th>{getText('global.heading.variable.name')}</th>
+                <th>{getText('global.heading.value')}</th>
+                <th class="operations"><span class="assistive">{getText('global.heading.operations')}</span></th>
+            </tr>
+        {/param}
+        {param tfootContent}
+            {if $showOverrideFooter}
+                <tr>
+                    <td colspan="3"><a class="aui-button aui-button-link aui-style variables-override">Override a variable</a></td>
+                </tr>
+            {/if}
+        {/param}
+        {param content}
+            {if not $hideAddHeader}
+                <tr class="add-variable">
+                    <td>
+                        {call .selectOrInput}
+                            {param id: 'variableKey' /}
+                            {param options: $availableVariables /}
+                        {/call}
+                    </td>
+                    <td>
+                        {call .selectOrInput}
+                            {param id: 'variableValue' /}
+                            {param value: $firstAvailableVariable /}
+                        {/call}
+                    </td>
+                    <td class="operations">
+                        {call aui.form.submit}
+                            {param text: getText('global.buttons.add') /}
+                            {param id: '' /}
+                        {/call}
+                    </td>
+                </tr>
+            {/if}
+            {if $variables}
+                {foreach $variable in $variables}
+                    {call .variablesTableRow data="$variable"}
+                        {param inlineEdit: $inlineEdit /}
+                        {param availableVariables: $availableVariables /}
+                        {param deleteVariableUrl: $deleteVariableUrl /}
+                    {/call}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param id
+ * @param key
+ * @param value
+ * @param? inlineEdit
+ * @param? availableVariables
+ * @param? deleteVariableUrl
+ */
+{template .variablesTableRow}
+    <tr data-variable-id="{$id}">
+        <td>
+            {if $inlineEdit}
+                {call .inPlaceEditField}
+                    {param id: 'key_' + $id /}
+                    {param value: $key /}
+                    {param options: $availableVariables /}
+                {/call}
+            {else}
+                {call .selectOrInput}
+                    {param id: 'key_' + $id /}
+                    {param value: $key /}
+                    {param options: $availableVariables /}
+                {/call}
+            {/if}
+        </td>
+        <td>
+            {if $inlineEdit}
+                {call .inPlaceEditField}
+                    {param id: 'value_' + $id /}
+                    {param value: $value /}
+                {/call}
+            {else}
+                {call .selectOrInput}
+                    {param id: 'value_' + $id /}
+                    {param value: $key /}
+                {/call}
+            {/if}
+        </td>
+        <td class="operations">
+            <a id="deleteVariable_{$id}" class="delete-variable"{if $deleteVariableUrl} href="{$deleteVariableUrl}"{/if} title="{getText('global.buttons.delete')}" tabindex="-1">
+                {call aui.icons.icon}
+                    {param icon: 'remove' /}
+                    {param useIconFont: true /}
+                    {param accessibilityText: getText('global.buttons.delete') /}
+                    {param extraAttributes: [ 'title': getText('global.buttons.delete') ] /}
+                {/call}
+            </a>
+        </td>
+    </tr>
+{/template}
+
+/**
+ * Inline Edit field
+ * @param id
+ * @param value
+ * @param? readonly
+ * @param? options
+ */
+{template .inPlaceEditField}
+    <span class="inline-edit-view"{if not $readonly} tabindex="0"{/if} id="key_{$id}">{$value}</span>
+    {if $readonly}
+        {call aui.form.input}
+            {param type: 'hidden' /}
+            {param name: $id /}
+            {param value: $value /}
+        {/call}
+    {else}
+        {call .selectOrInput data="all"}
+            {param extraClasses: 'inline-edit-field' /}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * @param id
+ * @param? value
+ * @param? options
+ * @param? extraClasses
+ */
+{template .selectOrInput private="true"}
+    {if $options}
+        {call .select}
+            {param name: $id /}
+            {param options: $options /}
+            {param extraClasses: $extraClasses /}
+        {/call}
+    {else}
+        {call aui.form.input}
+            {param type: 'text' /}
+            {param name: $id /}
+            {param value: $value /}
+            {param extraClasses: $extraClasses /}
+            {param extraAttributes: [ 'autocomplete': 'off' ] /}
+        {/call}
+    {/if}
+{/template}
+
+/**
+ * Password confirmation dialog
+ */
+{template .passwordConfirmaton}
+    {call aui.message.warning}
+        {param titleContent: getText('variables.password.dialog.title') /}
+        {param content}<p>{getText('variables.password.dialog.description')}</p>{/param}
+    {/call}
+{/template}
+
+/**
+ * Variable deletion confirmation dialog
+ */
+{template .deleteConfirmaton}
+    {call aui.message.warning}
+        {param titleContent: getText('variables.delete.dialog.title') /}
+        {param content}<p>{getText('variables.delete.dialog.description')}</p>{/param}
+    {/call}
+{/template}
+
+// BELOW CONTAINS CHANGES THAT NEED TO BE CONTRIBUTED BACK TO AUI
+
+/**
+ *
+ * Renders a <select/> element containing <optgrpup> and <option> elements.
+ *
+ * Example value for the $options param: [
+ *      [
+ *          text 'My Optgroup 1',
+ *          options : [
+ *              [ text : 'My Option 1 in group 1', value : '1.1' ],
+ *              [ text : 'My Option 2 in group 1', value : '1.2', selected : true ]
+ *          ]
+ *      ],
+ *      [ text : 'My Option 2', value : '2' ]
+ *  ]
+ *
+ * renders
+ *
+ * <select>
+ *      <optgroup label="My Optgroup 1">
+ *          <option value="1.1">My Option 1 in group 1</option>
+ *          <option value="1.2">My Option 2 in group 1</option>
+ *      </optgroup>
+ *      <option value="2">My Option 2</option>
+ * </select>
+ *
+ * @param? id At least one of $id or $name is required.
+ * @param? name At least one of $id or $name is required. $name defaults to $id if not provided.
+ * @param? isDisabled
+ * @param? isMultiple whether multiple selections are allowed.
+ * @param? size
+ * @param options a tree containing internal nodes like [text : 'My OptGroup', options], and leaf nodes like [ text : 'My Option', value : '1']
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .select private="true"}
+    <select{if $id} id="{$id}"{/if} name="{if $name}{$name}{else}{$id}{/if}" class="{$isMultiple ? 'multi-select' : 'select'}{call aui.renderExtraClasses data="all" /}"
+        {if $size} size="{$size}"{/if}{if $isDisabled} disabled{/if}{if $isMultiple} multiple{/if}
+        {call aui.renderExtraAttributes data="all" /}>
+        {foreach $option in $options}
+            {call .optionOrOptgroup data="$option" /}
+        {/foreach}
+    </select>
+{/template}
+
+/**
+ * Not meant for direct public usage.
+ *
+ * @param text text for the option or optgroup
+ * @param? options Exactly one of $options and $value must be specified. if provided, this template will render an optgroup.
+ * @param? value Exactly one of $options and $value must be specified. If provided, this tempalte will render an option
+ * @param? selected Only valid for options, not optgroups.
+ * @param? extraAttributes
+ */
+{template .optionOrOptgroup private="true"}
+    {if $options}
+        <optgroup label="{$text}"{call aui.renderExtraAttributes data="all" /}>
+            {foreach $option in $options}
+                {call .optionOrOptgroup data="$option" /}
+            {/foreach}
+        </optgroup>
+    {else}
+        <option value="{$value}"{call aui.renderExtraAttributes data="all" /}{if $selected} selected{/if}>{$text}</option>
+    {/if}
+{/template}
+
+/**
+ *
+ * @param variable
+ */
+{template .overrideText}
+    {if $variable}
+        <div class="variable-override-text">
+        {if $variable.variableType == 'PLAN'}
+            {getText('variables.overridden.plan.description')} {$variable.value}
+        {else}
+            {getText('variables.overridden.global.description')} {$variable.value}
+        {/if}
+        </div>
+    {/if}
+{/template}

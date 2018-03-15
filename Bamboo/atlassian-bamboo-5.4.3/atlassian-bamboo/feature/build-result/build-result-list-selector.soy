@@ -1,0 +1,75 @@
+{namespace bamboo.feature.build.result}
+
+/**
+* @param results
+* @param? customBuildResultsError
+* @param? selectedBuildNumber
+* @param placeHolderBuildNumber
+* @param? isBuildRecent true or false, depending on if the build is in the 3 most recent builds
+* @param? planKey
+* @param? planName
+*/
+{template .resultSelectionList}
+    {if $results and length($results) > 0}
+        <div class="aui-group">
+            <div class="aui-item result-selector">
+                <fieldset id ="build-results" class="group">
+                    <legend>
+                        <span>{getText('deployment.version.create.choose.build.results')}</span>
+                    </legend>
+                    {foreach $resultSummary in $results}
+                        {if index($resultSummary) < 3}
+                            {call .resultRadio}
+                                {param resultSummary: $resultSummary /}
+                                {param checked: (not $selectedBuildNumber and isFirst($resultSummary)) or ($selectedBuildNumber and $isBuildRecent and $resultSummary.planResultKey.buildNumber == $selectedBuildNumber) /}
+                            {/call}
+                        {/if}
+                    {/foreach}
+                    {if length($results) > 3 or $selectedBuildNumber}
+                        <div class="radio">
+                            <input id="build-result-other" class="radio handleOnSelectShowHide" type="radio" name="buildResult" value="custom" {if $selectedBuildNumber and not $isBuildRecent}checked="checked"{/if}>
+                            <label for="build-result-other">{getText('deployment.version.create.build.results.other')}{sp}</label>
+                            <input id="custom-build-result" class="text dependsOnbuildResult showOncustom" type="text" placeholder="{$placeHolderBuildNumber}" name="buildResultOther" value="{if $selectedBuildNumber and not $isBuildRecent}{$selectedBuildNumber}{/if}">
+                            <div id="custom-build-result-error" class="error control-form-error hidden">{if $customBuildResultsError}{$customBuildResultsError}{/if}</div>
+                        </div>
+                    {else}
+                        <div class="description">{getText('deployment.version.create.noMoreResults')}</div>
+                    {/if}
+                </fieldset>
+            </div>
+            <div class="aui-item result-selector-note">
+                {getText('deployment.version.create.build.results.note')}
+            </div>
+        </div>
+    {else}
+        {call aui.message.info}
+            {param titleContent: getText('deployment.version.create.noResults.title') /}
+            {param content}
+                <p>{getText('deployment.version.create.noResults.message', contextPath() + '/browse/' + $planKey, $planName)|noAutoescape}</p>
+            {/param}
+        {/call}
+    {/if}
+{/template}
+
+/**
+* Single build radio button row
+* @param resultSummary
+* @param checked
+*/
+{template .resultRadio private="true"}
+    <div class="radio">
+        <input id="build-result-{$resultSummary.buildNumber}" class="radio handleOnSelectShowHide" type="radio" {if $checked}checked="checked"{/if} name="buildResult" value="{$resultSummary.buildResultKey}">
+        <label for="build-result-{$resultSummary.buildNumber}">
+            {sp}
+            {call widget.buildresult.resultStatusAndLink}
+                {param resultSummary: $resultSummary /}
+            {/call}
+            {sp}
+            <span>{$resultSummary.reasonSummary|noAutoescape}</span>
+            {sp}
+            {call bamboo.widget.time.relative}
+                {param datetime: $resultSummary.buildCompletedDate /}
+            {/call}
+        </label>
+    </div>
+{/template}

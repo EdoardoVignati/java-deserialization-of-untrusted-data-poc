@@ -1,0 +1,193 @@
+.tests {
+    margin-top: 16px;
+}
+.tests .item-count {
+    margin-left: 2px;
+}
+.tests-table-container {
+    margin-top: 16px;
+    position: relative;
+}
+.tests-table-container > .tests-table.aui {
+    margin-top: 0;
+}
+/* overriding Bamboo's table styles */
+.tests-table.aui {
+    table-layout: fixed;
+    width: 100%;
+}
+.tests-table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tests-table.aui > tbody > tr.expanded {
+    border-bottom: 0;
+}
+.tests-table .collapsed + .stack-trace {
+    display: none;
+}
+.tests-table .stack-trace .code {
+    background: #fafafa;
+    border-bottom: 2px solid #ddd;
+    border-top: 0;
+    color: #000;
+    overflow: visible;
+    padding: 0;
+}
+.tests-table .stack-trace .code > pre {
+    border-top: 1px dotted #ddd;
+    margin: 0;
+    overflow: auto;
+    padding: 1.5em;
+}
+.tests-table .controls,
+.tests-table .twixie,
+.tests-table .status {
+    padding-left: 0;
+    padding-right: 0;
+    width: 16px;
+}
+.tests-table .twixie > span {
+    cursor: pointer;
+}
+
+.tests-table .test {
+    min-width: 40%;
+}
+
+.tests-table .failing-since {
+    width: 15%;
+}
+.tests-table .quarantine-info {
+    width: 15%;
+}
+.tests-table .job {
+  width: 15%;
+}
+.tests-table td.failing-since > a {
+    color: #c00;
+    font-weight: bold;
+    overflow: hidden;
+    text-decoration: none;
+}
+.tests-table td.failing-since > a:hover {
+    text-decoration: underline;
+}
+.tests-table .reason {
+    color: #505050;
+    font-size: 0.9em;
+}
+
+.tests-table .duration {
+    text-align: center;
+    white-space: nowrap;
+    width: 70px;
+}
+.tests-table .actions {
+    text-align: right;
+    width: 100px;
+}
+.tests-table .actions .aui-toolbar {
+    float: right;
+}
+.tests-table p.description {
+    color: #505050;
+    margin: 0;
+}
+
+.tests-table .tests span {
+    vertical-align: top;
+}
+
+.create-jira-issue-for-test-action.hidden,
+.link-test-to-jira-action.hidden,
+.unlink-test-to-jira-action.hidden {
+    display: none
+}
+
+/* Quarantine Test History */
+#quarantine-test-hint .title {
+    float: left;
+}
+#quarantine-test-hint .quarantine-test-history {
+    float: left;
+    margin: 3px 0 8px 8px;
+}
+#quarantine-test-hint .quarantine-test-history + p {
+    clear: left;
+}
+.quarantine-test-history {
+    border-collapse: collapse;
+    display: table;
+    line-height: 1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+}
+.quarantine-test-history > li {
+    display: table-cell;
+}
+.quarantine-test-history > li + li {
+    border-left: 1px solid transparent;
+}
+.quarantine-test-history a {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    display: block;
+    height: 11px;
+    overflow: hidden;
+    position: relative;
+    text-indent: -9999px;
+    width: 11px;
+}
+.quarantine-test-history > .failed > a {
+    background: #900;
+}
+.quarantine-test-history > .failed > a:before,
+.quarantine-test-history > .failed > a:after {
+    background: #fff;
+    content: "";
+    position: absolute;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.quarantine-test-history > .failed > a:before {
+    bottom: -2px;
+    left: 5px;
+    top: -2px;
+    width: 1px;
+}
+.quarantine-test-history > .failed > a:after {
+    left: -2px;
+    right: -2px;
+    top: 5px;
+    height: 1px;
+}
+.quarantine-test-history > .successful > a {
+    background: #95c500;
+}
+.quarantine-test-history > .skipped > a {
+    background: #bbb;
+}
+
+/* Expand/Collapse all */
+.tests-table-container > .controls {
+    position: absolute;
+    right: 0;
+    top: 0.5em;
+}
+.tests-table-container > .controls .toolbar-trigger {
+    padding: 0 4px;
+}
+
+.successfulTestsText > strong {
+    color: #070;
+}
+.failedTestsText > strong {
+    color: #c00;
+}

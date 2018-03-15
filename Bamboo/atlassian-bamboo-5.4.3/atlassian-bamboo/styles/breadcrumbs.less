@@ -1,0 +1,43 @@
+@import "../global.less";
+
+.aui-page-header-main {
+    .aui-nav-breadcrumbs > li > .icon {
+        margin-left: @halfSpacing;
+    }
+    h1 > .icon {
+        margin-left: @baseSpacing;
+        vertical-align: baseline;
+    }
+}
+
+h1 {
+    &.has-branch-selector {
+        display: inline-block;
+        margin-right: 10px !important;
+        vertical-align: middle;
+    }
+}
+
+/* Branch Selector */
+@borderSize: 1px;
+@verticalPaddingSize: 4px;
+@horizontalPaddingSize: 10px;
+
+#branch-selector {
+    .border-radius();
+    border-width: 1px;
+    color: @bodyTextColor;
+    vertical-align: middle;
+
+    &.no-branch-selected {
+        color: @secondaryTextColor;
+    }
+}
+
+.aui-nav-breadcrumbs #branch-selector {
+    height: @doubleSpacing;
+
+    > span {
+        margin: -(@borderSize + @verticalPaddingSize) 0 0 -@horizontalPaddingSize;
+    }
+}

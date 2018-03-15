@@ -1,0 +1,64 @@
+@import "../../../global.less";
+
+.version-details-panel {
+    width: 300px;
+
+    .version-details {
+        .border-radius(@baseBorderRadius);
+        .box-sizing();
+        border: 1px solid @dividerColor;
+        margin-top: @baseSpacing;
+        padding: @baseSpacing;
+
+        > dt {
+            .apply-standard-spacing();
+            color: @secondaryTextColor;
+        }
+        ul {
+            .reset-list-style();
+        }
+
+        .reviewed-user-avatar {
+            padding-top: @halfSpacing;
+        }
+
+        img.aui-avatar-small {
+            .border-radius(@baseBorderRadius);
+            .box-sizing();
+        }
+    }
+}
+
+.version-status-hidden {
+  display: none;
+}
+
+.has-version-status {
+  display: inline-block;
+  margin-right: @baseSpacing !important;
+  vertical-align: middle;
+}
+
+#compareWithContainer {
+    padding-bottom: @doubleSpacing;
+
+    .aui-button {
+        margin-left: @baseSpacing;
+    }
+}
+
+.icon-right-arrow {
+  background: url(../../../images/build_nav_arrow_right_grey.gif) no-repeat 50% 50%;
+}
+
+#testedInTable .result-cell {
+    width: 10%;
+}
+
+.artifacts-from-result {
+    padding-right: @baseSpacing;
+}
+
+#comments {
+  margin-top: 40px;
+}

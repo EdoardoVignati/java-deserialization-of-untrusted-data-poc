@@ -1,0 +1,6 @@
+[@ww.label labelKey='repository.p4.port' value='${repository.port}' /]
+[@ww.label labelKey='repository.p4.client' value='${repository.client}' /]
+[@ww.label labelKey='repository.p4.depot' value='${repository.depot}' /]
+[@ww.label labelKey='repository.p4.username' value='${repository.user}' /]
+[@ww.label labelKey='repository.p4.manageWorkspace' value='${repository.manageWorkspace?string}' /]
+[@ww.label labelKey='repository.p4.useClientMapping' value='${repository.useClientMapping?string}' hideOnNull=true /]

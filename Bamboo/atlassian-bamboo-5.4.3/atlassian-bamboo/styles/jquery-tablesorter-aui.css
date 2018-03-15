@@ -1,0 +1,13 @@
+/* tables */
+.tablesorter thead .header {
+	background-image: url(../../../images/jquery-tablesorter/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+.tablesorter thead .headerSortUp {
+    background-image: url(../../../images/jquery-tablesorter/asc.gif);
+}
+.tablesorter thead .headerSortDown {
+    background-image: url(../../../images/jquery-tablesorter/desc.gif);
+}

@@ -1,0 +1,237 @@
+@import "global-colours.less";
+
+// Variables
+
+@globalHeaderHeight: 44px;
+
+@baseSpacing: 10px;
+@doubleSpacing: @baseSpacing * 2;
+@tripleSpacing: @baseSpacing * 3;
+@halfSpacing: @baseSpacing / 2;
+
+@baseBorderRadius: 3.01px;
+
+@baseFontSize: 14px; // equal to AUI's body font-size
+@smallFontSize: 12px;
+@baseLineHeight: 1.42857142857143; // equal to AUI's body line-height
+
+// Mixins
+
+.box-sizing(@sizing: border-box) { // defaults to border-box if the @sizing parameter is not passed in
+    -webkit-box-sizing: @sizing;
+    -moz-box-sizing: @sizing;
+    box-sizing: @sizing;
+}
+
+.border-radius(@radius: @baseBorderRadius) { // defaults to @baseBorderRadius (see variables above) if the @radius parameter is not passed in
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+
+    -moz-background-clip: padding;  // useful if you don't want a bg color from leaking outside the border
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+}
+
+.border-top-left-radius(@radius) {
+    -webkit-border-top-left-radius: @radius;
+    -moz-border-radius-topleft: @radius;
+    border-top-left-radius: @radius;
+}
+
+.border-top-right-radius(@radius) {
+    -webkit-border-top-right-radius: @radius;
+    -moz-border-radius-topright: @radius;
+    border-top-right-radius: @radius;
+}
+
+.border-bottom-left-radius(@radius) {
+    -webkit-border-bottom-left-radius: @radius;
+    -moz-border-radius-bottomleft: @radius;
+    border-bottom-left-radius: @radius;
+}
+
+.border-bottom-right-radius(@radius) {
+    -webkit-border-bottom-right-radius: @radius;
+    -moz-border-radius-bottomright: @radius;
+    border-bottom-right-radius: @radius;
+}
+
+.box-shadow(@x: 0, @y: 0, @blur: 5px, @color: @contentShadow) {
+    -webkit-box-shadow: @x @y @blur @color;
+    box-shadow: @x @y @blur @color;
+}
+
+.transition(@trans) {
+    -webkit-transition: @trans;
+    -moz-transition: @trans;
+    -ms-transition: @trans;
+    -o-transition: @trans;
+    transition: @trans;
+}
+
+.scale(@ratio) {
+    -webkit-transform: scale(@ratio);
+    -moz-transform: scale(@ratio);
+    -ms-transform: scale(@ratio);
+    -o-transform: scale(@ratio);
+    transform: scale(@ratio);
+}
+
+.square(@length) {
+    width: @length;
+    height: @length;
+}
+
+.transform-rotate(@angle, @x: 50%, @y: 50%) {
+    -webkit-transform: rotate(@angle);
+    -webkit-transform-origin: @x @y;
+    -moz-transform: rotate(@angle);
+    -moz-transform-origin: @x @y;
+    -o-transform: rotate(@angle);
+    -o-transform-origin: @x @y;
+    -ms-transform: rotate(@angle);
+    -ms-transform-origin: @x @y;
+    transform: rotate(@angle);
+    transform-origin: @x @y;
+}
+
+.opacity(@opacity) {
+    @ie-opacity: (@opacity * 100);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=@{ie-opacity})";
+    filter: ~"alpha(opacity=@{ie-opacity})";
+    opacity: @opacity;
+}
+
+
+// Requires explicit width and inline-block or block to work
+.text-overflow() {
+    -o-text-overflow: ellipsis; // Only Opera needs the vendor prefix. IE7+, Safari and FF7+ already support it
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.word-break() {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.linear-gradient(@firstColor: #FFF, @secondColor: #F2F2F2, @angle: -90deg) {
+    background-image: ~"-webkit-gradient(linear, left top, left bottom, from(@{firstColor}), to(@{secondColor}))";
+    background-image: -webkit-linear-gradient(@angle, @firstColor, @secondColor);
+    background-image: -moz-linear-gradient(@angle, @firstColor, @secondColor);
+    background-image: -o-linear-gradient(@angle, @firstColor, @secondColor);
+    background-image: -ms-linear-gradient(@angle, @firstColor, @secondColor);
+    background-image: linear-gradient(@angle, @firstColor,  @secondColor);
+    -ms-filter: ~"progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr=@{firstColor},EndColorStr=@{secondColor})";
+}
+
+// Grey cross icons
+.icon-cross-delete() {
+    .border-radius(8px);
+    .transition(all 0.1s ease);
+    background: #bbb;
+    color: #fff;
+    font: bold 14px/16px Arial, Helvetica, sans-serif;
+    height: 16px;
+    text-align: center;
+    text-decoration: none;
+    width: 16px;
+
+    &:hover {
+        background: @secondaryTextColor;
+        text-decoration: none;
+    }
+    &:active {
+        background: @bodyTextColor;
+        text-decoration: none;
+    }
+    &:before {
+        content: "\00D7";
+    }
+}
+
+// List with no default styling (i.e. the numbers/bullets or the padding left for them)
+.reset-list-style() {
+    list-style: none;
+    padding: 0;
+}
+
+// Hide element accessibly, so that the content is still read by screen readers
+.hide-accessibly() {
+    border: 0 none;
+    clip: rect(0pt, 0pt, 0pt, 0pt);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+// Rounded box with count in it
+.item-count-lozenge() {
+    background-color: #e6e6e6;
+    .border-radius(1em);
+    color: #333;
+    display: inline-block;
+    padding: 0 6px;
+    text-align: center;
+}
+
+// Details definition list
+.details-dl(@keySize: 10em) {
+    &,
+    dl {
+        overflow: hidden;
+        padding-left: @keySize;
+    }
+
+    dt {
+        .box-sizing();
+        color: @secondaryTextColor;
+        clear: left;
+        float: left;
+        margin-left: -@keySize;
+        margin-top: @baseSpacing;
+        padding-right: @baseSpacing;
+        text-align: right;
+        width: @keySize;
+
+        &:first-child {
+            &,
+            & + dd {
+                margin-top: 0 !important;
+            }
+        }
+    }
+    dd {
+        float: left;
+        margin-top: @baseSpacing;
+        width: 100%;
+
+        + dd {
+            margin-top: @halfSpacing;
+        }
+    }
+    // Nested lists
+    dl {
+        dt {
+            margin-top: @halfSpacing;
+            text-align: left;
+        }
+        dd {
+            margin-top: @halfSpacing;
+        }
+    }
+}
+
+// Apply standard ADG spacing
+.apply-standard-spacing() {
+    margin-top: @baseSpacing;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}

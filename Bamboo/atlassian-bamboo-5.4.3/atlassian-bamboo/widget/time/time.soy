@@ -1,0 +1,44 @@
+{namespace bamboo.widget.time}
+
+/**
+ * Timestamp
+ * @param datetime
+ * @param? format 'short', 'long', 'full'
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .timestamp}
+    {call .time data="all"}
+        {param content: ($format ? format_date($datetime, $format) : format_date($datetime)) /}
+    {/call}
+{/template}
+
+/**
+ * Relative time
+ * @param datetime
+ * @param? format 'short', 'long'
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .relative}
+    {call .time data="all"}
+        {param content: ($format ? format_date($datetime, ($format + 'Age')) : format_date($datetime, 'shortAge')) /}
+    {/call}
+{/template}
+
+/**
+ * Time element itself
+ * @param datetime
+ * @param content
+ * @param? extraClasses
+ * @param? extraAttributes
+ */
+{template .time private="true"}
+    <time datetime="{format_date($datetime, 'timestamp')}" title="{format_date($datetime, 'full')}"
+        {call aui.renderExtraClasses data="all"}
+            {param isFullAttr: true /}
+        {/call}
+        {call aui.renderExtraAttributes data="all" /}>
+        {$content|noAutoescape}
+    </time>
+{/template}

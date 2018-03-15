@@ -1,0 +1,2 @@
+.status-ribbon:before,.status-ribbon:after{display:none;}
+.status-ribbon>.before,.status-ribbon>.after{-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";filter:alpha(opacity=20);opacity:0.2;background:#fff;}

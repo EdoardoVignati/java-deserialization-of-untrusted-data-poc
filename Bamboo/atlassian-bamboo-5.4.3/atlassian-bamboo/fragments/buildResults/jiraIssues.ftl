@@ -1,0 +1,1 @@
+[@cp.displayJiraIssuesSummary action.resultsSummary /]

@@ -1,0 +1,7 @@
+[#-- @ftlvariable name="action" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.ww2.actions.admin.bulk.BulkPlanAction" --]
+[#if bulkAction.getNewSvnUrl(params)?has_content ]
+    [@ww.label labelKey='repository.svn.repository' name='bulkAction.getNewSvnUrl(params)' /]
+[#else]
+    [@ww.text name='bulkAction.svn.noneSpecified' /]
+[/#if]

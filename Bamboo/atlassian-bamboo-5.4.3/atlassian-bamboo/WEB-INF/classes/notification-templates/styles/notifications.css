@@ -1,0 +1,432 @@
+/* Reset */
+body, div, p, td, th, li, dt, dd, h1, h2, h3, h4, h5, h6, input { font: 13px Arial, FreeSans, Helvetica, sans-serif; }
+small { font-size: 11px; }
+
+a, input.postlink { color: #326ca6; text-decoration: none; }
+
+form.postlink {
+    display: inline
+}
+
+input.postlink {
+    background: transparent;
+    border: 0;
+    cursor:pointer;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, p, ul, ol, dl { margin: 16px 0 0 0; }
+
+h1 { font-size: 25px; margin: 0; }
+h2 { font-size: 23px; }
+h3 { font-size: 19px; }
+h4 { font-size: 17px; }
+h5 { font-size: 15px; }
+h6 { font-size: 13px; }
+
+img { border: 0; }
+
+table { margin: 0; border: 0; border-collapse: collapse; }
+table, caption { font-size: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; }
+td, th { text-align: left; vertical-align: top; }
+/*I'm sorry, I know how much you hate classes based on the style. I blame our currently limited css injection technology...*/
+td.vcentered, th.vcentered { vertical-align: middle}
+td.hcentered, th.hcentered { text-align: center}
+
+th { font-weight: bold; }
+
+/* AUI Tables */
+table.aui table.aui {
+    margin: 0;
+}
+table.aui > caption {
+    padding: 0.5em;
+}
+table.aui > tbody > tr,
+table.aui > tfoot > tr {
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    color: #111;
+}
+table.aui > tbody > tr > th {
+    background: #fafafa;
+    color: #111;
+}
+table.aui > thead > tr > th,
+table.aui > tbody > tr > th,
+table.aui > thead > tr > td,
+table.aui > tbody > tr > td,
+table.aui > tfoot > tr > td {
+    padding: 0.5em 0.4em 0.5em 0.6em;
+    text-align: left;
+}
+table.aui > thead {
+    border-bottom: 1px solid #bbb;
+}
+table.aui > thead > tr > th {
+    background: #f0f0f0;
+    color: #000;
+}
+/* Borders on TBODY and TFOOT don't work in IE - whereas these at least work in IE7 & IE8 */
+table.aui > tbody > tr:first-child > td,
+table.aui > tbody > tr:first-child > th,
+table.aui > tfoot > tr:first-child > td {
+    border-top: 1px solid #bbb;
+}
+
+/* Email Template */
+body,
+#email-wrap {
+    background: #f0f0f0;
+    color: #505050;
+}
+#email-wrap-inner {
+	background: #fff;
+	border: 1px solid #bbb;
+	color: #000;
+}
+#title-status + #email-wrap-inner {
+    border-top: 0;
+}
+#email-wrap > tbody > tr > td,
+#email-wrap-inner > tbody > tr > td,
+#email-footer td {
+	padding: 16px;
+}
+#email-footer td {
+	text-align: center;
+}
+#email-footer p {
+	font-size: 11px;
+	margin: 0;
+}
+#email-footer p + p {
+	margin-top: 4px;
+}
+#email-title-flavor {
+    margin: 0;
+    padding: 0 0 4px;
+}
+#email-title-heading {
+    font-size: 14px;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+}
+#email-actions {
+    border-top: 1px solid #bbb;
+    color: #505050;
+    margin: 16px 0 0;
+    padding: 0;
+}
+#email-actions td {
+    padding-top: 8px;
+}
+.email-metadata { color: #505050; }
+small.email-metadata { font-size: 12px; }
+.email-item-list { list-style: none; margin: 4px 0; padding-left: 0; }
+.email-item-list li { list-style-type: none; margin: 0; padding: 4px 0; }
+.email-list-divider { color: #505050; padding: 0 0.35em; }
+
+/* Bamboo specific */
+#title-status {
+    padding: 8px 0;
+}
+#title-status.failed {
+    background: #b33;
+}
+#title-status.successful {
+    background: #5bad5b;
+}
+#title-status.unknown {
+    background: #848484;
+}
+#title-status.queued {
+    background: #6393c3;
+}
+#title-status > table {
+    border-style: solid;
+    border-width: 1px 0;
+    table-layout: fixed;
+}
+#title-status.failed > table {
+    background: #a00;
+    border-color: #a20000;
+}
+#title-status.successful > table {
+    background: #393;
+    border-color: #309130;
+}
+#title-status.unknown > table {
+    background: #666;
+    border-color: #616161;
+}
+#title-status.queued > table {
+    background: #3c78b5;
+    border-color: #3d79b6;
+}
+#title-status-icon {
+    padding: 8px 0 8px 8px;
+    width: 24px;
+}
+#title-status-text {
+    font-size: 16px;
+    padding: 8px;
+}
+.failed #title-status-text {
+    text-shadow: 1px 1px 1px #500;
+}
+.successful #title-status-text {
+    text-shadow: 1px 1px 1px #194c19;
+}
+.unknown #title-status-text {
+    text-shadow: 1px 1px 1px #333;
+}
+.queued #title-status-text {
+    text-shadow: 1px 1px 1px #1e3c5a;
+}
+#title-status-text,
+#title-status-text a {
+    color: #fff;
+}
+#title-status-text > .build {
+    font-weight: bold;
+}
+
+.trigger,
+.tests-summary,
+.failing-since,
+.agent-info,
+.build-hung-details {
+    margin-top: 4px;
+}
+
+.section-header {
+    border-bottom: 1px solid #ddd;
+    margin-top: 16px;
+}
+.section-header h3 {
+    margin: 0;
+}
+.section-header .utility {
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.section-header .icon-more {
+    height: 15px;
+    vertical-align: middle;
+    width: 15px;
+}
+
+.section-header + table,
+.section-header + h4 {
+    margin-top: 12px;
+}
+h4 + table {
+    margin-top: 4px;
+}
+.errors,
+.log,
+.error-log {
+    background: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+}
+.error-log {
+    margin: 16px 0 0;
+    padding: 2px 4px;
+}
+.errors td,
+.log th,
+.log td,
+.error-log {
+    font: 12px Menlo, Monaco, "Courier New", monospace;
+}
+.log th {
+    color: #505050;
+}
+.commits {
+    margin-top: 8px;
+}
+.commits td {
+    padding: 4px 0;
+}
+.errors td {
+    padding: 2px 4px;
+}
+.errors .first td {
+    padding-top: 4px;
+}
+.errors .last td {
+    padding-bottom: 4px;
+}
+.commits td + td {
+    padding-left: 4px;
+}
+
+.error-detected td + td {
+    padding-left: 8px;
+}
+.error-context {
+    color: #505050;
+    display: block;
+}
+.error-throwable-details dt,
+.error-throwable-details dd {
+    margin: 0;
+    padding: 0;
+}
+.error-details {
+    margin: 16px 0 0;
+}
+.error-details th {
+    color: #505050;
+    font-weight: normal;
+    padding: 0;
+    white-space: nowrap;
+}
+.error-details td {
+    padding: 0 0 0 8px;
+}
+.error-details tr + tr > th,
+.error-details tr + tr > td {
+    padding-top: 8px;
+}
+
+.status-icon {
+    width: 16px;
+}
+table.aui .status-icon {
+    padding-bottom: 0;
+    padding-right: 0;
+}
+#title-status-icon > img,
+.status-icon > img {
+    height: 16px;
+    width: 16px;
+}
+
+.commit-avatar {
+    width: 24px;
+}
+.commit-avatar + td {
+    padding-left: 8px;
+}
+.commit-avatar > img {
+    height: 24px;
+    width: 24px;
+}
+.commits .revision {
+    white-space: nowrap;
+}
+
+.actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+table.comments {
+    border-collapse: separate;
+}
+.comment > td {
+    border: 1px solid transparent;
+}
+td.comment-avatar {
+    border-right: 0;
+    border-top-color: #ddd;
+    padding: 16px 8px 0 16px;
+    width: 32px;
+}
+.comment > td + td {
+    border-left: 0;
+    border-top-color: #ddd;
+    padding: 16px 16px 16px 0;
+}
+.comment.active > td {
+    background: #ffffd1;
+    border-color: #f7df92;
+}
+.wiki-content {
+    margin-top: 2px;
+    color: #000;
+}
+
+.revision-id,
+.branch-name {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    display: inline-block;
+    font-family: monospace;
+    line-height: 1;
+    max-width: 5em;
+    overflow: hidden;
+    padding: 2px 4px;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+span.revision-id {
+    color: #505050;
+}
+
+.branch-name + .revision-id {
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+    -moz-border-radius-topleft: 0;
+    -moz-border-radius-bottomleft: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+    border-top-left-radius: 0;
+    padding-left: 0;
+}
+
+.branch-name {
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-radius-topright: 0;
+    -moz-border-radius-bottomright: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+    border-top-right-radius: 0;
+    float: left;
+    max-width: none;
+    padding-right: 0;
+}
+
+#mergeResults th {
+    background:  none;
+}
+
+.icon-branch {
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+}
+
+table.details-list {
+    color: #333333;
+    overflow: hidden;
+    padding-left: 10em;
+}
+.details-list th {
+    color: #707070;
+    font-weight: normal;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    text-align: right;
+    width: 10em;
+}
+.details-list td {
+    padding-bottom: 10px;
+    text-align: left;
+}
+.show-full-deployment-result {
+    margin-top: 10px;
+    text-align: center;
+}

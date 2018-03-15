@@ -1,0 +1,123 @@
+{namespace bamboo.feature.deployment.result.resultList}
+
+/**
+ * Result List Container
+ * @param id
+ * @param environmentId
+ * @param? results
+ * @param? count
+ * @param? limit
+ * @param? currentUrl
+ */
+{template .container}
+    {let $tableId: $id + '-table' /}
+    {let $suppliedResults: ($results ? $results : []) /}
+    {let $suppliedCount: ($count ? $count : length($results)) /}
+    <div id="{$id}" class="result-list">
+        {call .list}
+            {param id: $tableId /}
+            {param environmentId: $environmentId /}
+            {param results: $suppliedResults /}
+            {param limit: ($limit ? $limit : 25) /}
+            {param count: $suppliedCount /}
+            {param currentUrl: $currentUrl /}
+        {/call}
+    </div>
+{/template}
+
+
+/**
+ * @param? id
+ * @param environmentId
+ * @param results
+ * @param limit
+ * @param count
+ * @param? currentUrl
+ */
+{template .list}
+    {call aui.table}
+        {param id: $id /}
+        {param columnsContent}
+            <colgroup>
+                <col width="30%"/>
+                <col width="20%"/>
+                <col/>
+                <col/>
+                <col width="100px"/>
+            </colgroup>
+        {/param}
+        {param theadContent}
+            <tr>
+                <th>{getText('deployment.environment.result.version')}</th>
+                <th>{getText('deployment.environment.result')}</th>
+                <th>{getText('deployment.environment.result.date')}</th>
+                <th>{getText('deployment.environment.result.trigger')}</th>
+                <th>{getText('global.heading.actions')}</th>
+            </tr>
+        {/param}
+        {param content}
+            {if length($results)}
+                {foreach $result in $results}
+                    {if index($result) < $limit}
+                        {call .item data="$result"}
+                            {param deploymentResult: $result /}
+                            {param environmentId: $environmentId /}
+                            {param currentUrl: $currentUrl /}
+                        {/call}
+                    {/if}
+                {/foreach}
+            {/if}
+        {/param}
+    {/call}
+    {if $count > $limit}
+        <script>
+            new BAMBOO.DEPLOYMENT.ResultList('#{$id|escapeJsString}', {$environmentId}, {lb}
+                size: {$count},
+                maxResult: {$limit},
+                pageSize: {$limit}
+            {rb});
+        </script>
+    {/if}
+{/template}
+
+/**
+ * @param deploymentResult
+ * @param environmentId
+ * @param? currentUrl
+ */
+{template .item}
+    <tr>
+        <td>
+            {call bamboo.feature.deployment.result.version}
+                {param deploymentVersion: $deploymentResult.deploymentVersion /}
+                {param deploymentVersionName: $deploymentResult.deploymentVersionName /}
+                {param subtle: true /}
+            {/call}
+        </td>
+        <td>
+            {call bamboo.feature.deployment.result.environmentState}
+                {param deploymentResult: $deploymentResult /}
+                {param showDetailsLinkAlways: true /}
+            {/call}
+        </td>
+        <td>
+            {call bamboo.feature.deployment.result.finishedTimeOrDuration}
+                {param id: $deploymentResult.id /}
+                {param lifeCycleState: $deploymentResult.lifeCycleState /}
+                {param finishedDate: $deploymentResult.finishedDate /}
+                {param startedDate: $deploymentResult.startedDate /}
+                {param queuedDate: $deploymentResult.queuedDate /}
+                {param executedDate: $deploymentResult.executedDate /}
+                {param hideLink: true /}
+            {/call}
+        </td>
+        <td>{$deploymentResult.reasonSummary|noAutoescape}</td>
+        <td>
+            {if $deploymentResult.deploymentVersion}
+                <a href="{contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environmentId}{'&versionId='+$deploymentResult.deploymentVersion.id+'&returnUrl='+$currentUrl}">
+                    {getText('deployment.environment.view.result.rollback')}
+                </a>
+            {/if}
+        </td>
+    </tr>
+{/template}

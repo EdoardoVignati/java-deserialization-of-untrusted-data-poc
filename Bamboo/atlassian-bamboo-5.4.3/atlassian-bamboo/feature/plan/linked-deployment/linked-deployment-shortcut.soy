@@ -1,0 +1,73 @@
+{namespace feature.plan.linkedDeployment}
+
+/**
+ * @param hasLinkedDeployments
+ * @param immutablePlan
+ */
+{template .linkedDeploymentHeaderDropdown}
+    {if $hasLinkedDeployments}
+        {call aui.buttons.buttons}
+            {param content}
+                {call aui.buttons.button}
+                    {param text: ''/}
+                    {param tagName: 'a' /}
+                    {param iconType: 'aui' /}
+                    {param iconClass: 'aui-icon-small icon-deploy' /}
+                    {param extraAttributes: ['title': getText('deployment.plan.crosslink.title'), 'data-plan-key': $immutablePlan.planKey.key] /}
+                    {param extraClasses: 'linked-deployments-menu'/}
+                {/call}
+            {/param}
+        {/call}
+
+        {call .linkedDeploymentDialogTriggerHandler/}
+    {/if}
+{/template}
+
+
+/**
+ */
+{template .linkedDeploymentDialogTriggerHandler}
+    <script>
+        AJS.$(function () {lb}
+             BAMBOO.linkedDeploymentShortcut.init({lb}
+                 triggerSelector: ".linked-deployments-menu",
+                 relatedProjectsUrl: "{contextPath() + '/rest/api/latest/deploy/project/forPlan?planKey='}",
+                 dialogContentTemplate: feature.plan.linkedDeployment.linkedDeploymentDialogContent
+             {rb});
+        {rb});
+    </script>
+{/template}
+
+/**
+ * @param hasLinkedDeployments
+ * @param immutablePlan
+ */
+{template .linkedDeploymentDashboardDropdown}
+    {if $hasLinkedDeployments}
+       <a class="linked-deployments-menu" title="{getText('deployment.plan.crosslink.title')}" data-plan-key={$immutablePlan.planKey.key} href="{contextPath()}/browse/{$immutablePlan.planKey.key}/deployments">
+        {call widget.icons.icon}
+            {param type: 'deploy'/}
+        {/call}
+       </a>
+    {/if}
+{/template}
+
+
+/**
+ *  @param linkedDeploymentProjects
+ */
+{template .linkedDeploymentDialogContent}
+    <div class="linked-deployments-content">
+        <h3>{getText('deployment.plan.crosslink.title')}</h3>
+        {if $linkedDeploymentProjects and length($linkedDeploymentProjects) > 0}
+            {getText('deployment.plan.crosslink.description')}
+            <ul>
+                {foreach $deploymentProject in $linkedDeploymentProjects}
+                    <li><a href="{contextPath()}/deploy/viewDeploymentProjectEnvironments.action?id={$deploymentProject.id}">{$deploymentProject.name}</a></li>
+                {/foreach}
+            </ul>
+        {else}
+            <p>{getText('deployment.plan.crosslink.none')}</p>
+        {/if}
+    </div>
+{/template}

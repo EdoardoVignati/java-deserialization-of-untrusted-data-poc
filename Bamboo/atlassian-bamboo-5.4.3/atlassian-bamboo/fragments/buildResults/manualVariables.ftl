@@ -1,0 +1,1 @@
+[@cp.displayManualVariables action.resultsSummary /]

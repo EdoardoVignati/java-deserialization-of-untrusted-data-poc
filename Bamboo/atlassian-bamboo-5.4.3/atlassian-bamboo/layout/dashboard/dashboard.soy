@@ -1,0 +1,17 @@
+{namespace bamboo.layout}
+
+/**
+ * Dashboard Layout
+ * @param instanceName
+ * @param? headerActionsButtons
+ * @param? pageFooterContent
+ * @param? navItems
+ * @param content
+ */
+{template .dashboard}
+    {call .base data="all"}
+        {param headerMainContent}
+            <h1 id="dashboard-instance-name">{getText('dashboard.heading', $instanceName)|noAutoescape}</h1>
+        {/param}
+    {/call}
+{/template}

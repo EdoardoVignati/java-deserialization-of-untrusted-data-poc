@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+  <!-- BambooAuthenticationContext -->
+  <bean id="authenticationContext" class="com.atlassian.bamboo.user.DefaultAuthenticationContext" plugin:available="true">
+    <constructor-arg ref="bambooUserManager" />
+    <constructor-arg ref="i18nBeanFactory" />
+  </bean>
+
+  <!-- Bamboo User Manager -->
+  <bean id="bambooUserManager" parent="txUserReadWriteProxy" plugin:available="true">
+    <property name="target">
+      <bean class="com.atlassian.bamboo.user.BambooUserManagerImpl" >
+        <property name="authorDao" ref="authorDao"/>
+        <property name="commentDao" ref="commentDao" />
+        <property name="labelDao" ref="labelDao" />
+        <property name="aclService" ref="aclService"/>
+        <property name="aclAuthorizationStrategy" ref="aclAuthorizationStrategy"/>
+        <property name="atlassianUserConfiguration" ref="atlassianUserConfiguration" />
+        <property name="loginInformationManager" ref="loginInformationManager" />
+        <property name="tokenDao" ref="tokenDao" />
+        <property name="rememberMeTokenDao" ref="bambooRememberMeTokenDao"/>
+        <property name="propertySetDao" ref="propertySetDao"/>
+        <property name="bambooUserConfiguration" ref="bambooUserConfiguration"/>
+        <property name="filteredGroupsProvider" ref="filteredGroupsProvider"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="txUserReadWriteProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+    <property name="transactionManager" ref="transactionManager"/>
+    <property name="transactionAttributes">
+      <props>
+        <prop key="saveExternalEntity">PROPAGATION_REQUIRES_NEW</prop>
+        <prop key="getPropertySet*">PROPAGATION_REQUIRED</prop>
+        <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="is*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="has*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="filter*">PROPAGATION_REQUIRED,readOnly</prop>
+        <prop key="*">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="userConfigurationService" class="com.atlassian.crowd.integration.atlassianuser.UserConfigurationServiceImpl">
+      <constructor-arg index="0" ref="atlassianUserConfiguration"/>
+      <constructor-arg index="1" ref="userConfigurationPersister"/>
+      <constructor-arg index="2" ref="crowdConfigurationPersister"/>
+      <constructor-arg index="3" ref="bambooPermissionManager"/>
+  </bean>
+
+  <bean id="atlassianUserConfiguration" class="com.atlassian.crowd.integration.atlassianuser.AbstractDynamicUserConfiguration">
+    <constructor-arg index="0" ref="configurationDirectory"/>
+    <lookup-method name="createConfiguration" bean="bambooUserConfiguration"/>
+  </bean>
+
+  <bean id="bambooUserConfiguration" class="com.atlassian.bamboo.user.BambooUserConfiguration" scope="prototype">
+    <constructor-arg index="0">
+      <bean factory-bean="userConfigurationPersister" factory-method="getConfigurationStream" destroy-method="close"/>
+    </constructor-arg>
+    <property name="sessionFactory" ref="sessionFactory"/>
+    <property name="cacheManager" ref="cacheManager"/>
+    <property name="externalEntityDao" ref="externalEntityDao"/>
+  </bean>
+
+  <bean id="userConfigurationPersister" class="com.atlassian.crowd.integration.atlassianuser.UserConfigurationPersisterImpl">
+    <constructor-arg index="0" ref="configurationDirectory"/>
+  </bean>
+
+  <bean id="crowdConfigurationPersister" class="com.atlassian.crowd.integration.atlassianuser.CrowdPropertiesPersisterImpl">
+    <constructor-arg index="0" ref="configurationDirectory"/>
+  </bean>
+
+  <bean id="configurationDirectory" factory-bean="bootstrapManager" factory-method="getConfigDirectory"/>
+
+  <bean id="delegationAccessor" factory-bean="atlassianUserConfiguration" factory-method="getDelegationAccessor"/>
+  <bean id="authenticator" factory-bean="delegationAccessor" factory-method="getAuthenticator"/>
+  <bean id="entityQueryParser" factory-bean="delegationAccessor" factory-method="getEntityQueryParser"/>
+
+  <bean id="userManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean factory-bean="delegationAccessor" factory-method="getUserManager" />
+    </property>
+  </bean>
+
+  <bean id="groupManager" parent="txReadWriteProxy">
+    <property name="target">
+      <bean factory-bean="delegationAccessor" factory-method="getGroupManager"/>
+    </property>
+  </bean>
+
+  <bean id="propertySetFactory" parent="txReadWriteProxy">
+    <property name="target">
+      <bean factory-bean="delegationAccessor" factory-method="getPropertySetFactory"/>
+    </property>
+  </bean>
+
+  <bean id="externalEntityDao" parent="txUserReadWriteProxy">
+    <property name="target">
+      <bean class="com.atlassian.user.impl.hibernate.CachingExternalEntityDAO">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="filteredGroupsProvider" class="com.atlassian.bamboo.user.crowd.filteredgroups.XmlFilteredGroupsProvider"/>
+
+</beans>

@@ -1,0 +1,31 @@
+{namespace widget.icons}
+
+/**
+* @param type - a string containing the icon type (eg. "failed") which will be prefixed with "icon-"
+* @param? text - a string to be inserted inside the icon span, which will be hidden using CSS
+* @param? showTitle - a boolean indicating whether the title attribute should be added to the icon
+*/
+{template .icon}
+    <span class="icon icon-{$type}"{if $text and $showTitle} title="{$text}"{/if}>{if $text}<span>{$text}</span>{/if}</span>
+{/template}
+
+/**
+* @param type - a string containing the icon type (eg. "failed") which will be prefixed with "icon-"
+* @param? text - a string to be inserted inside the icon span, which will be hidden using CSS
+* @param? showTitle - a boolean indicating whether the title attribute should be added to the icon
+*/
+{template .fontIcon}
+    <span class="aui-icon aui-icon-small aui-iconfont-{$type}"{if $text and $showTitle} title="{$text}"{/if}>{if $text}<span>{$text}</span>{/if}</span>
+{/template}
+
+/**
+* @param iconType - a string containing the icon type (eg. "failed") which will be prefixed with "aui-iconfont--"
+* @param relativeUrl - relativeUrl, without the context path
+* @param? text - a string to be inserted inside the icon span & title, which will be hidden using CSS
+*/
+{template .auiFontLink}
+    <a {if $text} title="{$text}" {/if}
+       href="{contextPath() + $relativeUrl}">
+        <span class="aui-icon aui-icon-small aui-iconfont-{$iconType}">{if $text}{$text}{/if}</span>
+    </a>
+{/template}

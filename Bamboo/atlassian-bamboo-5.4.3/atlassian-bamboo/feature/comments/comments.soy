@@ -1,0 +1,67 @@
+{namespace bamboo.feature.comments}
+
+/**
+ * @param comments
+ * @param? showOperations
+ * @param? headingLevel
+ * @param? showTopLevelHeading
+ */
+{template .commentList}
+    {if length($comments) > 0}
+        {if $showTopLevelHeading}
+            <h2>{getText('buildResult.comment.title')}</h2>
+        {/if}
+        <ol>
+            {foreach $comment in $comments}
+                {call .commentListItem}
+                    {param id: $comment.id /}
+                    {param comment: $comment.comment /}
+                    {param lastModificationDate: $comment.lastModificationDate /}
+                    {param prettyLastModificationDate: $comment.prettyLastModificationDate /}
+                    {param avatar: $comment.avatar /}
+                    {param user: $comment.user /}
+                    {param userDisplayName: $comment.userDisplayName /}
+                    {param showOperations: $showOperations /}
+                    {param headingLevel: ($headingLevel ? $headingLevel : 'h3') /}
+                    {param result: $comment.result /}
+                {/call}
+            {/foreach}
+        </ol>
+    {/if}
+{/template}
+
+/**
+ * @param id
+ * @param comment
+ * @param lastModificationDate
+ * @param prettyLastModificationDate
+ * @param avatar
+ * @param? result
+ * @param? user
+ * @param? userDisplayName
+ * @param? showOperations
+ * @param? headingLevel
+ */
+{template .commentListItem}
+    <li>
+        <img src="{$avatar ? $avatar : (contextPath() + '/images/icons/useravatar.png')}" class="avatar">
+        <{($headingLevel ? $headingLevel : 'h3')}>
+            {if $user}
+                <a href="{contextPath() + '/browse/user/' + $user.name}">{$userDisplayName}</a>
+            {else}
+                {getText('buildResult.comment.anonymous.title')}
+            {/if}
+        </{($headingLevel ? $headingLevel : 'h3')}>
+        <p>{$comment|noAutoescape}</p>
+        {if $showOperations}
+            <div class="ops">
+            {if $result}
+                <a class="delete mutative" href="{contextPath() + '/build/ajax/deleteComment.action?commentId=' + $id + '&buildKey=' + $result.buildKey + '&buildNumber=' + $result.buildNumber}" title="{getText('buildResult.comment.delete.description')}">{getText('global.buttons.delete')}</a>
+            {else}
+                <a class="delete mutative" href="{contextPath() + '/deploy/deleteComment.action?commentId=' + $id}" title="{getText('buildResult.comment.delete.description')}">{getText('global.buttons.delete')}</a>
+            {/if}
+            </div>
+        {/if}
+        <time datetime="{$lastModificationDate}" title="{$lastModificationDate}">{getText('global.dateFormat.ago.fuzzy', $prettyLastModificationDate)}</time>
+    </li>
+{/template}

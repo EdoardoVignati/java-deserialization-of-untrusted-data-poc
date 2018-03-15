@@ -1,0 +1,24 @@
+{namespace bamboo.widget.autocomplete.variableSelect}
+
+/**
+ * @param variablesToAutoIncrement list of variables for initial load
+ * @param? extraClasses
+ */
+{template .list}
+    <ul class="{length($variablesToAutoIncrement) == 0 ? 'empty' : ''}{call aui.renderExtraClasses data="all" /}">
+        {foreach $variable in $variablesToAutoIncrement}
+            <li data-id="{$variable.key}">
+                {call .item data="$variable"/}
+            </li>
+        {/foreach}
+    </ul>
+{/template}
+
+/**
+ * @param key
+ */
+{template .item}
+    {$key}
+    <a class="remove"></a>
+    <input type="hidden" name="variablesToAutoIncrement" value="{$key}" />
+{/template}

@@ -1,0 +1,212 @@
+{namespace bamboo.layout}
+
+/**
+ * Deployment Project Layout
+ * @param? navItems
+ * @param content
+ * @param deploymentProject
+ */
+{template .deploymentProject}
+    {let $currentUrl: '/deploy/viewDeploymentProjectEnvironments.action?id=' + $deploymentProject.id /}
+    {call .deployment data="all"}
+        {param headerText: $deploymentProject.name /}
+        {param parentCrumbs: [
+            ['link': contextPath() + '/deploy/viewAllDeploymentProjects.action', 'text': getText('deployment.breadcrumb.allProjects')]
+        ] /}
+        {param headerActionsButtons}
+            {call bamboo.layout.menus.deployDropdown}
+                {param environments: $deploymentProject.environments /}
+                {param currentUrl: $currentUrl /}
+            {/call}
+            {if $deploymentProject.operations.allowedToCreateVersion or $deploymentProject.operations.canEdit }
+                {call aui.buttons.buttons}
+                    {param content}
+                        {call aui.buttons.button}
+                            {param id: 'configure-project-actions'/}
+                            {param text: ' ' /}
+                            {param tagName: 'a' /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'aui-icon-small aui-iconfont-more' /}
+                            {param dropdown2Target: 'project-configuration-actions' /}
+                        {/call}
+                    {/param}
+                {/call}
+                {call aui.dropdown2.contents}
+                    {param id: 'project-configuration-actions' /}
+                    {param content}
+                        <div class="aui-dropdown2-section">
+                            <ul>
+                            {if $deploymentProject.operations.allowedToCreateVersion}
+                                {let $actionUrl: contextPath() + '/deploy/createDeploymentVersion.action?deploymentProjectId=' + $deploymentProject.id /}
+                                 <li>
+                                     <a id='create-deployment-version'
+                                        href="{$actionUrl + '&returnUrl='}{$currentUrl|escapeUri}"
+                                        title="{getText('deployment.project.create.version.tooltip')}"
+                                        class="aui-icon-container">
+                                         {call widget.icons.fontIcon}{param type: 'add'/}{/call}{sp}{getText('deployment.project.create.version')}
+                                     </a>
+                                 </li>
+                            {/if}
+                            {if $deploymentProject.operations.canEdit}
+                                <li>
+                                    <a id='edit-deployment-project'
+                                       class="aui-icon-container"
+                                       href="{contextPath() + '/deploy/config/configureDeploymentProject.action?id=' + $deploymentProject.id}">
+                                        {call widget.icons.fontIcon}{param type: 'edit'/}{/call}{sp}{getText('deployment.project.configure.short')}
+                                    </a>
+                                </li>
+                            {/if}
+                            </ul>
+                        </div>
+                    {/param}
+                    {param extraClasses: 'aui-style-default' /}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+    <script>
+        AJS.whenIType('e').followLink('#edit-deployment-project');
+    </script>
+{/template}
+
+/**
+ * Deployment Version Layout
+ * @param? navItems
+ * @param content
+ * @param deploymentVersion
+ * @param deploymentProject
+ */
+{template .deploymentVersion}
+    {let $actionsDropdownId: 'deployment-version-actions-list' /}
+    {let $currentUrl: '/deploy/viewDeploymentVersion.action?versionId=' + $deploymentVersion.id /}
+    {call .deployment data="all"}
+        {param headerContent}
+            <h1 class="has-version-status">{getText('deployment.version.header', $deploymentVersion.name)}</h1>
+            <span class="version-lozenge-container">
+                {if $deploymentVersion.versionStatus}
+                    {call widget.status.deploymentVersionStatus}
+                        {param deploymentVersionState: $deploymentVersion.versionStatus.versionState /}
+                    {/call}
+                {/if}
+            </span>
+        {/param}
+        {param parentCrumbs: [
+            ['link': contextPath() + '/deploy/viewAllDeploymentProjects.action', 'text': getText('deployment.breadcrumb.allProjects')],
+            ['link': contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $deploymentProject.id, 'text': $deploymentProject.name],
+            ['link': contextPath() + '/deploy/viewDeploymentProjectVersions.action?id=' + $deploymentProject.id, 'text': getText('deployment.breadcrumb.versions')]
+        ] /}
+        {param headerActionsButtons}
+            {call bamboo.layout.menus.deployDropdown}
+                {param environments: $deploymentProject.environments /}
+                {param currentUrl: $currentUrl /}
+                {param versionId: $deploymentVersion.id /}
+            {/call}
+            {if $deploymentVersion.operations.allowedToSetVersionStatus}
+                {call aui.buttons.buttons}
+                    {param content}
+                        {call aui.buttons.button}
+                            {param text: ' ' + getText('deployment.version.mark.approved') /}
+                            {param id: 'mark-approved-' + $deploymentVersion.id /}
+                            {param extraClasses: [ 'mark-approved' ] /}
+                            {param extraAttributes: [
+                                'title': getText('deployment.version.mark.approved.title', $deploymentVersion.name),
+                                'data-id': $deploymentVersion.id
+                            ] /}
+                            {param isPressed: $deploymentVersion.versionStatus.versionState == 'APPROVED'  /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'aui-icon-small aui-iconfont-approve' /}
+                        {/call}
+                        {call aui.buttons.button}
+                            {param text: ' ' + getText('deployment.version.mark.broken') /}
+                            {param id: 'mark-broken-' + $deploymentVersion.id /}
+                            {param extraClasses: [ 'mark-broken' ] /}
+                            {param extraAttributes: [
+                                'title': getText('deployment.version.mark.broken.title', $deploymentVersion.name),
+                                'data-id': $deploymentVersion.id
+                            ] /}
+                            {param isPressed: $deploymentVersion.versionStatus.versionState == 'BROKEN' /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'aui-icon-small aui-iconfont-error' /}
+                        {/call}
+                    {/param}
+                {/call}
+            {/if}
+            {if $deploymentVersion.operations.canDelete or $deploymentVersion.operations.canEdit or $deploymentProject.operations.allowedToCreateVersion}
+                {call aui.buttons.buttons}
+                    {param content}
+                        {call aui.buttons.button}
+                            {param id: 'deployment-version-actions' /}
+                            {param text: ' ' /}
+                            {param tagName: 'a' /}
+                            {param iconType: 'aui' /}
+                            {param iconClass: 'aui-icon-small aui-iconfont-more' /}
+                            {param dropdown2Target: $actionsDropdownId /}
+                        {/call}
+                    {/param}
+                {/call}
+                {call aui.dropdown2.contents}
+                    {param id: $actionsDropdownId /}
+                    {param content}
+                        {if $deploymentProject.operations.allowedToCreateVersion or $deploymentProject.operations.canEdit}
+                            <div class="aui-dropdown2-section">
+                                <ul>
+                                    {if $deploymentProject.operations.allowedToCreateVersion}
+                                        {let $actionUrl: contextPath() + '/deploy/createDeploymentVersion.action?deploymentProjectId=' + $deploymentProject.id /}
+                                        <li>
+                                            <a id='create-deployment-version'
+                                               href="{$actionUrl}&returnUrl={$currentUrl|escapeUri}"
+                                               title="{getText('deployment.project.create.version.tooltip')}"
+                                               class="aui-icon-container">
+                                                {call widget.icons.fontIcon}{param type: 'add'/}{/call}{sp}{getText('deployment.project.create.version')}
+                                            </a>
+                                        </li>
+                                    {/if}
+                                    {if $deploymentProject.operations.canEdit}
+                                        {let $actionUrl: contextPath() + '/deploy/config/configureDeploymentProject.action?id=' + $deploymentProject.id /}
+                                        <li>
+                                            <a id="edit-deployment-project"
+                                               href="{$actionUrl}"
+                                               title="{getText('deployment.project.configure.short')}"
+                                               class="aui-icon-container">
+                                                {call widget.icons.fontIcon}{param type: 'edit'/}{/call}{sp}{getText('deployment.project.configure.short')}
+                                            </a>
+                                        </li>
+                                    {/if}
+                                </ul>
+                            </div>
+                        {/if}
+                        {if $deploymentProject.operations.canEdit or $deploymentProject.operations.canDelete}
+                            <div class="aui-dropdown2-section" >
+                                <ul>
+                                    {if $deploymentProject.operations.canEdit}
+                                        {let $renameUrl: contextPath() + '/deploy/renameDeploymentVersion.action?versionId=' + $deploymentVersion.id /}
+                                        <li>
+                                            <a id="rename-version"
+                                               href="{$renameUrl}&cancelUrl={$currentUrl|escapeUri}"
+                                               title="{getText('deployment.version.actions.rename')}"
+                                               class="aui-icon-container">
+                                                {call widget.icons.fontIcon}{param type: 'devtools-tag'/}{/call}{sp}{getText('deployment.version.actions.rename')}
+                                            </a>
+                                        </li>
+                                    {/if}
+                                    {if $deploymentProject.operations.canDelete}
+                                        {let $actionUrl: contextPath() + '/deploy/confirmDeleteDeploymentVersion.action?versionId=' + $deploymentVersion.id /}
+                                        <li>
+                                            <a id="delete-version"
+                                               href="{$actionUrl}&cancelUrl={$currentUrl|escapeUri}"
+                                               title="{getText('deployment.version.actions.delete')}"
+                                               class="aui-icon-container delete-deployment-version">
+                                                {call widget.icons.fontIcon}{param type: 'remove'/}{/call}{sp}{getText('deployment.version.actions.delete')}
+                                            </a>
+                                        </li>
+                                    {/if}
+                                </ul>
+                            </div>
+                        {/if}
+                    {/param}
+                    {param extraClasses: 'aui-style-default' /}
+                {/call}
+            {/if}
+        {/param}
+    {/call}
+{/template}

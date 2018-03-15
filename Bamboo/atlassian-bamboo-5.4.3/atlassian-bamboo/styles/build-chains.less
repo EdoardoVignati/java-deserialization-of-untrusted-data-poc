@@ -1,0 +1,458 @@
+@import "../global.less";
+
+.chainStructureSummary {
+    margin-right: 355px;
+}
+#branch-information {
+    .details-dl(6em);
+    font-size: 12px;
+}
+
+.result-summary > .details > .variables dl > dt {
+    text-align: left;
+}
+
+.result-summary {
+    & > .details {
+        .status + dd + .status {
+            display: none;
+
+            & + dd {
+                margin-top: 0;
+            }
+        }
+        .started,
+        .completed,
+        .queued,
+        .successful-since,
+        .first-to-pass-since,
+        .failing-since,
+        .fixed-in,
+        .restarts {
+            & + dd span {
+                color: @secondaryTextColor;
+            }
+        }
+    }
+    #buildResultsSummary {
+        display: block;
+        margin: 0 0 15px;
+
+        #buildResults {
+            display: block;
+            float: none;
+            width: auto;
+        }
+    }
+
+    // Additional details expandy thing
+    .show-less-details,
+    .show-more-details {
+        color: @secondaryTextColor;
+        cursor: pointer;
+        margin-top: 9px;
+        padding: 8px;
+        position: relative;
+        text-align: center;
+
+        &:before {
+            background: @activeDividerColor;
+            background: -moz-linear-gradient(left,  rgba(255,255,255,0) 0%, rgba(187,187,187,1) 10%, rgba(187,187,187,1) 90%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(10%,rgba(187,187,187,1)), color-stop(90%,rgba(187,187,187,1)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(187,187,187,1) 10%,rgba(187,187,187,1) 90%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(187,187,187,1) 10%,rgba(187,187,187,1) 90%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(187,187,187,1) 10%,rgba(187,187,187,1) 90%,rgba(255,255,255,0) 100%); /* IE10+ */
+            background: linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(187,187,187,1) 10%,rgba(187,187,187,1) 90%,rgba(255,255,255,0) 100%); /* W3C */
+            content: "";
+            height: 1px;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        &:active,
+        &:focus {
+            outline: none;
+            text-decoration: underline;
+        }
+    }
+}
+
+h3.repository-name {
+    border: 0;
+    color: @secondaryTextColor;
+    font-size: 1em;
+    font-weight: normal;
+    margin-top: 16px;
+    padding: 0;
+}
+h3.repository-name + ul {
+    margin-top: 4px;
+}
+
+#shared-artifacts > ul {
+    list-style: none;
+    padding: 0;
+}
+#shared-artifacts > ul > li + li {
+    margin-top: 8px;
+}
+#shared-artifacts > p {
+    border-top: 1px solid @dividerColor;
+    margin-top: 8px;
+    padding-top: 8px;
+}
+#shared-artifacts .icon {
+    margin-right: @halfSpacing;
+}
+#shared-artifacts span {
+    color: @secondaryTextColor;
+}
+
+.test-summary {
+    margin-top: 16px;
+
+    & > .floating-toolbar > span {
+        color: @secondaryTextColor;
+    }
+    ul {
+        color: @bodyTextColor;
+        display: table;
+        list-style: none;
+        padding: 0;
+        table-layout: fixed;
+        text-align: center;
+        width: 100%;
+
+        span {
+            color: @secondaryTextColor;
+            display: block;
+            font-size: @baseFontSize;
+            font-weight: normal;
+            line-height: @baseLineHeight;
+        }
+    }
+    li {
+        display: table-cell;
+        font-size: @baseFontSize * 3;
+        font-weight: bold;
+        line-height: 1;
+    }
+    a {
+        text-decoration: none !important;
+
+        &:hover span {
+            color: @primaryLinkColor;
+            text-decoration: underline !important;
+        }
+    }
+    .new-failures a,
+    .existing-failures a {
+        color: @lozengeErrorColor;
+    }
+    .fixed a {
+        color: @bodyTextColor;
+    }
+    .quarantine a {
+        color: @lozengeWarningColor;
+    }
+    .new-failures,
+    .existing-failures,
+    .fixed,
+    .quarantine {
+        a:hover {
+            color: @primaryLinkColor;
+        }
+    }
+}
+
+.stage-item() {
+    .border-radius();
+    background: @contentBackgroundColor;
+    border: 1px solid @dividerColor;
+    margin: 0 0 21px;
+    position: relative;
+
+    > div {
+        .border-radius(@baseBorderRadius - 1px);
+        border-left: @halfSpacing solid @dividerColor;
+        overflow: hidden;
+        position: relative;
+
+        > dl {
+            background: @bodyBackgroundColor;
+            -moz-border-radius-topright: 2px;
+            -webkit-border-top-right-radius: 2px;
+            border-top-right-radius: 2px;
+            margin: 0;
+            overflow: hidden;
+            padding: 10px 15px;
+
+            > dt {
+                float: left;
+                font-weight: bold;
+                padding-left: 16px;
+
+                > span {
+                    color: @secondaryTextColor;
+                    font-weight: normal;
+                    margin-left: @halfSpacing;
+                }
+            }
+            > dd {
+                float: right;
+
+                > .aui-button {
+                    margin: -1px 0 -5px;
+                    top: -2px;
+                }
+            }
+        }
+        > ul {
+            border-top: 1px solid @dividerColor;
+            list-style: none;
+            margin: 0;
+            overflow: hidden;
+            padding: 0;
+
+            > li {
+                border-bottom: 1px solid @dividerColor;
+                border-top: 1px solid @dividerColor;
+                margin: 0 0 -1px;
+                overflow: hidden;
+                padding: 8px 15px 8px 30px;
+                position: relative;
+            }
+        }
+    }
+}
+
+.stageList {
+    .reset-list-style();
+}
+.stageList > li,
+#deploymentsList {
+    .stage-item();
+}
+.stageList .jobError {
+    color: #c00;
+    float: right;
+}
+.stageList .noMatchingAgent {
+    color: #c00;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.stageList > .collapsed > div > dl {
+    -moz-border-radius-bottomright: 2px;
+    -webkit-border-bottom-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+}
+
+.stageList > li > div > dl > dt {
+  background: url(../../../images/jt/icn_collapse.gif) no-repeat 0 0;
+  cursor: pointer;
+}
+
+.stageList > .collapsed > div > dl > dt {
+    background: url(../../../images/jt/icn_expand.gif) no-repeat 0 0;
+}
+.stageList > .not-collapsible > div > dl > dt {
+    background: transparent;
+    cursor: default;
+    padding: 0;
+}
+.stageList .collapsed ul {
+    display: none;
+}
+.stageList .Pending,
+.stageList .Queued,
+.stageList .InProgress {
+    background: #ebf1f7;
+}
+.stageList a.job {
+    float: left;
+    min-height: 15px;
+    position: relative;
+}
+.stageList > li > div.arrow {
+    background: @dividerColor url(../../../images/stage-separator.gif) no-repeat 50% 0;
+    border: 0;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    bottom: -22px;
+    height: 21px;
+    left: 50%;
+    margin-left: -20px;
+    position: absolute;
+    width: 41px;
+}
+.stageList > li.last > div.arrow,
+.stageList > li.ui-sortable-helper > div.arrow {
+    display: none;
+}
+.stageList > li:last-child > div.arrow { /* on its own line because IE8 won't parse any additional rules once hitting the :last-child selector */
+    display: none;
+}
+
+#deploymentsList ul.environmentList {
+    list-style-image: url(../../../images/agent_arrow.gif);
+    padding-left: @doubleSpacing;
+}
+
+.stageList .progress {
+    border: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    > .progress-bar {
+        background: #fff url(../../../images/job-progress-bar-bg.png) repeat-y 100% 0;
+        padding-right: 10px;
+    }
+    > .progress-text {
+        color: #4a4a4a;
+        float: right;
+        min-height: 15px;
+        padding: 8px 40px 8px 0;
+        text-align: right;
+    }
+}
+
+/* Stage Configuration */
+#editstages > li > div,
+#editstages > li > div > ul,
+#editstages > li > div > ul > li {
+    overflow: visible;
+}
+.stageList .ui-droppable {
+    min-height: 33px;
+}
+.stageList .ui-droppable > li:hover {
+    background: #fafafa;
+}
+.stageList.ui-sortable > li > div > dl > dt {
+    background: url(../../../images/handle.png) no-repeat 0 50%;
+    padding-left: 15px;
+}
+.stageList.ui-sortable dl,
+.stageList.ui-sortable > li > div > dl > dt {
+    cursor: move;
+}
+#editstages a.job {
+    float: none;
+}
+.stageList .floating-toolbar > li:before {
+    color: @dividerColor;
+}
+
+.stageList .create-job {
+    font-weight: bold;
+    padding-left: @baseSpacing;
+    padding-right: 0;
+
+    a {
+        display: inline-block;
+    }
+    .aui-icon {
+        margin-right: @halfSpacing;
+    }
+}
+.stageList .ui-droppable .handle {
+    background: url(../../../images/handle.png) no-repeat 15px 50%;
+    cursor: move;
+    height: 80%;
+    left: 0;
+    position: absolute;
+    top: 10%;
+    width: 30px;
+}
+
+.stageList ul.ui-state-active {
+    background: #f5f8fb;
+}
+.stageList ul.ui-state-hover {
+    background: @primaryHighlightColor;
+}
+
+.stageList > .ui-sortable-placeholder {
+    background: #f5f8fb;
+    border: 2px dashed @dividerColor;
+    margin: 0 0 20px;
+    visibility: visible !important;
+}
+.stageList ul > .ui-draggable-dragging {
+    background: #fff !important;
+    border: 1px solid @dividerColor !important;
+    z-index: 1000;
+}
+
+#planSummaryGraphs,
+#planSummaryGraphs img {
+    margin-top: 16px;
+}
+
+#planStatsSummary {
+    width: 345px;
+}
+
+#planDetailsSummary > div {
+    margin-top: 16px;
+}
+#planDetailsSummary > div:first-child {
+    margin-top: 0;
+}
+
+#stageListSummary .stageList {
+    margin-left: 0;
+}
+
+ul.history-permalinks {
+    list-style: none;
+    overflow: hidden;
+    padding: 0;
+}
+.history-permalinks > li {
+    display: inline-block;
+    margin-right: 16px;
+}
+.history-permalinks .icon {
+    margin-right: @halfSpacing;
+}
+
+/* Quick Branch List */
+#quick-branch-list {
+    margin-top: 16px;
+}
+#quick-branch-list table.aui {
+    min-width: 0;
+}
+#quick-branch-list .build > a {
+    display: inline-block;
+    max-width: 220px;
+    padding-left: 20px;
+    position: relative;
+    word-wrap: break-word;
+}
+#quick-branch-list .planKeySection {
+    white-space: nowrap;
+    width: 1%;
+}
+#quick-branch-list .build .aui-icon {
+    margin: 0 4px 0 -20px;
+}
+
+#quick-branch-list .more-link {
+    display: block;
+    font-weight: bold;
+    padding: 0.5em 0.4em 0.5em 0.6em;
+}
+
+/* list of dependant branches */
+ul.branchDependencyList {
+    margin: 0;
+    padding: 0 0 5px 140px;
+}

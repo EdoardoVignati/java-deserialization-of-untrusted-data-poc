@@ -1,0 +1,27 @@
+[#compress]
+    [#if (fieldErrors[parameters.name])?has_content]
+        [#list fieldErrors[parameters.name] as error]
+            <div class="error control-form-error" [#if (parameters.name)?has_content] data-field-name="${parameters.name?html}"[/#if]>${error?html}</div>
+        [/#list]
+    [/#if]
+[/#compress]
+[#if parameters.description?has_content || parameters.descriptionKey?has_content || parameters.optionDescription?has_content || (parameters.labelKey?has_content && action.doesLabelKeyHaveMatchingDescription(parameters.labelKey))]
+    <div class="description[#if parameters.descriptionClass?has_content] ${parameters.descriptionClass}[/#if]"[#if (parameters.id)?has_content] id="${parameters.id?html}Desc"[/#if]>[#rt/]
+        [#if parameters.descriptionKey?has_content]
+            [@ww.text name=parameters.descriptionKey /][#t/]
+        [#elseif parameters.description?has_content ]
+            ${parameters.description}[#t/]
+        [#elseif parameters.labelKey?has_content && action.doesLabelKeyHaveMatchingDescription(parameters.labelKey)]
+            ${action.getDescriptionFromLabelKey(parameters.labelKey)}[#t/]
+        [/#if]
+    </div>[#lt/]
+[/#if]
+[#lt/]
+[#if parameters.id?? && parameters.autofocus?? && parameters.autofocus == true]
+<script>[#lt/]
+(function (field) {
+    if (field['autofocus'] !== true) { field.focus(); }
+}(document.getElementById('${parameters.id?js_string}')));
+</script>[#lt/]
+[/#if]
+[#lt/]

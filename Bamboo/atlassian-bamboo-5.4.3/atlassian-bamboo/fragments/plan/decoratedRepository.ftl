@@ -1,0 +1,10 @@
+[#-- @ftlvariable name="" type="com.atlassian.bamboo.ww2.actions.build.admin.config.repository.DecoratedRepository" --]
+[#import "/build/common/repositoryCommon.ftl" as rc]
+
+<div id="repository-edit-html">[@rc.basicRepositoryEdit repo=repositoryOption plan=mutablePlan!''/]</div>[#t]
+[#if !repositoryOption.group?has_content]
+    [#assign advancedEditHtml]${repositoryOption.repository.getAdvancedEditHtml(buildConfiguration, mutablePlan)!}[/#assign]
+    [#if advancedEditHtml?has_content]
+        <div id="repository-advanced-edit-html">[@ui.bambooSection dependsOn='selectedRepository' showOn=repositoryOption.key]${advancedEditHtml}[/@ui.bambooSection]</div>[#t]
+    [/#if]
+[/#if]

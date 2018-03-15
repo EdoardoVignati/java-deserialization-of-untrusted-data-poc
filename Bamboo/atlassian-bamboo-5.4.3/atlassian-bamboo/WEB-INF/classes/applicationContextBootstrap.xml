@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd">
+
+    <bean id="homeLocator" class="com.atlassian.bamboo.setup.BambooHomeLocator" plugin:available="true">
+        <property name="propertiesFile" value="bamboo-init.properties"/>
+        <property name="initPropertyName" value="bamboo.home"/>
+        <property name="configFileName" value="bamboo.cfg.xml"/>
+    </bean>
+
+    <bean id="applicationConfig" class="com.atlassian.bamboo.setup.BambooApplicationConfig">
+        <property name="configurationPersister">
+            <bean class="com.atlassian.config.xml.DefaultDom4jXmlConfigurationPersister"/>
+        </property>
+    </bean>
+
+    <bean id="setupPersister" class="com.atlassian.bamboo.setup.DefaultSetupPersister">
+        <property name="applicationConfig">
+            <ref local="applicationConfig"/>
+        </property>
+    </bean>
+
+    <bean id="setupUtilityBean" class="com.atlassian.bamboo.ww2.actions.setup.SetupUtilityBean"/>
+
+    <bean id="bootstrapManager" class="com.atlassian.bamboo.setup.DefaultBootstrapManager">
+        <property name="homeLocator">
+            <ref local="homeLocator"/>
+        </property>
+        <property name="setupPersister">
+            <ref local="setupPersister"/>
+        </property>
+        <property name="applicationConfig">
+            <ref local="applicationConfig"/>
+        </property>
+        <property name="hibernateConfig">
+            <ref local="hibernateConfig"/>
+        </property>
+        <property name="hibernateConfigurator">
+            <ref local="hibernateConfigurator"/>
+        </property>
+        <property name="bootstrapUpgradeManager">
+            <ref local="bootstrapUpgradeManager"/>
+        </property>
+        <property name="tables">
+            <list>
+                <value>acl_entry</value>
+                <value>acl_object_identity</value>
+                <value>audit_log</value>
+                <value>author</value>
+                <value>build</value>
+                <value>build_definition</value>
+                <value>buildresultsummary</value>
+                <value>buildresultsummary_customdata</value>
+                <value>brs_linkedjiraissues</value>
+                <value>buildresultsummary_label</value>
+                <value>comment</value>
+                <value>commit</value>
+                <value>commit_files</value>
+                <value>elastic_image</value>
+                <value>elastic_schedule</value>
+                <value>external_entities</value>
+                <value>external_members</value>
+                <value>groups</value>
+                <value>hibernate_unique_key</value>
+                <value>imserver</value>
+                <value>jiraserver</value>
+                <value>label</value>
+                <value>local_members</value>
+                <value>notification_recipients</value>
+                <value>notification_rules</value>
+                <value>notification_sets</value>
+                <value>os_propertyentry</value>
+                <value>plan_dependencies</value>
+                <value>project</value>
+                <value>queue</value>
+                <value>queue_build_key</value>
+                <value>users</value>
+                <value>chain</value>
+                <value>chain_result</value>
+                <value>chain_stage</value>
+                <value>chain_stage_result</value>
+                <value>test_case</value>
+                <value>test_case_result</value>
+                <value>test_class</value>
+                <value>test_class_result</value>
+                <value>test_error</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="serverFingerprint" factory-bean="bootstrapManager" factory-method="getFingerprint"/>
+
+    <bean id="hibernateConfig" class="com.atlassian.config.db.HibernateConfig">
+        <property name="applicationConfig">
+            <ref local="applicationConfig"/>
+        </property>
+    </bean>
+
+    <bean id="hibernateConfigurator" class="com.atlassian.bamboo.setup.DefaultHibernateConfigurator"/>
+
+    <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <!--<prop key="hibernate.query.imports">com.atlassian.confluence.spaces, com.atlassian.confluence.pages</prop>-->
+                <prop key="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</prop>
+                <prop key="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</prop>
+                <!--<prop key="hibernate.cache.provider_class">com.atlassian.confluence.cache.tangosol.hibernate.CoherenceHibernateCacheProvider</prop>-->
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <!--<prop key="hibernate.show_sql">true</prop>-->
+                <!-- it can be useful to disable batching during debugging, as HSQLDB doesn't report the exact statement which fails in batch mode -->
+                <prop key="hibernate.jdbc.batch_size">20</prop>
+                <prop key="hibernate.order_inserts">true</prop>
+                <prop key="hibernate.order_updates">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="bambooLicenseManager" class="com.atlassian.bamboo.license.BambooLicenseManagerImpl" plugin:available="true">
+        <constructor-arg ref="bootstrapManager"/>
+    </bean>
+
+    <bean id="sidManager" class="com.atlassian.license.DefaultSIDManager"/>
+
+    <bean id="bootstrapUpgradeManager" class="com.atlassian.bamboo.upgrade.BootstrapUpgradeManagerImpl">
+        <constructor-arg ref="applicationConfig"/>
+        <constructor-arg value="upgrades.xml"/>
+        <property name="upgradeUtilityBean" ref="upgradeUtilityBean"/>
+        <property name="textProvider" ref="textProvider"/>
+    </bean>
+
+    <bean id="upgradeUtilityBean" class="com.atlassian.bamboo.upgrade.UpgradeUtilityBean"/>
+    <bean id="textProvider" class="com.atlassian.struts.DefaultTextProvider"/>
+
+</beans>

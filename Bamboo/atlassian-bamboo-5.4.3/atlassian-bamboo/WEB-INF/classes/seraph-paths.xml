@@ -1,0 +1,14 @@
+<!--  ================================================================ -->
+<!--  The Seraph security configuration.                               -->
+<!--                                                                   -->
+<!--  ================================================================ -->
+
+<security-paths>
+
+    <!-- make sure that anyone accessing the admin pages is a server-admin user -->
+    <path name="secure">
+        <url-pattern>/admin/*</url-pattern>
+        <role-name>server-admin</role-name>
+    </path>
+
+</security-paths>

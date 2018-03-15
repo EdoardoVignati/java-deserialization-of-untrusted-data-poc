@@ -1,0 +1,9 @@
+[@ww.form
+     action='viewElasticConfig!agree.action'
+     namespace='/admin/elastic'
+     titleKey='elastic.configure.form.title'
+     descriptionKey='feature.ec2.agreement'
+     submitLabelKey='feature.ec2.agreement.button'
+     showActionErrors='false'
+]
+[/@ww.form]

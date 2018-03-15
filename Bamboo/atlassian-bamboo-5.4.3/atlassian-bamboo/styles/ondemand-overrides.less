@@ -1,0 +1,21 @@
+/* Studio theme plugins don't like AUI shadows
+   Once JST-2591 is fixed, this can be removed */
+.studio-header .aui-shadow-parent {
+    display: none;
+}
+
+.studio-admin-table {
+    position: relative;
+}
+.studio-admin-table #elasticWidget > .toolbar {
+    margin-top: 1px;
+    right: 0;
+    top: 1em;
+}
+.ondemand #inline-dialog-plan-status-history-info {
+    top: 128px !important; /* stops the tooltip from jumping around */
+}
+
+.ondemand .upm-notifications-bamboo {
+    display: none;
+}

@@ -1,0 +1,360 @@
+Mar 14, 2018 12:59:27 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 12:59:27 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 12:59:39 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 12:59:39 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 12:59:43 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 12:59:43 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 1:00:43 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 1:00:43 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 1:00:45 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 1:00:45 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 1:00:55 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 1:00:55 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 1:00:57 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 1:00:57 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 1:01:06 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 1:01:06 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 1:01:09 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 1:01:09 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 2:35:01 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 2:35:01 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 2:37:07 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 2:37:07 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 2:37:19 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 2:37:19 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 2:39:09 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 2:39:09 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 2:39:11 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 2:39:11 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 2:53:04 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 2:53:04 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 2:54:54 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 2:54:54 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 3:00:57 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 3:00:57 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 3:03:44 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 3:03:44 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 3:04:46 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 3:04:46 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 3:05:00 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 3:05:00 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 3:07:38 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter is being destroyed...
+Mar 14, 2018 3:07:38 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: destroy called
+Mar 14, 2018 3:09:50 PM org.apache.catalina.core.ApplicationContext log
+INFO: org.tuckey.web.filters.urlrewrite.UrlRewriteFilter INFO: loaded (conf ok)
+Mar 14, 2018 3:09:50 PM org.apache.catalina.core.ApplicationContext log
+INFO:  [CompressingFilter/1.4] CompressingFilter has initialized
+Mar 14, 2018 3:13:43 PM org.apache.catalina.core.ApplicationContext log
+INFO: Initializing Spring root WebApplicationContext
+Mar 14, 2018 3:30:27 PM org.apache.catalina.core.StandardWrapperValve invoke
+SEVERE: Servlet.service() for servlet [deliverMessage] in context with path [] threw exception
+java.lang.annotation.IncompleteAnnotationException: java.lang.Override missing element entrySet
+	at sun.reflect.annotation.AnnotationInvocationHandler.invoke(AnnotationInvocationHandler.java:81)
+	at com.sun.proxy.$Proxy965.entrySet(Unknown Source)
+	at sun.reflect.annotation.AnnotationInvocationHandler.readObject(AnnotationInvocationHandler.java:451)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at java.io.ObjectStreamClass.invokeReadObject(ObjectStreamClass.java:1058)
+	at java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:1897)
+	at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1798)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1350)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:370)
+	at com.atlassian.bamboo.agent.messaging.DeliverMessageServlet.deserializeObject(DeliverMessageServlet.java:127)
+	at com.atlassian.bamboo.agent.messaging.DeliverMessageServlet.doPost(DeliverMessageServlet.java:50)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:647)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:305)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.applinks.core.rest.context.ContextFilter.doFilter(ContextFilter.java:25)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsDispatcherFilter.doFilter(PrettyUrlsDispatcherFilter.java:60)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsSiteMeshFilter.doFilter(PrettyUrlsSiteMeshFilter.java:92)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsMatcherFilter.doFilter(PrettyUrlsMatcherFilter.java:56)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.NewRelicTransactionNamingFilter.doFilter(NewRelicTransactionNamingFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.ww2.StrutsPrepareFilter.handleRequest(StrutsPrepareFilter.java:56)
+	at com.atlassian.bamboo.ww2.StrutsPrepareFilter.doFilter(StrutsPrepareFilter.java:39)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.BambooProfilingFilter.doFilter(BambooProfilingFilter.java:44)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsCombinedMatchDispatcherFilter.doFilter(PrettyUrlsCombinedMatchDispatcherFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.AccessLogFilter.doFilter(AccessLogFilter.java:134)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.LicenseFilter.doFilter(LicenseFilter.java:73)
+	at com.atlassian.core.filters.AbstractHttpFilter.doFilter(AbstractHttpFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.johnson.filters.AbstractJohnsonFilter.doFilter(AbstractJohnsonFilter.java:71)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.seraph.filter.SecurityFilter.doFilter(SecurityFilter.java:234)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.seraph.filter.BaseLoginFilter.doFilter(BaseLoginFilter.java:169)
+	at com.atlassian.seraph.filter.BambooLoginFilter.doFilter(BambooLoginFilter.java:34)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.oauth.serviceprovider.internal.servlet.OAuthFilter.doFilter(OAuthFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.security.auth.trustedapps.filter.TrustedApplicationsFilter.doFilter(TrustedApplicationsFilter.java:100)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsCombinedMatchDispatcherFilter.doFilter(PrettyUrlsCombinedMatchDispatcherFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.RequestCacheThreadLocalFilter.doFilter(RequestCacheThreadLocalFilter.java:27)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.core.filters.HeaderSanitisingFilter.doFilter(HeaderSanitisingFilter.java:44)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsCombinedMatchDispatcherFilter.doFilter(PrettyUrlsCombinedMatchDispatcherFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:75)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.tuckey.web.filters.urlrewrite.RuleChain.handleRewrite(RuleChain.java:176)
+	at org.tuckey.web.filters.urlrewrite.RuleChain.doRules(RuleChain.java:145)
+	at org.tuckey.web.filters.urlrewrite.UrlRewriter.processRequest(UrlRewriter.java:92)
+	at org.tuckey.web.filters.urlrewrite.UrlRewriteFilter.doFilter(UrlRewriteFilter.java:394)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:222)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:123)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:171)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:99)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:118)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:953)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:408)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1008)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:589)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:310)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+
+Mar 14, 2018 3:34:26 PM org.apache.catalina.core.StandardWrapperValve invoke
+SEVERE: Servlet.service() for servlet [deliverMessage] in context with path [] threw exception
+java.lang.annotation.IncompleteAnnotationException: java.lang.Override missing element entrySet
+	at sun.reflect.annotation.AnnotationInvocationHandler.invoke(AnnotationInvocationHandler.java:81)
+	at com.sun.proxy.$Proxy965.entrySet(Unknown Source)
+	at sun.reflect.annotation.AnnotationInvocationHandler.readObject(AnnotationInvocationHandler.java:451)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at java.io.ObjectStreamClass.invokeReadObject(ObjectStreamClass.java:1058)
+	at java.io.ObjectInputStream.readSerialData(ObjectInputStream.java:1897)
+	at java.io.ObjectInputStream.readOrdinaryObject(ObjectInputStream.java:1798)
+	at java.io.ObjectInputStream.readObject0(ObjectInputStream.java:1350)
+	at java.io.ObjectInputStream.readObject(ObjectInputStream.java:370)
+	at com.atlassian.bamboo.agent.messaging.DeliverMessageServlet.deserializeObject(DeliverMessageServlet.java:127)
+	at com.atlassian.bamboo.agent.messaging.DeliverMessageServlet.doPost(DeliverMessageServlet.java:50)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:647)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:728)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:305)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.applinks.core.rest.context.ContextFilter.doFilter(ContextFilter.java:25)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsDispatcherFilter.doFilter(PrettyUrlsDispatcherFilter.java:60)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsSiteMeshFilter.doFilter(PrettyUrlsSiteMeshFilter.java:92)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsMatcherFilter.doFilter(PrettyUrlsMatcherFilter.java:56)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.NewRelicTransactionNamingFilter.doFilter(NewRelicTransactionNamingFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.ww2.StrutsPrepareFilter.handleRequest(StrutsPrepareFilter.java:56)
+	at com.atlassian.bamboo.ww2.StrutsPrepareFilter.doFilter(StrutsPrepareFilter.java:39)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.BambooProfilingFilter.doFilter(BambooProfilingFilter.java:44)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsCombinedMatchDispatcherFilter.doFilter(PrettyUrlsCombinedMatchDispatcherFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.AccessLogFilter.doFilter(AccessLogFilter.java:134)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.LicenseFilter.doFilter(LicenseFilter.java:73)
+	at com.atlassian.core.filters.AbstractHttpFilter.doFilter(AbstractHttpFilter.java:31)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.johnson.filters.AbstractJohnsonFilter.doFilter(AbstractJohnsonFilter.java:71)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.seraph.filter.SecurityFilter.doFilter(SecurityFilter.java:234)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.seraph.filter.BaseLoginFilter.doFilter(BaseLoginFilter.java:169)
+	at com.atlassian.seraph.filter.BambooLoginFilter.doFilter(BambooLoginFilter.java:34)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.oauth.serviceprovider.internal.servlet.OAuthFilter.doFilter(OAuthFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.security.auth.trustedapps.filter.TrustedApplicationsFilter.doFilter(TrustedApplicationsFilter.java:100)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsCombinedMatchDispatcherFilter.doFilter(PrettyUrlsCombinedMatchDispatcherFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.bamboo.filter.RequestCacheThreadLocalFilter.doFilter(RequestCacheThreadLocalFilter.java:27)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.core.filters.HeaderSanitisingFilter.doFilter(HeaderSanitisingFilter.java:44)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:46)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter$1.doFilter(DelegatingPluginFilter.java:66)
+	at com.atlassian.prettyurls.filter.PrettyUrlsCombinedMatchDispatcherFilter.doFilter(PrettyUrlsCombinedMatchDispatcherFilter.java:61)
+	at com.atlassian.plugin.servlet.filter.DelegatingPluginFilter.doFilter(DelegatingPluginFilter.java:74)
+	at com.atlassian.plugin.servlet.filter.IteratingFilterChain.doFilter(IteratingFilterChain.java:42)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:77)
+	at com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter.doFilter(ServletFilterModuleContainerFilter.java:63)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:96)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:75)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.tuckey.web.filters.urlrewrite.RuleChain.handleRewrite(RuleChain.java:176)
+	at org.tuckey.web.filters.urlrewrite.RuleChain.doRules(RuleChain.java:145)
+	at org.tuckey.web.filters.urlrewrite.UrlRewriter.processRequest(UrlRewriter.java:92)
+	at org.tuckey.web.filters.urlrewrite.UrlRewriteFilter.doFilter(UrlRewriteFilter.java:394)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:243)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:210)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:222)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:123)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:472)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:171)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:99)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:118)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:953)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:408)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1008)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:589)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:310)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)
+	at java.lang.Thread.run(Thread.java:745)
+

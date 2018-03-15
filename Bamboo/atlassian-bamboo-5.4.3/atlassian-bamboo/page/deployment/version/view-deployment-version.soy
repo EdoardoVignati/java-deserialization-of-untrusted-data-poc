@@ -1,0 +1,298 @@
+{namespace bamboo.page.deployment.version}
+
+/**
+ * @param deploymentVersion
+ * @param deploymentProject
+ * @param deploymentEnvironmentStatuses
+ * @param deploymentVersionItemsWithUrls
+ * @param createdFromResults
+ * @param commitsTestedInResults
+ * @param currentUrl
+ * @param comments
+ * @param? showCommentsOperations
+ * @param? showAddCommentForm
+ * @param? avatar
+ */
+{template .viewDeploymentVersion}
+    {call aui.group.group}
+        {param content}
+            {call aui.group.item}
+                {param content}
+                    <h2>{getText('deployment.version.deploymentStatus')}</h2>
+                    {call .deploymentStatus data="all"/}
+                    {call .testedIn data="all"/}
+                {/param}
+            {/call}
+            {call aui.group.item}
+                {param content}
+                    {call .versionDetailsPanel data="all"/}
+                {/param}
+                {param extraClasses: 'version-details-panel'/}
+            {/call}
+        {/param}
+    {/call}
+    {call .commentsWidget data="all" /}
+{/template}
+
+/**
+ * @param deploymentVersion
+ * @param comments
+ * @param? showCommentsOperations
+ * @param? showAddCommentForm
+ * @param? avatar
+ */
+{template .commentsWidget}
+    <div class="comments" id="comments">
+        {call bamboo.feature.comments.commentList}
+            {param comments: $comments /}
+            {param showOperations: $showCommentsOperations /}
+            {param showTopLevelHeading: true /}
+        {/call}
+        {if $showAddCommentForm}
+            {call aui.form.form}
+                {param id: 'result_summary_comment' /}
+                {param action: contextPath() + '/deploy/createComment.action' /}
+                {param extraClasses: 'collapsed' /}
+                {param content}
+                    {call aui.form.input}
+                        {param type: 'hidden' /}
+                        {param name: 'versionId' /}
+                        {param value: $deploymentVersion.id /}
+                    {/call}
+                    <img src="{$avatar ? $avatar : (contextPath() + '/images/icons/useravatar.png')}" class="avatar">
+                    {call aui.form.textarea}
+                        {param id: 'commentContent' /}
+                        {param name: 'commentContent' /}
+                        {param rows: 5 /}
+                        {param extraAttributes: [ 'placeholder': getText('deployment.version.comment.placeholder') ] /}
+                        {param extraClasses: 'full-width-field' /}
+                    {/call}
+
+                    <div class="buttons-container">
+                        <div class="buttons">
+                            {call aui.buttons.button}
+                                {param text: getText('global.buttons.add') /}
+                                {param type: 'primary' /}
+                                {param tagName: 'input' /}
+                                {param inputType: 'submit' /}
+                            {/call}
+                            <a class="cancel" accesskey="`" href="{contextPath() + '/deploy/viewDeploymentVersion.action?versionId=' + $deploymentVersion.id}">Cancel</a>
+                        </div>
+                    </div>
+                {/param}
+            {/call}
+        {/if}
+    </div>
+{/template}
+
+/**
+ * @param deploymentEnvironmentStatuses
+ * @param deploymentProject
+ * @param deploymentVersion
+ * @param currentUrl
+ * @param? hideActions
+ */
+{template .deploymentStatus}
+    {call aui.table}
+        {param id: 'deploymentStatusTable'/}
+        {param theadContent}
+            <tr>
+                <th>{getText('deployment.version.deploymentStatus.environment')}</th>
+                <th>{getText('deployment.version.deploymentStatus.status')}</th>
+                <th></th>
+                <th>{getText('deployment.version.deploymentStatus.deploymentResult')}</th>
+                <th>{getText('deployment.version.deploymentStatus.date')}</th>
+                <th>{getText('deployment.version.deploymentStatus.trigger')}</th>
+                {if not $hideActions}
+                    <th>{getText('global.heading.actions')}</th>
+                {/if}
+            </tr>
+        {/param}
+        {param content}
+            {if $deploymentEnvironmentStatuses and length($deploymentEnvironmentStatuses) > 0}
+                {foreach $environmentStatus in $deploymentEnvironmentStatuses}
+                    <tr>
+                        <td><a href="{contextPath() + '/deploy/viewEnvironment.action?id=' + $environmentStatus.environment.id}">{$environmentStatus.environment.name}</a></td>
+                        <td>
+                            {call bamboo.feature.deployment.result.versionStatusLozenge}
+                                {param environmentStatus: $environmentStatus/}
+                                {param deploymentVersion: $deploymentVersion/}
+                            {/call}
+                        </td>
+                        <td>
+                           {if $environmentStatus.latestResult}
+                                {call bamboo.feature.deployment.result.nowAt}
+                                    {param deploymentResult: $environmentStatus.latestResult /}
+                                {/call}
+                            {/if}
+                        </td>
+                        {if $environmentStatus.deploymentResult}
+                            <td>
+                                {call widget.status.deploymentResultStatusLozenge data="$environmentStatus.deploymentResult"/}
+                                {call bamboo.feature.deployment.result.detailsLink}
+                                    {param deploymentResult: $environmentStatus.deploymentResult/}
+                                {/call}
+                            </td>
+                            <td>
+                                {call bamboo.feature.deployment.result.finishedTimeOrDuration data="$environmentStatus.deploymentResult" /}
+                            </td>
+                            <td>
+                                {$environmentStatus.deploymentResult.reasonSummary|noAutoescape}
+                            </td>
+                        {else}
+                            <td colspan="3"></td>
+                        {/if}
+                        {if not $hideActions}
+                        <td>
+                            {if $environmentStatus.environment.operations.canExecute}
+                                <a href="{contextPath() + '/deploy/selectVersionForExecute.action?environmentId=' + $environmentStatus.environment.id + '&versionId=' + $deploymentVersion.id +  '&returnUrl=' + $currentUrl}">
+                                    {call widget.icons.icon}
+                                        {param type: 'deploy' /}
+                                        {param text: getText('deployment.execute.button') /}
+                                    {/call}
+                                </a>{sp}
+                            {/if}
+                            {if $environmentStatus.environment.operations.canEdit}
+                                <a href="{contextPath() + '/deploy/config/configureDeploymentProject.action?environmentId=' + $environmentStatus.environment.id + '&id=' + $deploymentProject.id}">
+                                    {call widget.icons.fontIcon}
+                                        {param type: 'edit' /}
+                                        {param text: getText('deployment.environment.configure') /}
+                                    {/call}
+                                </a>
+                            {/if}
+                        </td>
+                        {/if}
+                    </tr>
+                {/foreach}
+             {else}
+                <p>{getText('deployment.version.deploymentStatus.none', $deploymentProject.name)}</p>
+             {/if}
+        {/param}
+    {/call}
+{/template}
+
+/**
+ * @param commitsTestedInResults
+ */
+{template .testedIn private="true"}
+    <h2>{getText('deployment.version.builds.commitsTestedIn')}</h2>
+    <p>{getText('deployment.version.builds.commitsTestedIn.description')}</p>
+    {if length($commitsTestedInResults) > 0}
+        {call aui.table}
+             {param theadContent}
+                 <tr>
+                     <th>{getText('deployment.version.builds.build')}</th>
+                     <th>{getText('deployment.version.builds.plan')}</th>
+                     <th>{getText('deployment.version.builds.tests')}</th>
+                 </tr>
+             {/param}
+             {param id: 'testedInTable'/}
+             {param content}
+                 {foreach $resultSummary in $commitsTestedInResults}
+                     <tr>
+                         <td class="result-cell">{call .resultCell}
+                                 {param resultSummary: $resultSummary/}
+                             {/call}
+                         </td>
+                         <td>{call widget.plan.renderPlanNameLink}
+                                     {param plan: $resultSummary.plan/}
+                             {/call}
+                         </td>
+                         <td>{$resultSummary.testSummary}</td>
+                     </tr>
+                 {/foreach}
+             {/param}
+        {/call}
+    {else}
+        <p>{getText('deployment.version.builds.commitsTestedIn.empty')}</p>
+    {/if}
+{/template}
+
+
+
+/**
+ * @param deploymentVersion
+ * @param deploymentProject
+ * @param deploymentVersionItemsWithUrls
+ * @param createdFromResults
+ */
+{template .versionDetailsPanel private="true"}
+    <h2>{getText('deployment.version.details', $deploymentVersion.name)}</h2>
+    <dl class="version-details">
+        <dt>{getText('deployment.version.details.created')}</dt>
+        <dd>
+            {call bamboo.widget.time.relative}
+                {param datetime: $deploymentVersion.creationDate.time /}
+            {/call}
+        </dd>
+        {if $deploymentVersion.creatorUserName}
+            <dt>
+                {getText('deployment.version.details.created.by')}
+            </dt>
+            <dd>
+                <img src="{$deploymentVersion.creatorGravatarUrl ? $deploymentVersion.creatorGravatarUrl : (contextPath() + '/images/icons/useravatar.png')}" alt='{$deploymentVersion.creatorDisplayName}' class="aui-avatar-small">
+                {sp}
+                <span>
+                    {if $deploymentVersion.creatorDisplayName}
+                        <a href="{contextPath() + '/browse/user/' + $deploymentVersion.creatorUsername}">{$deploymentVersion.creatorDisplayName}</a>
+                    {else}
+                        {$deploymentVersion.creatorUsername}
+                    {/if}
+                </span>
+            </dd>
+        {/if}
+        {if $deploymentVersion.versionStatus and $deploymentVersion.versionStatus.versionState != 'UNKNOWN'}
+            <dt class="version-status-details">{getText('deployment.version.details.status.username')}</dt>
+            <dd class="detailed-version-info-container version-status-details">
+                {call widget.status.deploymentVersionStatusInfo}
+                    {param avatar : $deploymentVersion.versionStatus.gravatarUrl /}
+                    {param userName : $deploymentVersion.versionStatus.userName /}
+                    {param displayName : $deploymentVersion.versionStatus.displayName /}
+                    {param deploymentVersionState: $deploymentVersion.versionStatus.versionState /}
+                {/call}
+            </dd>
+        {else}
+            <dt class="version-status-hidden version-status-details">{getText('deployment.version.details.status.username')}</dt>
+            <dd class="detailed-version-info-container version-status-details version-status-hidden"/>
+        {/if}
+        <dt>{getText('deployment.version.details.project')}</dt>
+        <dd><a href="{contextPath() + '/deploy/viewDeploymentProjectEnvironments.action?id=' + $deploymentProject.id}">{$deploymentProject.name}</a></dd>
+        <dt>{getText('deployment.version.details.artifactsProvidedBy')}</dt>
+        <dd>
+            <ul>
+                {foreach $resultSummary in $createdFromResults}
+                    <li>
+                         <span class="artifacts-from-result">
+                             {call .resultCell}
+                                  {param resultSummary: $resultSummary/}
+                             {/call}
+                         </span>
+                         {call widget.plan.renderPlanNameLink}
+                               {param plan: $resultSummary.plan/}
+                         {/call}
+                     </li>
+                 {/foreach}
+            </ul>
+        </dd>
+        <dt>{getText('deployment.version.details.artifacts')}</dt>
+        <dd>
+            <ul>
+            {foreach $item in $deploymentVersionItemsWithUrls}
+                <li>
+                    <a href="{$item.url}">{$item.deploymentVersionItem.name}</a>
+                </li>
+            {ifempty}
+                {getText('deployment.version.details.artifacts.none')}
+            {/foreach}
+            <ul>
+        </dd>
+    </dl>
+{/template}
+/**
+ * @param resultSummary
+ */
+{template .resultCell private="true"}
+    {call widget.buildresult.resultStatusAndLink}
+        {param resultSummary: $resultSummary /}
+    {/call}
+{/template}

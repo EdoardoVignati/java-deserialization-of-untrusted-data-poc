@@ -1,0 +1,80 @@
+/*********************************************/
+/* Bamboo Javascript Widget css        */
+/*********************************************/
+
+
+#Failed, a.Failed, .Failed, .Failed a, .Failed td {
+    color: red;
+}
+
+#Successful, a.Successful, .Successful, .Successful a, .Successful td {
+    color: green;
+}
+
+.Suspended, .Suspended a, .Suspended td {
+    color: gray;
+}
+
+.NeverExecuted, .NeverExecuted a, .NeverExecuted td {
+    color: gray;
+}
+
+table.grid {
+    border-bottom:1px solid #CCCCCC;
+    border-collapse:collapse;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:75%;
+    background-color:white;
+}
+
+.grid th {
+    background-color:#F0F0F0;
+    border:1px solid #CCCCCC;
+    font-size:12px;
+    padding:2px 4px;
+    text-align:left;
+    border-bottom:0 none #FFFFFF;
+    vertical-align:top;
+}
+
+.grid td {
+    border:1px solid #CCCCCC;
+    padding:3px 4px 3px 5px;
+    background-color:#FFFFFF;
+    text-align:left;
+    vertical-align:top;
+}
+
+
+/* Build Summary All & Build Summary Favourites  ---------------- */
+
+#summaryBrief a {
+    text-decoration: none;
+}
+
+#summaryBrief a:hover {
+    text-decoration: underline;
+}
+
+#summaryBrief th {
+    text-align: left;
+}
+
+#summaryBrief img {
+    border: none;
+}
+
+/* MyChanges -------------------------------------------------*/
+
+td.commentColumn .actionLinks {
+    font-size:9px;
+    float:right;
+    margin-right:3px;
+}
+td.commentColumn div {
+    padding:4px;
+}
+
+.jiraLinkIcon img {
+    border: none;
+}

@@ -1,0 +1,26 @@
+[#-- @ftlvariable name="stageState" type="com.atlassian.bamboo.chains.StageExecution" --]
+[#-- @ftlvariable name="chainExecution" type="com.atlassian.bamboo.chains.ChainExecution" --]
+[#-- @ftlvariable name="chain" type="com.atlassian.bamboo.chains.Chain" --]
+
+[#assign planResultKey = chainExecution.planResultKey/]
+
+Stage ${stageState} of chain ${chain.name} execution ${planResultKey.buildNumber} [#t]
+[#if stageState.successful]
+was SUCCESSFUL[#t]
+[#else]
+has FAILED[#t]
+[/#if]
+
+[#list stageState.builds as build]
+[#if build.successful]
+    Build ${build.planResultKey} successful.[#lt]
+[#else]
+    [#if build.completed]
+        Build ${build.planResultKey} failed.[#lt]
+    [#else]
+        Build ${build.planResultKey} not executed.[#lt]
+    [/#if]
+[/#if]
+    ${baseUrl}/browse/${build.planResultKey}/[#lt]
+[/#list]
+${baseUrl}/chain/result/viewChainResult.action?buildKey=${chain.key}&buildNumber=${planResultKey.buildNumber}

@@ -1,0 +1,66 @@
+.plan-branch-selector {
+    margin: -4px 0 0 -12px;
+}
+.plan-branch-selector.breadcrumbs {
+    margin-top: 0;
+}
+.plan-branch-selector .icon-loading {
+    margin: 8px;
+}
+.plan-branch-selector .contents {
+    padding: 4px 0;
+}
+.plan-branch-selector ul {
+    border-collapse: collapse;
+    display: table;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.plan-branch-selector li {
+    display: table-row;
+    margin: 0;
+    padding: 0;
+}
+.plan-branch-selector li:nth-child(2n) {
+    background: #fafafa;
+}
+.plan-branch-selector li > span {
+    display: table-cell;
+    padding: 4px;
+    vertical-align: top;
+}
+.plan-branch-selector li + li > span {
+    border-top: 1px solid #efefef;
+}
+.plan-branch-selector .master > span {
+    border-bottom: 1px solid #ddd;
+}
+.plan-branch-selector .latest-build {
+    white-space: nowrap;
+    width: 1%;
+}
+.plan-branch-selector .branch > a {
+    display: inline-block;
+    max-width: 190px;
+    word-wrap: break-word;
+}
+.plan-branch-selector .branch:only-child > a {
+    max-width: 242px;
+}
+.plan-branch-selector .latest-build > a {
+    padding-left: 20px;
+    position: relative;
+}
+.plan-branch-selector a > .icon {
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+.plan-branch-selector .complete-listing {
+    border-top: 1px solid #ddd;
+    display: block;
+    font-weight: bold;
+    padding: 4px;
+}

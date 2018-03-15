@@ -1,0 +1,121 @@
+@import "../global.less";
+
+/*------------------------------------------------------------------------------------------- Wide Build Plans List Styles */
+
+#dashboard-controls {
+    .aui-button {
+        margin-top: 0;
+    }
+    + #ajaxErrorHolder {
+        clear: both;
+
+        > .aui-message,
+        + .error-holder {
+            margin: 10px 0;
+        }
+    }
+    ~ table.aui {
+        margin-top: 0;
+    }
+}
+span.buildSummaryDetails  {
+    display: inline;
+    font-size: 10px;
+}
+
+span.buildSummaryDetails > span {
+    border-left: 1px solid gray;
+    display: inline;
+    margin: 0 0 0 4px;
+    padding: 0 0 0 4px;
+}
+
+span.buildSummaryDetails > span:first-child {
+    border: 0;
+}
+
+#dashboard {
+    &.aui.aui-zebra tr {
+        border-bottom: 1px solid #efefef;
+    }
+
+    td {
+        &.project {
+            font-weight: bold;
+        }
+        &.twixie {
+            padding-left: 2px;
+            padding-right: 0;
+            width: 16px;
+        }
+    }
+    .show-more-plans .icon-loading {
+        margin-left: @halfSpacing;
+        position: absolute;
+    }
+    .show-more-trigger {
+        .border-radius();
+        background: transparent;
+        border: 1px solid @dividerColor;
+        color: @secondaryTextColor;
+        cursor: pointer;
+        display: inline-block;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: bold;
+        min-width: 600px;
+        padding: @halfSpacing;
+
+        &:hover {
+            background-color: #FAFAFA;
+            border-color: @activeDividerColor;
+        }
+        &[disabled] {
+            color: @activeDividerColor;
+            cursor: default;
+
+            &:hover {
+                background-color: transparent;
+                border-color: @dividerColor;
+            }
+        }
+        + .show-more-text {
+            margin-top: @baseSpacing;
+        }
+    }
+    .show-more-text {
+        color: @secondaryTextColor;
+        font-size: 90%;
+        font-style: italic;
+        margin: 0;
+    }
+    tfoot {
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+        div {
+            display: inline-block;
+        }
+    }
+}
+
+.markBuildFavourite,
+.unmarkBuildFavourite {
+    .transition(opacity 0.3s ease);
+
+    &.loading {
+        opacity: 0.3;
+    }
+ }
+
+td.dashboard-operations a {
+    padding-left: @halfSpacing;
+}
+
+td.build {
+    .linked-deployments-menu,
+    .view-branches {
+        padding-left: @halfSpacing;
+    }
+}

@@ -1,0 +1,82 @@
+@import "../../../global.less";
+
+@borderWidth: 3px;
+
+@infoGraphicWidth: 900px;
+@welcomeWidth: @infoGraphicWidth + (@baseSpacing * 2) + 20px;
+@heartWidth: 151px;
+@artifactTextWidth: 217px;
+@versionTextWidth:  332px;
+@environmentTextWidth:  (@infoGraphicWidth - @versionTextWidth -  @artifactTextWidth - (@baseSpacing * 6) - (@borderWidth * 3));
+
+.welcome-message {
+    .border-radius(@baseBorderRadius * 2);
+    .box-sizing();
+    border: 1px solid @dividerColor;
+    color: #333;
+    margin: @doubleSpacing auto 0;
+    overflow: hidden;
+    padding: 20px;
+    width: @welcomeWidth;
+
+    &:before {
+        content: url(../../../images/heart.png);
+        float: right;
+        height: 137px;
+        margin-left: @doubleSpacing;
+        width: @heartWidth;
+    }
+    .aui-message {
+        margin-right: @heartWidth + @doubleSpacing;
+    }
+}
+.welcome-title {
+    border: 0;
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 1.25; /* 30px equiv line-height */
+}
+.welcome-blurb {
+    margin: @baseSpacing 0 0;
+}
+.welcome-actions {
+    margin-top: @doubleSpacing;
+}
+.welcome-next-steps {
+    margin: (@doubleSpacing * 2) auto 0;
+    width: @welcomeWidth;
+}
+
+.infographic {
+  .border-radius(@baseBorderRadius * 2);
+  .box-sizing();
+  border: 1px solid @dividerColor;
+  margin: @doubleSpacing auto 0;
+  overflow: hidden;
+  padding: @doubleSpacing;
+  width: @welcomeWidth;
+
+  img {
+    margin-top: @baseSpacing;
+  }
+
+  .artifactText, .versionText, .environmentText {
+    padding: @baseSpacing;
+    float: left;
+    height: 200px;
+  }
+
+  .artifactText {
+    width: @artifactTextWidth;
+  }
+  .versionText {
+    width: @versionTextWidth;
+  }
+  .environmentText {
+    width: @environmentTextWidth;
+  }
+
+  .artifactText, .versionText {
+    border-right: @borderWidth solid #f5f5f5;
+  }
+}

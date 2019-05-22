@@ -1,4 +1,5 @@
-Here there are 3 practical example (PoC) of the vulnerability when deserializing objects from untrusted sources.
+Here there are practical example of the vulnerability when deserializing objects from untrusted sources.
+This use the ysoserial tool to generate exploits.
 
 Minimal Example
 ---------------------------------

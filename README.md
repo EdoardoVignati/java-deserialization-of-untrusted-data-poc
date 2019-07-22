@@ -67,11 +67,12 @@ See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/in
 
 # References and readings
 https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
+Other references:
+https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478
+https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher
+
 
 # Defenses
 https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
 
 
-Other references:
-https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478
-https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher

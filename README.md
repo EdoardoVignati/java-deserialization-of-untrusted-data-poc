@@ -7,11 +7,6 @@ https://github.com/EdoardoVignati/ysoserial/tree/master/analyze
 
 See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/index.html
 
-POCs
--------------------
-https://github.com/EdoardoVignati/java-deserialization-of-untrusted-data-poc
-
-
 References and readings
 ------------------------
 https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib

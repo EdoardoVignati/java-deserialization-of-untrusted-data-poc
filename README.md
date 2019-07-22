@@ -1,4 +1,4 @@
-Here there are practical example of the vulnerability when deserializing objects from untrusted sources.
+Here there are practical examples of the -deserialization of untrusted objects- vulnerability.
 This use the ysoserial tool to generate exploits.
 
 Stacktraces

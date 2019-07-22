@@ -2,22 +2,19 @@ Here there are practical examples of the - deserialization of untrusted objects 
 
 This use the ysoserial tool to generate exploits.
 
-Stacktraces
---------------------
+# Stacktraces
 https://github.com/EdoardoVignati/ysoserial/tree/master/analyze
 
 See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/index.html
 
-References and readings
-------------------------
+# References and readings
 https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
 
-Defenses
--------------
+# Defenses
 https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
 
 
-#Minimal Example
+Minimal Example
 ---------------------------------
 - Use java 8
 - cd MinimalExample
@@ -29,7 +26,7 @@ https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
 - java -classpath .:apache-collections-commons-collections-3.1.jar DeSerializingObject 
 - You will find a file "pwned" in /tmp. This means that the attack has been completed correctly with a RCE.
 
-#JBOSS (CVE)
+JBOSS (CVE)
 ---------------------------------
 
 
@@ -45,7 +42,7 @@ https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
 
 
 
-#Jenkins (CVE-2015-8103)
+Jenkins (CVE-2015-8103)
 ---------------------------------
 
 - Download a vulnerable version of Jenkins (in this case you can find the v1.649
@@ -55,7 +52,7 @@ https://link.springer.com/chapter/10.1007/978-3-030-00470-5_21
 
 
 
-#Bamboo (CVE-2015-6576)
+Bamboo (CVE-2015-6576)
 ---------------------------------
 
 - Download and install openjdk 1.7

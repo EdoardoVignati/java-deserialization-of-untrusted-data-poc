@@ -1,6 +1,6 @@
 Here there are practical examples of the - deserialization of untrusted objects - vulnerability.
 
-These use the ysoserial tool to generate exploits.
+These PoCs use the ysoserial tool to generate exploits.
 
 # Pocs
 

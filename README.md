@@ -16,7 +16,7 @@ Minimal Example
 - java -classpath .:apache-collections-commons-collections-3.1.jar DeSerializingObject 
 - You will find a file "pwned" in /tmp. This means that the attack has been completed correctly with a RCE.
 
-JBOSS (CVE)
+JBOSS (CVE-2016-7065)
 ---------------------------------
 
 

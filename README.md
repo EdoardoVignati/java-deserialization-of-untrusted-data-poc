@@ -1,6 +1,6 @@
 Here there are practical examples of the - deserialization of untrusted objects - vulnerability.
 
-These PoCs use the ysoserial tool to generate exploits.
+These PoCs use the [ysoserial](https://github.com/frohoff/ysoserial/) tool to generate exploits.
 
 # Pocs
 
@@ -60,10 +60,9 @@ Bamboo (CVE-2015-6576)
   or use the payload inside the folder JBoss
 
 
-# Stacktraces
-https://github.com/EdoardoVignati/ysoserial/tree/master/analyze
+# Ysoserial stacktraces
 
-See the webpage on https://rawgit.com/EdoardoVignati/ysoserial/master/analyze/index.html
+Find them in the /Ysoserial-stacktraces directory
 
 # References and readings
 https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib

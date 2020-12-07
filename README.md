@@ -65,14 +65,10 @@ Bamboo (CVE-2015-6576)
 Find them in the /Ysoserial-stacktraces directory
 
 # References and readings
-https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
 
-Other references:
-
+- https://github.com/EdoardoVignati/ysoserial/blob/master/biblio.bib
 - https://www.edoardovignati.it/how-to-install-old-versions-of-java-jdk/
-
 - https://www.slideshare.net/codewhitesec/exploiting-deserialization-vulnerabilities-in-java-54707478
-
 - https://askubuntu.com/questions/761127/how-do-i-install-openjdk-7-on-ubuntu-16-04-or-higher
 
 

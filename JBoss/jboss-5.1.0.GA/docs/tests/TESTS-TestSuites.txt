@@ -1,0 +1,38 @@
+
+
+JBoss daily test results
+
+SUMMARY
+
+Number of tests run:   4011
+
+--------------------------------------------
+
+Successful tests:      4011
+
+Errors:                0
+
+Failures:              0
+
+--------------------------------------------
+
+
+
+[time of test: 2009-05-22.16-11 GMT]
+[java.version: 1.5.0_15]
+[java.vendor: Sun Microsystems Inc.]
+[java.vm.version: 1.5.0_15-b04]
+[java.vm.name: Java HotSpot(TM) Server VM]
+[java.vm.info: mixed mode]
+[os.name: Linux]
+[os.arch: i386]
+[os.version: 2.6.18-92.1.6.el5]
+
+
+NOTE: If there are any errors shown above - this mail is only highlighting 
+them - it is NOT indicating that they are being looked at by anyone.
+
+It is assumed that whoever makes change(s) to jboss that 
+break the test will be fixing the test or jboss, as appropriate!
+
+--------------------------------------------

